@@ -25,7 +25,7 @@ Si applica a ogni step di sviluppo, su qualsiasi file.
 - Se lo step tocca l'interfaccia, esegui anche `npm run test:e2e` (WebKit).
 - Verifica la compatibilità con Safari iOS:
   - nessuna API non supportata da WebKit iOS (es. Vibration API, Background Sync);
-  - `npm run preview` funziona su `http://localhost:4173/spese/` anche offline dopo il primo caricamento.
+  - `npm run preview` funziona su `http://localhost:4173/gestione-spese/` anche offline dopo il primo caricamento.
 - Aggiorna la colonna "Stato" della roadmap in `CLAUDE.md` (e la tabella stack se sono cambiate librerie).
 - Scrivi un riepilogo breve con tre sezioni:
   - **Cosa è cambiato**: file e comportamento;

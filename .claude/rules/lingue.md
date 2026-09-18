@@ -7,7 +7,7 @@ paths:
 
 # Lingue (italiano e inglese)
 
-Decisione D17 della proposta: interfaccia in italiano (predefinito) e inglese, scelta dall'utente in Impostazioni. Riferimento di comportamento: `docs/prototipo-app-spese-v2.html`.
+Decisione D17 della proposta: interfaccia in italiano (predefinito) e inglese, scelta dall'utente in Impostazioni. Riferimento di comportamento: `docs/prototipo-app-spese.html`.
 
 ## Dizionari
 

@@ -7,7 +7,7 @@ paths:
 
 # Interfaccia e design system
 
-Fonte dei valori: proposta § 1.5. Riferimento visivo: `docs/prototipo-app-spese-v2.html` (direzione "iOS raffinato").
+Fonte dei valori: proposta § 1.5. Riferimento visivo: `docs/prototipo-app-spese.html` (direzione "iOS raffinato").
 
 ## Token
 
@@ -35,6 +35,7 @@ Fonte dei valori: proposta § 1.5. Riferimento visivo: `docs/prototipo-app-spese
 - Nella griglia di inserimento la categoria scelta diventa piena (glifo bianco) con anello colorato e leggero ingrandimento.
 - Usa l'icona piena (glifo bianco su colore) solo per l'anteprima nel foglio categoria.
 - Usa solo icone di `lucide-react`, importate singolarmente.
+- Converti il nome salvato dell'icona categoria (`cart`, `heart`…) nel componente Lucide solo nella mappa di `src/components/categoryIcons.ts`; Salute usa il cuore semplice (`Heart`) come nel prototipo.
 
 ## Componenti chiave
 

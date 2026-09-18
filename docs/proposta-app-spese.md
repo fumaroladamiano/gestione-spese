@@ -1,21 +1,20 @@
 # 💶 Spese — Proposta per una PWA iPhone di tracciamento spese
 
-> **Versione 0.3.1 · Fase 1** (UX/UI, tecnologia, rischi) · 18 settembre 2026 — decisi: hosting **GitHub Pages**, lingue **italiano e inglese**, design del **prototipo v2**
+> **Versione 1.0 · proposta confermata** · 19 settembre 2026 — tutte le decisioni sono prese (vedi [`punti-aperti.md`](punti-aperti.md) e [§ 5.4](#54-decisioni-prese)); completate le sezioni 3 (Database) e 4 (Implementazione).
 > **Piattaforma**: l'app è una **PWA** (web app installata sulla schermata Home) e non un'app nativa Expo/React Native, perché è solo per uso personale e non si vuole pagare l'Apple Developer Program (confronto in [§ 2.4](#24-confronto-con-lalternativa-nativa-expo)).
-> Le sezioni 3 (Database) e 4 (Implementazione) verranno completate dopo la conferma di questa fase.
 
 ## Sommario
 
 - **Obiettivo**: registrare una spesa in **3 tap + importo** e capire a colpo d'occhio quanto si spende. Niente login, niente backend: dati solo sull'iPhone, funziona offline.
 - **Forma**: **PWA** aperta da Safari e aggiunta alla schermata Home → si avvia a schermo intero come un'app, **gratis**, senza Mac, senza account Apple, senza scadenze.
 - **Stack**: **Vite + React + TypeScript**, `vite-plugin-pwa` (service worker e manifest), React Router, **Dexie.js su IndexedDB**, grafici SVG su misura, `date-fns` (locale `it` ed `enIE`), dizionari IT/EN su misura, Zustand, `motion` per fogli e swipe, `lucide-react` per le icone.
-- **Hosting**: **GitHub Pages** con repository **pubblico** e deploy automatico via GitHub Actions a ogni push su `main` → `https://<utente>.github.io/spese/`. Il repository contiene solo codice: le spese restano sull'iPhone.
+- **Hosting**: **GitHub Pages** con repository **pubblico** e deploy automatico via GitHub Actions a ogni push su `main` → `https://<utente>.github.io/gestione-spese/`. Il repository contiene solo codice: le spese restano sull'iPhone.
 - **Navigazione**: tab bar con **pulsante centrale "+"** che apre un foglio con **tastierino numerico integrato** (evita la tastiera iOS e lo zoom automatico di Safari).
 - **Dati**: importi come **interi in centesimi**, date come testo locale `YYYY-MM-DD`, archiviazione persistente richiesta al browser, **backup JSON/CSV** con lo share sheet di iOS (Web Share API).
 - **Rischio principale**: i dati vivono nello spazio della PWA installata: **rimuovere l'icona dalla Home li cancella**, e quelli inseriti in Safari prima dell'installazione non passano all'app → guida all'installazione al primo avvio e backup facile fin dall'MVP.
 - **Tempi stimati**: **15–25 ore** di lavoro effettivo (4–6 sessioni, 1–2 settimane di calendario); l'**MVP usabile ogni giorno** in circa **6–9 ore** ([§ 4.1](#41-piano-di-lavoro-e-stima-dei-tempi)).
 - **Lingue**: interfaccia in **italiano (predefinito) e inglese**, scelta in Impostazioni; importi e date nel formato della lingua (`1.234,56 €` / `€1,234.56`).
-- **Prototipo interattivo**: [`prototipo-app-spese-v2.html`](prototipo-app-spese-v2.html), design da implementare (aprire nel browser).
+- **Prototipo interattivo**: [`prototipo-app-spese.html`](prototipo-app-spese.html), design da implementare (aprire nel browser).
 
 ## Indice
 
@@ -33,13 +32,25 @@
    - [2.4 Confronto con l'alternativa nativa (Expo)](#24-confronto-con-lalternativa-nativa-expo)
    - [2.5 Hosting e deploy su GitHub Pages](#25-hosting-e-deploy-su-github-pages)
 3. [Database](#3-database)
+   - [3.1 Dove stanno i dati](#31-dove-stanno-i-dati)
+   - [3.2 Tabelle](#32-tabelle)
+   - [3.3 Schema Dexie e indici](#33-schema-dexie-e-indici)
+   - [3.4 Categorie predefinite e seed](#34-categorie-predefinite-e-seed)
+   - [3.5 Query principali](#35-query-principali)
+   - [3.6 Spese ricorrenti](#36-spese-ricorrenti)
+   - [3.7 Backup ed esportazione](#37-backup-ed-esportazione)
+   - [3.8 Migrazioni](#38-migrazioni)
 4. [Implementazione](#4-implementazione)
    - [4.1 Piano di lavoro e stima dei tempi](#41-piano-di-lavoro-e-stima-dei-tempi)
+   - [4.2 Ambiente di sviluppo](#42-ambiente-di-sviluppo)
+   - [4.3 Struttura delle cartelle](#43-struttura-delle-cartelle)
+   - [4.4 Step e criteri di completamento](#44-step-e-criteri-di-completamento)
+   - [4.5 Controlli automatici e pubblicazione](#45-controlli-automatici-e-pubblicazione)
 5. [Rischi e punti aperti](#5-rischi-e-punti-aperti)
    - [5.1 Limiti noti e rischi](#51-limiti-noti-e-rischi)
    - [5.2 Requisiti che semplificherei](#52-requisiti-che-semplificherei)
    - [5.3 Requisiti mancanti](#53-requisiti-mancanti)
-   - [5.4 Decisioni da prendere](#54-decisioni-da-prendere)
+   - [5.4 Decisioni prese](#54-decisioni-prese)
 
 ---
 
@@ -101,17 +112,18 @@ flowchart TD
 | Schermata | Presentazione | Implementazione web (indicativa) |
 |---|---|---|
 | Home | Tab | Route `#/` |
-| Storico | Tab | Route `#/storico` (filtri anche nella query, es. `#/storico?mese=2026-09&cat=spesa`) |
-| Grafici | Tab | Route `#/grafici?mese=2026-09` |
-| Impostazioni | Tab | Route `#/impostazioni` |
-| Categorie | Pagina con pulsante "‹ Impostazioni" | Route `#/impostazioni/categorie` |
+| Storico | Tab | Route `#/history` (filtri anche nella query, es. `#/history?month=2026-09&cat=spesa`) |
+| Grafici | Tab | Route `#/charts?month=2026-09` |
+| Impostazioni | Tab | Route `#/settings` |
+| Categorie | Pagina con pulsante "‹ Impostazioni" | Route `#/settings/categories` |
+| Spese ricorrenti (fase 4) | Pagina con pulsante "‹ Impostazioni" | Route `#/settings/recurring` |
 | Nuova / modifica spesa | Foglio dal basso a tutta altezza | Componente `Sheet` aperto da stato globale |
 | Filtri | Foglio dal basso | Componente `Sheet` |
 | Nuova / modifica categoria | Foglio dal basso | Componente `Sheet` |
 | Esporta / conferme | Action sheet | Componente `ActionSheet` |
 | Guida installazione | Foglio mostrato solo se l'app è aperta in Safari | `display-mode: standalone` non attivo |
 
-> Le route usano il **`#`** (`https://<utente>.github.io/spese/#/storico`): GitHub Pages non sa reindirizzare gli indirizzi interni all'app, e con il `#` il server riceve sempre solo `/spese/` (vedi [§ 2.5](#25-hosting-e-deploy-su-github-pages)).
+> Le route usano il **`#`** (`https://<utente>.github.io/gestione-spese/#/history`): GitHub Pages non sa reindirizzare gli indirizzi interni all'app, e con il `#` il server riceve sempre solo `/gestione-spese/` (vedi [§ 2.5](#25-hosting-e-deploy-su-github-pages)).
 >
 > In una PWA avviata dalla Home non esistono il pulsante "indietro" del browser né lo swipe dal bordo per tornare indietro: ogni pagina secondaria ha un **pulsante "‹" esplicito** e i fogli si chiudono con `Annulla` o trascinandoli verso il basso.
 
@@ -182,7 +194,7 @@ flowchart TD
 - **Chip dettagli** (tutti opzionali, un tap ciascuno):
   - `Oggi` → mostra `Oggi` / `Ieri` / selettore data nativo di iOS (`<input type="date">`);
   - `Carta` → cicla Carta → Contanti → Altro (predefinito impostabile);
-  - `Una tantum` ↔ `Ogni mese` (ricorrente mensile).
+  - `Una tantum` ↔ `Ogni mese` (ricorrente mensile, dalla fase 4: crea una regola, [§ 3.6](#36-spese-ricorrenti)).
 - Campo **Nota** a una riga (max 40 caratteri, testo a 17 px per evitare lo zoom automatico di Safari).
 - **Tastierino numerico integrato** (non la tastiera di sistema): cifre, virgola, cancella. Massimo 2 decimali e 6 cifre intere.
 - In modalità **Modifica**: stessi campi precompilati + pulsante rosso "Elimina spesa" in fondo.
@@ -271,6 +283,7 @@ flowchart TD
 - **Mese**: selettore `‹ Settembre 2026 ›` + interruttore "Tutti i mesi".
 - **Categorie**: chip a selezione multipla.
 - **Giorno**: mini-calendario del mese (settimana da lunedì), puntino sotto i giorni con spese, giorni futuri disattivati.
+- **Cerca nelle note**: campo di testo (17 px) che filtra le spese la cui nota contiene il testo, senza distinzione di maiuscole e accenti; nella barra dello Storico compare come chip `"esselunga" ✕`.
 - Pulsante principale con **anteprima live**: "Mostra 12 spese · 187,40 €".
 
 **Interazioni**
@@ -419,10 +432,12 @@ flowchart TD
 - Lista categorie attive con icona, nome, numero di spese.
 - `+ Nuova categoria` (in barra e in fondo alla lista); pulsante `‹ Impostazioni` per tornare indietro.
 - Sezione **Archiviate** (visibile solo se presenti).
-- **Foglio categoria**: anteprima icona, nome (max 20 caratteri), 14 colori, 14 icone.
+- **Foglio categoria**: anteprima icona, nome (max 20 caratteri), 15 colori, 15 icone.
 
 **Regole**
-- Le categorie predefinite si possono **rinominare e ricolorare**, non eliminare.
+- Le categorie predefinite si possono **rinominare, ricolorare e archiviare** (tranne "Altro"), mai eliminare.
+- Ordine fisso: predefinite nell'ordine della tabella di § 1.5, poi quelle create dall'utente per data di creazione (nessun riordino manuale).
+- Massimo **15 categorie attive**: oltre, "Nuova categoria" e "Ripristina" sono disattivati con un messaggio.
 - Una categoria con spese si **archivia** (sparisce da inserimento e filtri, resta nello storico e nei grafici); una categoria personalizzata senza spese si può eliminare.
 - Nomi univoci (confronto senza maiuscole/minuscole).
 
@@ -536,8 +551,8 @@ flowchart TD
 **Casi limite**
 - Virgola doppia o terzo decimale → ignorati con leggero shake.
 - Importo massimo 999.999,99 €.
-- Data futura: **non consentita** nell'MVP (vedi [decisioni](#54-decisioni-da-prendere)).
-- Spesa ricorrente: salvata come normale spesa del giorno scelto + regola mensile (generazione delle occorrenze successive nella fase "extra", all'apertura dell'app).
+- Data futura: **non consentita** (vedi [decisioni](#54-decisioni-prese)).
+- Spesa ricorrente (fase 4): salvata come normale spesa del giorno scelto + regola mensile che genera le occorrenze successive all'apertura dell'app ([§ 3.6](#36-spese-ricorrenti)).
 - App chiusa da iOS mentre il foglio è aperto: la bozza non salvata si perde (accettabile: l'inserimento dura pochi secondi).
 
 #### 1.4.2 Filtrare lo storico
@@ -567,14 +582,14 @@ flowchart LR
 
 **Regole di combinazione**
 - Tra tipi di filtro diversi vale **AND** (mese **e** categorie **e** giorno); tra più categorie vale **OR**.
-- I filtri sono riflessi nell'indirizzo (`#/storico?mese=…&cat=…`): se iOS chiude l'app in background, alla riapertura la vista filtrata viene ripristinata.
+- I filtri sono riflessi nell'indirizzo (`#/history?month=…&cat=…&day=…&q=…`): se iOS chiude l'app in background, alla riapertura la vista filtrata viene ripristinata.
 - Il totale mostrato è sempre quello dei risultati filtrati, mai quello generale.
 
 #### 1.4.3 Installare l'app sull'iPhone
 
 | # | Azione utente | Risposta |
 |---|---|---|
-| 1 | Apre l'indirizzo dell'app in **Safari** (es. `https://<utente>.github.io/spese/`) | L'app rileva di non essere installata e mostra la **guida** |
+| 1 | Apre l'indirizzo dell'app in **Safari** (es. `https://<utente>.github.io/gestione-spese/`) | L'app rileva di non essere installata e mostra la **guida** |
 | 2 | Tocca **Condividi** nella barra di Safari | Si apre lo share sheet di iOS |
 | 3 | Tocca **Aggiungi alla schermata Home** → **Aggiungi** | Compare l'icona "Spese" sulla Home |
 | 4 | Apre l'app dall'icona | Avvio a schermo intero; l'app chiede l'**archiviazione persistente** e scarica tutto per l'uso **offline** |
@@ -605,7 +620,7 @@ flowchart TD
 
 ### 1.5 Design system
 
-Direzione **"iOS raffinato"**: il linguaggio di iOS (large title, liste inset grouped, fogli dal basso, font di sistema) con più carattere. Il totale del mese sta in una card in gradiente indaco, le icone categoria sono squircle tenui, la tab bar è una capsula sospesa, le ombre sono morbide e c'è più gerarchia tipografica. Riferimento visivo: [`prototipo-app-spese-v2.html`](prototipo-app-spese-v2.html); i valori di questa sezione coincidono con i suoi token CSS.
+Direzione **"iOS raffinato"**: il linguaggio di iOS (large title, liste inset grouped, fogli dal basso, font di sistema) con più carattere. Il totale del mese sta in una card in gradiente indaco, le icone categoria sono squircle tenui, la tab bar è una capsula sospesa, le ombre sono morbide e c'è più gerarchia tipografica. Riferimento visivo: [`prototipo-app-spese.html`](prototipo-app-spese.html); i valori di questa sezione coincidono con i suoi token CSS.
 
 #### Palette colori
 
@@ -648,17 +663,19 @@ Implementata come **variabili CSS** (`--color-…`) con valori chiari di default
 
 #### Categorie predefinite
 
-| Categoria (IT / EN) | Icona `lucide-react` | SF Symbol di riferimento | Light | Dark |
-|---|---|---|---|---|
-| Spesa / Groceries | `ShoppingCart` | `cart.fill` | `#34C759` | `#30D158` |
-| Trasporti / Transport | `Car` | `car.fill` | `#007AFF` | `#0A84FF` |
-| Ristoranti / Restaurants | `Utensils` | `fork.knife` | `#FF9500` | `#FF9F0A` |
-| Casa / Home | `House` | `house.fill` | `#A2845E` | `#AC8E68` |
-| Salute / Health | `HeartPulse` | `cross.case.fill` | `#FF2D55` | `#FF375F` |
-| Svago / Leisure | `Star` | `gamecontroller.fill` | `#AF52DE` | `#BF5AF2` |
-| Abbonamenti / Subscriptions | `Repeat` | `arrow.triangle.2.circlepath` | `#30B0C7` | `#40C8E0` |
-| Lavoro / Work | `Briefcase` | `briefcase.fill` | `#5A6B8C` | `#8FA0C4` |
-| Altro / Other | `Ellipsis` | `ellipsis.circle.fill` | `#8E8E93` | `#98989D` |
+| Categoria (IT / EN) | `id` | Icona salvata | Icona `lucide-react` | Light | Dark |
+|---|---|---|---|---|---|
+| Spesa / Groceries | `spesa` | `cart` | `ShoppingCart` | `#34C759` | `#30D158` |
+| Trasporti / Transport | `trasporti` | `car` | `Car` | `#007AFF` | `#0A84FF` |
+| Ristoranti / Restaurants | `ristoranti` | `food` | `Utensils` | `#FF9500` | `#FF9F0A` |
+| Casa / Home | `casa` | `home` | `House` | `#A2845E` | `#AC8E68` |
+| Salute / Health | `salute` | `heart` | `Heart` (cuore semplice, come nel prototipo) | `#FF2D55` | `#FF375F` |
+| Svago / Leisure | `svago` | `star` | `Star` | `#AF52DE` | `#BF5AF2` |
+| Abbonamenti / Subscriptions | `abbonamenti` | `repeat` | `Repeat` | `#30B0C7` | `#40C8E0` |
+| Lavoro / Work | `lavoro` | `briefcase` | `Briefcase` | `#5A6B8C` | `#8FA0C4` |
+| Altro / Other | `altro` | `dots` | `Ellipsis` | `#8E8E93` | `#98989D` |
+
+Icone disponibili per le categorie personalizzate (15, come nel prototipo): le 9 sopra più `gift` → `Gift`, `plane` → `Plane`, `book` → `BookOpen`, `dumbbell` → `Dumbbell`, `shirt` → `Shirt`, `coffee` → `Coffee`.
 
 Colori aggiuntivi per categorie personalizzate: giallo `#FFCC00`/`#FFD60A`, menta `#00C7BE`/`#63E6E2`, indaco `#5856D6`/`#5E5CE6`, rosso `#FF3B30`/`#FF453A`, ciano `#32ADE6`/`#64D2FF`, lampone `#C2185B`/`#EC407A`, ardesia `#5A6B8C`/`#8FA0C4`.
 
@@ -667,7 +684,7 @@ Colori aggiuntivi per categorie personalizzate: giallo `#FFCC00`/`#FFD60A`, ment
 - **Stile delle icone categoria**: squircle con fondo tenue del colore della categoria (15% su `surface` in chiaro, 22% in scuro) e glifo colorato. Vale in liste, legenda dei grafici, top categorie e griglia di inserimento.
 - **Categoria scelta nella griglia**: fondo pieno, glifo bianco, anello colorato al 45% staccato di 3 px e ingrandimento del 6%.
 - **Glifo bianco su colore pieno** solo nell'anteprima del foglio categoria.
-- **Salvataggio**: nel database si salva il **nome** dell'icona (es. `ShoppingCart`), non il componente.
+- **Salvataggio**: nel database e nel backup si salva un **nome proprio stabile** (`cart`, `heart`…), convertito nel componente Lucide solo in `src/components/categoryIcons.ts`: se un giorno cambia la libreria di icone, dati e backup restano validi.
 - **Nomi**: i nomi delle categorie predefinite seguono la lingua finché non vengono rinominati; le categorie create dall'utente non si traducono (§ 5.4, D17).
 
 #### Tipografia
@@ -774,7 +791,7 @@ Tutti i testi dei componenti arrivano dai dizionari IT/EN (`src/i18n`, vedi `.cl
 
 ### 1.6 Prototipo interattivo HTML
 
-Il file [`prototipo-app-spese-v2.html`](prototipo-app-spese-v2.html) è il **riferimento da implementare**. Simula l'app dentro una cornice iPhone (393 × 852 px) con dati di esempio generati sugli ultimi tre mesi, con il design di § 1.5 e la scelta della lingua.
+Il file [`prototipo-app-spese.html`](prototipo-app-spese.html) è il **riferimento da implementare**. Simula l'app dentro una cornice iPhone (393 × 852 px) con dati di esempio generati sugli ultimi tre mesi, con il design di § 1.5 e la scelta della lingua.
 
 | Cosa provare | Come |
 |---|---|
@@ -809,7 +826,7 @@ Il file [`prototipo-app-spese-v2.html`](prototipo-app-spese-v2.html) è il **rif
 - **IndexedDB con Dexie.js**: il database "vero" del browser, con indici, transazioni, versioni dello schema e query reattive (`useLiveQuery`).
 - **Nessun backend**: l'hosting serve solo file statici; i dati non lasciano mai l'iPhone se non tramite backup esplicito.
 
-> ℹ️ Una PWA richiede **HTTPS**. In sviluppo sulla rete locale (`http://192.168.x.x:5173`) l'interfaccia si prova normalmente, ma installazione e offline sull'iPhone si verificano solo sul sito HTTPS pubblicato su GitHub Pages. Sul PC invece `npm run build && npm run preview` (`http://localhost:4173/spese/`) permette di provare service worker e offline, perché `localhost` è considerato sicuro.
+> ℹ️ Una PWA richiede **HTTPS**. In sviluppo sulla rete locale (`http://192.168.x.x:5173`) l'interfaccia si prova normalmente, ma installazione e offline sull'iPhone si verificano solo sul sito HTTPS pubblicato su GitHub Pages. Sul PC invece `npm run build && npm run preview` (`http://localhost:4173/gestione-spese/`) permette di provare service worker e offline, perché `localhost` è considerato sicuro.
 
 ### 2.2 Librerie scelte
 
@@ -833,6 +850,7 @@ Il file [`prototipo-app-spese-v2.html`](prototipo-app-spese-v2.html) è il **rif
 | Backup | **Web Share API** (`navigator.share` con file), `<a download>`, `<input type="file">`, Clipboard API | Share sheet nativo di iOS per salvare su File/iCloud Drive; fallback per desktop | 0 KB |
 | Persistenza | **Storage API** (`navigator.storage.persist()` / `estimate()`) | Chiede al browser di non cancellare i dati e mostra lo spazio usato | 0 KB |
 | Test | `vitest` + Testing Library; **Playwright con WebKit** | Test di calcoli e componenti; test end-to-end sul motore di Safari **anche da Windows** | dev |
+| Test dei repository | `fake-indexeddb` | IndexedDB simulato in Node: i repository Dexie si testano con Vitest senza browser | dev |
 | Debug su iPhone | `eruda` (solo in sviluppo) | Console dentro la pagina: su Windows non si può usare il Web Inspector di Safari | dev |
 | Qualità | ESLint + Prettier | Stile e errori comuni | dev |
 | Hosting | **GitHub Pages** + **GitHub Actions** | Gratis con repository pubblico, HTTPS automatico, codice e pubblicazione nello stesso posto; deploy a ogni push su `main` | — |
@@ -855,7 +873,7 @@ Il file [`prototipo-app-spese-v2.html`](prototipo-app-spese-v2.html) è il **rif
 | Selettore data nativo | ✅ `<input type="date">` | Chip data → Scegli data |
 | Feedback aptico (vibrazione) | ❌ Vibration API non supportata | Feedback visivi (rimbalzo, shake, stati premuti) |
 | Gesto "indietro" dal bordo | ❌ in modalità standalone | Pulsanti "‹" espliciti e fogli trascinabili |
-| Notifiche e promemoria | ⚠️ solo Web Push, che richiede un server | Fuori scopo; eventuale promemoria ricorrente nell'app Promemoria di iOS con link all'app |
+| Notifiche e promemoria | ⚠️ solo Web Push, che richiede un server | Fuori scopo; promemoria ricorrente nell'app Promemoria di iOS, senza link (§ 4.5) |
 | Attività in background | ❌ | Spese ricorrenti generate all'apertura (in modo idempotente) |
 | Face ID / blocco app | ⚠️ possibile solo con WebAuthn/passkey, poco pratico | Fuori scopo per l'MVP |
 | Widget, Siri, Comandi rapidi, ricezione di file condivisi | ❌ | Non previsti |
@@ -887,7 +905,7 @@ L'alternativa valutata era un'app nativa con React Native + Expo. Confronto per 
 
 ### 2.5 Hosting e deploy su GitHub Pages
 
-**Decisione**: repository **pubblico** su GitHub (nome indicativo `spese`), pubblicato con **GitHub Pages** tramite **GitHub Actions**. Indirizzo dell'app: `https://<utente>.github.io/spese/`.
+**Decisione**: repository **pubblico** `fumaroladamiano/gestione-spese` su GitHub, pubblicato con **GitHub Pages** tramite **GitHub Actions**. Indirizzo dell'app: `https://fumaroladamiano.github.io/gestione-spese/` (nessun dominio personale). Nome del repository e nome utente **non vanno più cambiati** (R5).
 
 > Il repository pubblico contiene **solo il codice**. Le spese vivono nell'IndexedDB dell'iPhone e non passano mai da GitHub: chi apre il link vede un'app vuota. L'unica regola è **non committare mai i file di backup** (vedi `.gitignore` sotto).
 
@@ -897,15 +915,15 @@ L'alternativa valutata era un'app nativa con React Native + Expo. Confronto per 
 flowchart LR
     DEV["PC Windows<br/>VS Code"] -->|git push su main| GH["Repository GitHub<br/>pubblico"]
     GH --> ACT["GitHub Actions<br/>npm ci · npm run build"]
-    ACT -->|cartella dist| PAGES["GitHub Pages<br/>https://utente.github.io/spese/"]
+    ACT -->|cartella dist| PAGES["GitHub Pages<br/>https://utente.github.io/gestione-spese/"]
     PAGES -->|"Safari → Aggiungi alla Home"| IPH["iPhone<br/>PWA installata"]
     PAGES -.->|"nuova versione del service worker"| IPH
     IPH --> DB[("IndexedDB<br/>solo sul telefono")]
 ```
 
-1. Il codice sta nel repository GitHub `spese`.
-2. A ogni `git push` sul branch `main` parte il workflow **Deploy**: installa le dipendenze, esegue la build e pubblica la cartella `dist`.
-3. Dopo 1–2 minuti il sito è aggiornato su `https://<utente>.github.io/spese/`, già in HTTPS.
+1. Il codice sta nel repository GitHub `gestione-spese`; si lavora su un branch per fase (`fase-1-mvp`…).
+2. A ogni `git push` su qualsiasi branch parte il workflow **CI** (typecheck, lint, test, test end-to-end WebKit, build). Solo su `main`, e solo se i controlli passano, pubblica la cartella `dist`.
+3. Dopo 1–2 minuti il sito è aggiornato su `https://<utente>.github.io/gestione-spese/`, già in HTTPS.
 4. Sull'iPhone l'indirizzo si apre **una sola volta** in Safari e si aggiunge alla schermata Home.
 5. Dopo ogni nuova pubblicazione, l'app installata rileva la nuova versione e mostra il toast "Nuova versione disponibile · Aggiorna". Con GitHub Pages può servire qualche minuto, per la cache di 10 minuti applicata ai file.
 
@@ -913,56 +931,69 @@ flowchart LR
 
 | # | Dove | Azione |
 |---|---|---|
-| 1 | GitHub | Creare il repository **pubblico** `spese` (il nome diventa parte dell'indirizzo: sceglierlo definitivo) |
-| 2 | Repository → **Settings → Pages** | *Build and deployment* → *Source*: **GitHub Actions** |
-| 3 | Progetto | Aggiungere i file di configurazione qui sotto (`deploy.yml`, `vite.config.ts`, `index.html`, router, `.gitignore`) |
-| 4 | PC | `git push` su `main` → tab **Actions** del repository: il job *Deploy* deve risultare verde |
-| 5 | iPhone | Safari → `https://<utente>.github.io/spese/` → Condividi → **Aggiungi alla schermata Home** |
+| 1 | GitHub | ✅ Repository **pubblico** `fumaroladamiano/gestione-spese` già creato |
+| 2 | Repository → **Settings → Pages** | *Build and deployment* → *Source*: **GitHub Actions** (da fare durante la fase 0) |
+| 3 | Progetto | Aggiungere i file di configurazione qui sotto (`ci.yml`, `vite.config.ts`, `index.html`, router, `.gitignore`) |
+| 4 | PC | Unione della fase 0 in `main` → tab **Actions** del repository: i job *check* e *deploy* devono risultare verdi |
+| 5 | iPhone | Safari → `https://<utente>.github.io/gestione-spese/` → Condividi → **Aggiungi alla schermata Home** |
 
 #### Bozza: workflow di pubblicazione
 
 ```yaml
-# .github/workflows/deploy.yml
-name: Deploy
+# .github/workflows/ci.yml
+name: CI
 
 on:
   push:
-    branches: [main]
+    branches: ['**']
+    paths-ignore: ['docs/**', '.claude/**', '**/*.md'] # la sola documentazione non ripubblica l'app
   workflow_dispatch: # permette anche l'avvio manuale dalla tab Actions
 
 permissions:
   contents: read
-  pages: write
-  id-token: write
-
-concurrency:
-  group: pages
-  cancel-in-progress: true
 
 jobs:
-  deploy:
+  check:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-
       - uses: actions/setup-node@v4
         with:
-          node-version: 22
+          node-version-file: .nvmrc # 24
           cache: npm
-
       - run: npm ci
+      - run: npm run typecheck
+      - run: npm run lint
+      - run: npm test
+      - run: npx playwright install --with-deps webkit
+      - run: npm run test:e2e
       - run: npm run build
-
       - uses: actions/upload-pages-artifact@v3
+        if: github.ref == 'refs/heads/main'
         with:
           path: dist
 
-      - uses: actions/deploy-pages@v4
+  deploy:
+    needs: check # si pubblica solo se tutti i controlli sono passati
+    if: github.ref == 'refs/heads/main'
+    runs-on: ubuntu-latest
+    permissions:
+      pages: write
+      id-token: write
+    concurrency:
+      group: pages
+      cancel-in-progress: true
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - id: deployment
+        uses: actions/deploy-pages@v4
 ```
 
 #### Bozza: `vite.config.ts`
 
-Il sito vive nella sottocartella `/spese/`: `base`, `start_url` e `scope` devono usare lo stesso percorso, altrimenti file, manifest o service worker non vengono trovati.
+Il sito vive nella sottocartella `/gestione-spese/`: `base`, `start_url` e `scope` devono usare lo stesso percorso, altrimenti file, manifest o service worker non vengono trovati.
 
 ```ts
 // vite.config.ts
@@ -971,7 +1002,7 @@ import react from '@vitejs/plugin-react';
 import { VitePWA } from 'vite-plugin-pwa';
 
 // Deve coincidere con il nome del repository GitHub
-const BASE = '/spese/';
+const BASE = '/gestione-spese/';
 
 export default defineConfig({
   base: BASE,
@@ -1037,23 +1068,25 @@ export default defineConfig({
 import { createHashRouter } from 'react-router';
 import { AppLayout } from './AppLayout';
 import { HomePage } from '../features/home/HomePage';
-import { StoricoPage } from '../features/storico/StoricoPage';
-import { GraficiPage } from '../features/grafici/GraficiPage';
-import { ImpostazioniPage } from '../features/impostazioni/ImpostazioniPage';
-import { CategoriePage } from '../features/categorie/CategoriePage';
+import { HistoryPage } from '../features/history/HistoryPage';
+import { ChartsPage } from '../features/charts/ChartsPage';
+import { SettingsPage } from '../features/settings/SettingsPage';
+import { CategoriesPage } from '../features/categories/CategoriesPage';
+import { RecurringPage } from '../features/recurring/RecurringPage';
 
-// Indirizzi del tipo https://utente.github.io/spese/#/storico:
-// GitHub Pages riceve sempre /spese/ e non restituisce mai 404 sulle pagine interne.
+// Indirizzi del tipo https://utente.github.io/gestione-spese/#/history:
+// GitHub Pages riceve sempre /gestione-spese/ e non restituisce mai 404 sulle pagine interne.
 export const router = createHashRouter([
   {
     path: '/',
     element: <AppLayout />, // tab bar, fogli, toast
     children: [
       { index: true, element: <HomePage /> },
-      { path: 'storico', element: <StoricoPage /> },
-      { path: 'grafici', element: <GraficiPage /> },
-      { path: 'impostazioni', element: <ImpostazioniPage /> },
-      { path: 'impostazioni/categorie', element: <CategoriePage /> },
+      { path: 'history', element: <HistoryPage /> },
+      { path: 'charts', element: <ChartsPage /> },
+      { path: 'settings', element: <SettingsPage /> },
+      { path: 'settings/categories', element: <CategoriesPage /> },
+      { path: 'settings/recurring', element: <RecurringPage /> }, // fase 4
     ],
   },
 ]);
@@ -1066,6 +1099,11 @@ import { createRoot } from 'react-dom/client';
 import { RouterProvider } from 'react-router';
 import { router } from './app/router';
 import './styles/global.css';
+
+// Console dentro la pagina per il debug sull'iPhone: il blocco sparisce dalla build di produzione
+if (import.meta.env.DEV) {
+  void import('eruda').then(({ default: eruda }) => eruda.init());
+}
 
 createRoot(document.getElementById('root')!).render(
   <StrictMode>
@@ -1081,6 +1119,8 @@ createRoot(document.getElementById('root')!).render(
 node_modules/
 dist/
 dev-dist/
+test-results/
+playwright-report/
 
 # ambiente locale
 .env*
@@ -1096,8 +1136,8 @@ backup/
 
 | Aspetto | Comportamento di GitHub Pages | Come lo gestiamo |
 |---|---|---|
-| Sito in sottocartella (`/spese/`) | Percorsi assoluti come `/icon.png` non funzionano | `base: '/spese/'` in Vite; `start_url` e `scope` del manifest uguali; `%BASE_URL%` nell'HTML |
-| Nessun reindirizzamento delle pagine interne | Ricaricare `/spese/storico` darebbe 404 | Route con `#` (`createHashRouter`) |
+| Sito in sottocartella (`/gestione-spese/`) | Percorsi assoluti come `/icon.png` non funzionano | `base: '/gestione-spese/'` in Vite; `start_url` e `scope` del manifest uguali; `%BASE_URL%` nell'HTML |
+| Nessun reindirizzamento delle pagine interne | Ricaricare `/gestione-spese/history` darebbe 404 | Route con `#` (`createHashRouter`) |
 | Nessuna anteprima per branch | Si pubblica solo `main` | Prove in locale con `npm run preview`; su `main` solo codice pronto |
 | Cache non configurabile (10 minuti) | Il nuovo `sw.js` può arrivare con qualche minuto di ritardo | Accettabile; toast "Aggiorna" e versione visibile in Impostazioni |
 | Indirizzo legato a nome utente e repository | Rinominarli cambia l'indirizzo: l'app installata va rifatta e i dati vanno spostati | Nomi definitivi fin da subito; in caso di cambio, esporta → importa |
@@ -1108,14 +1148,184 @@ backup/
 
 ## 3. Database
 
-> ⏳ **Da completare dopo conferma.**
-> Con la scelta PWA lo schema sarà descritto per **IndexedDB (Dexie.js)** invece che per SQLite, mantenendo importi in centesimi, migrazioni (versioni dello schema), seed delle categorie, query per filtri e grafici e backup JSON/CSV.
+Database **IndexedDB** chiamato `spese`, gestito con **Dexie.js**. Le regole operative sono in [`.claude/rules/database.md`](../.claude/rules/database.md); qui ci sono schema, motivazioni ed esempi.
+
+### 3.1 Dove stanno i dati
+
+| Dove | Cosa | Perché lì |
+|---|---|---|
+| **IndexedDB** (`spese`) | Spese, categorie, regole ricorrenti, budget | Sono i dati dell'utente: transazioni, indici, finiscono nel backup |
+| **`localStorage`** (`spese:prefs`, tramite Zustand `persist`) | Tema, lingua, metodo di pagamento predefinito, data dell'ultimo backup, guida all'installazione già vista | Preferenze del dispositivo lette **in modo sincrono** all'avvio (niente lampo di tema o lingua sbagliati); non entrano nel backup |
+| Memoria (Zustand, senza `persist`) | Fogli aperti, bozza della spesa, toast, ultima spesa eliminata (per "Annulla") | Stato temporaneo dell'interfaccia |
+
+Nessun testo tradotto viene salvato: nel database ci sono solo id, valori e nomi scelti dall'utente.
+
+### 3.2 Tabelle
+
+**`expenses`** — una riga per spesa
+
+| Campo | Tipo | Regole |
+|---|---|---|
+| `id` | `string` | Chiave primaria casuale (`newId()`, 16 byte da `crypto.getRandomValues` in esadecimale). Casuale e non auto-incrementale, così i backup di dispositivi diversi si uniscono senza collisioni |
+| `amountCents` | `number` | Intero da 1 a 99.999.999 (999.999,99 €) |
+| `categoryId` | `string` | Id di una categoria esistente (anche archiviata) |
+| `date` | `string` | `YYYY-MM-DD` locale, mai nel futuro |
+| `note` | `string` | 0–40 caratteri, spazi iniziali e finali rimossi; stringa vuota se assente |
+| `paymentMethod` | `'carta' \| 'contanti' \| 'altro'` | Predefinito dalle preferenze |
+| `recurringRuleId` | `string` (opzionale) | Presente solo sulle spese create da una regola o che l'hanno creata; mostra il simbolo ↻ |
+| `createdAt` | `string` | ISO 8601; ordina le spese dello stesso giorno |
+| `updatedAt` | `string` | ISO 8601; aggiornato a ogni modifica |
+
+**`categories`**
+
+| Campo | Tipo | Regole |
+|---|---|---|
+| `id` | `string` | Predefinite: id stabili (`spesa`…`altro`); personalizzate: `newId()` |
+| `name` | `string \| null` | `null` = predefinita mai rinominata (nome dai dizionari IT/EN); altrimenti 1–20 caratteri, univoco senza distinzione di maiuscole |
+| `icon` | `string` | Nome proprio stabile (`cart`, `heart`…, [§ 1.5](#categorie-predefinite)) |
+| `colorLight`, `colorDark` | `string` | Esadecimali dalla palette di § 1.5 |
+| `builtin` | `boolean` | `true` per le 9 predefinite: non si eliminano |
+| `archived` | `boolean` | Esclusa da inserimento e filtri, visibile in storico e grafici. `altro` non si archivia |
+| `createdAt` | `string` | ISO 8601; ordina le personalizzate |
+
+**`recurringRules`** — usata dalla fase 4
+
+| Campo | Tipo | Regole |
+|---|---|---|
+| `id` | `string` | `newId()` |
+| `amountCents`, `categoryId`, `note`, `paymentMethod` | come `expenses` | Valori copiati in ogni spesa generata |
+| `dayOfMonth` | `number` | 1–31, preso dalla data della spesa che ha creato la regola |
+| `active` | `boolean` | `false` = sospesa |
+| `lastGeneratedMonth` | `string` | `YYYY-MM` dell'ultima spesa generata (o della prima spesa inserita) |
+| `createdAt`, `updatedAt` | `string` | ISO 8601 |
+
+**`settings`** — coppie chiave-valore
+
+| `key` | `value` | Note |
+|---|---|---|
+| `budgetCents` | `number` | Budget mensile globale unico; riga assente = nessun budget (usato dalla fase 4) |
+
+### 3.3 Schema Dexie e indici
+
+```ts
+// src/data/db.ts
+import Dexie, { type EntityTable } from 'dexie';
+import type { Category, Expense, RecurringRule, SettingRow } from '../domain/types';
+
+export const db = new Dexie('spese') as Dexie & {
+  expenses: EntityTable<Expense, 'id'>;
+  categories: EntityTable<Category, 'id'>;
+  recurringRules: EntityTable<RecurringRule, 'id'>;
+  settings: EntityTable<SettingRow, 'key'>;
+};
+
+// Versione 1: contiene già tutte le tabelle, anche quelle usate solo dalla fase 4,
+// per evitare migrazioni appena l'app è in uso. Non va più modificata dopo la pubblicazione.
+db.version(1).stores({
+  expenses: 'id, date, categoryId, recurringRuleId, [categoryId+date], [date+createdAt]',
+  categories: 'id',
+  recurringRules: 'id',
+  settings: 'key',
+});
+```
+
+| Indice | Serve a |
+|---|---|
+| `date` | Spese di un mese (`between`) o di un giorno (`equals`), giorni con spese nel calendario |
+| `categoryId` | Numero di spese per categoria (Impostazioni → Categorie), controllo prima di eliminare |
+| `[categoryId+date]` | Filtro per una o più categorie dentro un mese senza leggere tutto il mese |
+| `[date+createdAt]` | Ordine delle liste: giorno più recente prima e, nello stesso giorno, ultima inserita prima ("Ultime spese" in Home) |
+| `recurringRuleId` | Spese di una regola (conteggio, collegamento ↻) |
+
+- IndexedDB **non indicizza booleani né `null`**: `archived` e `active` non hanno indice, e `recurringRuleId` resta assente (non `null`) sulle spese normali.
+- `categories`, `recurringRules` e `settings` hanno poche decine di righe: si leggono per intero.
+- La **ricerca nelle note** (fase 2) filtra in memoria il risultato della query del mese; con "Tutti i mesi" scorre tutte le spese, che restano poche migliaia anche dopo anni (R16).
+
+### 3.4 Categorie predefinite e seed
+
+- Le 9 predefinite (id, icona e colori in § 1.5) sono definite in `src/domain/categories.ts`, che fissa anche il loro **ordine**.
+- Il **seed** gira a ogni avvio, in una sola transazione, e aggiunge solo le predefinite mancanti: così una predefinita introdotta in una versione futura arriva anche a chi ha già dati. Non tocca mai quelle esistenti.
+- Non aggiunge una predefinita se esiste già una categoria con lo stesso nome in italiano o in inglese (es. "Lavoro" creata a mano).
+- Le predefinite **non si eliminano** (si rinominano, ricolorano, archiviano): altrimenti il seed le ricreerebbe al riavvio.
+- **Ordine mostrato**: predefinite nell'ordine fisso (`altro` ultima), poi personalizzate per `createdAt`.
+- **Limite**: massimo 15 categorie attive (non archiviate). Il repository rifiuta creazione e ripristino oltre il limite; l'importazione non lo applica.
+- **Nome mostrato**: `name ?? t(categoryNames[id])`. Salvare il foglio categoria con il nome tradotto invariato lascia `name: null`.
+
+### 3.5 Query principali
+
+| Schermata | Query | Calcolo in `src/domain` |
+|---|---|---|
+| Home: card del mese, riquadri | `expenses.where('date').between('2026-09-01', '2026-09-31', true, true)` + stesso periodo del mese precedente | Totale, variazione %, oggi, media giornaliera, ultimi 7 giorni, top categorie |
+| Home: ultime spese | `expenses.orderBy('[date+createdAt]').reverse().limit(5)` | — |
+| Storico (un mese) | Come sopra; con categorie: `where('[categoryId+date]').between([cat, inizio], [cat, fine])` per ogni categoria scelta | Gruppi per giorno, totali giornalieri, totale filtrato, ricerca nelle note |
+| Storico (tutti i mesi) | `expenses.orderBy('[date+createdAt]').reverse()` | Come sopra |
+| Filtri: calendario | Spese del mese (già lette) | Giorni con almeno una spesa |
+| Grafici | Spese del mese e del mese precedente | Totali per categoria e percentuali, totali giornalieri, media, confronto (D6), proiezione del budget |
+| Categorie | `categories.toArray()` + `expenses.where('categoryId').equals(id).count()` | Ordine e conteggi |
+
+- Le query leggono al massimo uno o due mesi; le aggregazioni sono **funzioni pure** testate con Vitest.
+- La UI si aggiorna da sola con `useLiveQuery`, usato solo negli hook `src/features/**/use*.ts`.
+- **Annulla dopo l'eliminazione**: la spesa eliminata resta in memoria finché il toast è visibile; "Annulla" la riscrive con lo stesso `id` e `createdAt`. Niente "cestino" nel database.
+
+### 3.6 Spese ricorrenti
+
+Una spesa segnata "Ogni mese" crea una **regola** in `recurringRules` e la spesa del giorno scelto, collegata con `recurringRuleId`. Le occorrenze successive sono spese normali, create dall'app all'apertura (una PWA non può lavorare in background).
+
+```mermaid
+flowchart TD
+    OPEN(["Avvio o ritorno in primo piano"]) --> RULES["Regole attive"]
+    RULES --> LOOP{"Mese successivo a<br/>lastGeneratedMonth ≤ mese corrente<br/>e giorno già arrivato?"}
+    LOOP -->|sì| ADD["Crea la spesa del mese<br/>(giorno 31 → ultimo giorno del mese)"]
+    ADD --> UPD["lastGeneratedMonth = quel mese"] --> LOOP
+    LOOP -->|no| END(["Fine: stessa transazione"])
+```
+
+- **Idempotente**: `lastGeneratedMonth` e la transazione unica impediscono duplicati anche riaprendo l'app più volte o con due schede aperte.
+- **Mesi arretrati**: se l'app non viene aperta per due mesi, al primo avvio crea entrambe le spese.
+- **Modifica ed eliminazione** di una spesa generata riguardano solo quella spesa: la regola non cambia e la spesa non viene ricreata.
+- **Gestione** in Impostazioni → Spese ricorrenti: elenco delle regole con sospendi/riattiva ed elimina (le spese già create restano). Riattivando non si recuperano i mesi saltati.
+- Nel foglio di una spesa ricorrente, passare da "Ogni mese" a "Una tantum" sospende la regola.
+
+### 3.7 Backup ed esportazione
+
+**JSON** (`spese-backup-AAAA-MM-GG.json`), l'unico formato reimportabile:
+
+```json
+{
+  "app": "spese",
+  "schemaVersion": 1,
+  "exportedAt": "2026-09-19T10:15:00.000Z",
+  "categories": [{ "id": "spesa", "name": null, "icon": "cart", "colorLight": "#34C759", "colorDark": "#30D158", "builtin": true, "archived": false, "createdAt": "…" }],
+  "expenses": [{ "id": "9f2c…", "amountCents": 1250, "categoryId": "ristoranti", "date": "2026-09-16", "note": "Pizzeria", "paymentMethod": "carta", "createdAt": "…", "updatedAt": "…" }],
+  "recurringRules": [],
+  "settings": { "budgetCents": 150000 }
+}
+```
+
+- **Validazione** con `zod` prima di scrivere: struttura, limiti (importi, lunghezze, date valide), categorie referenziate esistenti. Un file non valido non modifica nulla e mostra un errore tradotto.
+- **Sostituisci tutto**: svuota e riscrive le quattro tabelle in una transazione, poi riesegue il seed.
+- **Unisci**: aggiunge ciò che manca. Una spesa è già presente se ha lo stesso `id` oppure stessi `date`, `amountCents`, `categoryId` e `note` (D9). Categorie e regole si uniscono per `id`; una categoria del file con lo stesso nome di una esistente viene ricollegata a quella. Il budget del file si usa solo se quello attuale manca.
+- Tema, lingua e preferenze del dispositivo **non** sono nel backup.
+- `schemaVersion` cambia solo quando cambia il formato del file; l'importazione accetta tutte le versioni precedenti.
+
+**CSV** (`spese-AAAA-MM-GG.csv`, solo esportazione, per Excel): UTF-8 con BOM, separatore `;`, virgola decimale e intestazioni in italiano qualunque sia la lingua:
+
+```text
+data;categoria;importo_eur;descrizione;metodo;ricorrente
+2026-09-16;Ristoranti;12,50;Pizzeria;Carta;no
+```
+
+### 3.8 Migrazioni
+
+- Ogni cambiamento dello schema è una **nuova versione** (`db.version(2).stores({...}).upgrade(...)`); le versioni già pubblicate su `main` non si modificano.
+- Ogni `upgrade` ha un test che parte da dati della versione precedente (`fake-indexeddb`).
+- Prima di pubblicare una fase che aggiunge una versione dello schema, il riepilogo ricorda di **esportare un backup** prima di toccare "Aggiorna" sull'iPhone.
 
 ---
 
 ## 4. Implementazione
 
-> ⏳ Setup dell'ambiente, architettura, struttura delle cartelle, roadmap con criteri di completamento e codice di base sono **da completare dopo conferma**. Il piano di lavoro e la stima dei tempi sono già disponibili qui sotto.
+Architettura a strati (UI → hook e stato → repository → Dexie) e regole di codice sono in `CLAUDE.md` e in `.claude/rules/`. Il codice di base (workflow, `vite.config.ts`, `index.html`, router) è in [§ 2.5](#25-hosting-e-deploy-su-github-pages).
 
 ### 4.1 Piano di lavoro e stima dei tempi
 
@@ -1123,11 +1333,11 @@ backup/
 
 | Fase | Contenuto | Tempo stimato | Cosa serve da parte tua |
 |---|---|---|---|
-| **0. Setup** | Progetto Vite + React + TypeScript, PWA (manifest e service worker), design system (variabili CSS, tema chiaro/scuro), tab bar, pubblicazione automatica su GitHub Pages | 1–2 h | Creare il repository, attivare GitHub Pages, installare l'app sull'iPhone (~30 min) |
-| **1. MVP** | Database Dexie con categorie predefinite, inserimento con tastierino, storico raggruppato per giorno, modifica ed eliminazione con swipe e "Annulla", guida all'installazione, backup esporta/importa | 5–7 h | Usarla per qualche giorno e segnalare cosa non va |
-| **2. Filtri** | Foglio filtri (mese, categorie, giorno), mini-calendario, totale filtrato, filtri nell'indirizzo | 1–2 h | Provarli |
+| **0. Setup** | Progetto Vite + React + TypeScript, PWA (manifest e service worker), design system (variabili CSS, tema chiaro/scuro), dizionari IT/EN, tab bar, CI e pubblicazione automatica su GitHub Pages | 1–2 h | Attivare GitHub Pages (Source: GitHub Actions), installare l'app sull'iPhone (~15 min) |
+| **1. MVP** | Database Dexie con categorie predefinite, inserimento con tastierino, storico raggruppato per giorno, modifica ed eliminazione con swipe e "Annulla", guida all'installazione, backup esporta/importa, lingua e tema in Impostazioni | 5–7 h | Usarla per qualche giorno e aprire una issue per ogni problema |
+| **2. Filtri** | Foglio filtri (mese, categorie, giorno), mini-calendario, ricerca nelle note, totale filtrato, filtri nell'indirizzo | 1–2 h | Provarli |
 | **3. Grafici** | Ciambella per categoria, barre giornaliere, confronto con il mese precedente, collegamenti allo storico filtrato | 2–3 h | Verificare che i numeri tornino |
-| **4. Extra** | Spese ricorrenti, budget mensile con proiezione, gestione categorie (aggiungi, rinomina, archivia), avviso nuova versione, stato app | 3–4 h | Provarli |
+| **4. Extra** | Spese ricorrenti, budget mensile con proiezione, gestione categorie (aggiungi, rinomina, archivia), suggerimento della categoria dalla nota, avviso nuova versione, stato app | 3–4 h | Provarli |
 | **Rifiniture su iPhone** | Particolarità di Safari, aree sicure, fluidità di gesti e fogli, dark mode, accessibilità | 3–6 h | **È la fase in cui il tuo feedback conta di più** |
 | **Totale** | | **15–25 h** | |
 
@@ -1148,7 +1358,7 @@ flowchart LR
 | Fattore | Perché | Come ridurlo |
 |---|---|---|
 | **Test sull'iPhone** | Lo sviluppo si verifica sul PC, anche con il motore di Safari (Playwright WebKit), ma il comportamento reale su iPhone lo puoi verificare solo tu: i tempi di calendario dipendono da quanto spesso la provi e segnali i problemi | Provare l'app dopo ogni fase e raccogliere le segnalazioni in un unico elenco (es. issue su GitHub) |
-| **Cambi sulle decisioni aperte** (D1–D16) | Cambiare idea a lavoro avviato costringe a rifare parti già pronte | Chiudere le decisioni della [§ 5.4](#54-decisioni-da-prendere) prima della fase 0 |
+| **Cambi sulle decisioni prese** (D1–D17) | Cambiare idea a lavoro avviato costringe a rifare parti già pronte | Decisioni chiuse prima della fase 0 ([§ 5.4](#54-decisioni-prese)); eventuali cambi solo dopo l'uso reale, come nuovo step |
 | **Rifiniture "da app nativa"** | Animazioni, gesti e dettagli visivi si possono limare all'infinito | Stabilire all'inizio cosa è "abbastanza buono" e rimandare il resto |
 
 #### Percorso consigliato: usarla subito
@@ -1156,6 +1366,85 @@ flowchart LR
 - Completare **fase 0 e fase 1** (circa **6–9 ore**): da quel momento l'app è installata sull'iPhone e si possono **registrare le spese ogni giorno**.
 - Filtri, grafici ed extra si aggiungono dopo; ogni pubblicazione arriva sull'iPhone con il toast "Nuova versione disponibile · Aggiorna".
 - I dati inseriti durante l'MVP **restano validi** nelle versioni successive: lo schema del database viene aggiornato con le migrazioni di Dexie (versioni dello schema), senza perdere le spese già registrate. Per sicurezza conviene comunque esportare un backup prima di ogni aggiornamento importante.
+
+### 4.2 Ambiente di sviluppo
+
+| Strumento | Versione / impostazione | Note |
+|---|---|---|
+| Node.js | **24** (fissata in `.nvmrc` e in `engines` di `package.json`) | Stessa versione sul PC e in GitHub Actions |
+| Package manager | **npm** | `package-lock.json` sempre versionato |
+| Editor | VS Code con ESLint, Prettier, Vitest, Playwright Test | Formattazione al salvataggio |
+| Browser di test | WebKit di Playwright (`npx playwright install webkit`) | Il motore di Safari anche su Windows |
+| iPhone in rete locale | `npm run dev -- --host` → `http://<ip-del-pc>:5173/gestione-spese/` | Solo interfaccia: niente installazione né offline (serve HTTPS). `eruda` attivo per vedere la console |
+| iPhone con l'app vera | `https://fumaroladamiano.github.io/gestione-spese/` | Dopo l'unione in `main` di una fase |
+
+Impostazioni principali:
+- **TypeScript**: `strict`, `noUncheckedIndexedAccess`, `verbatimModuleSyntax`.
+- **ESLint**: configurazione piatta con `typescript-eslint` (strict), `eslint-plugin-react-hooks`, `eslint-plugin-react-refresh`, `eslint-config-prettier`; zero warning ammessi.
+- **Prettier**: impostazioni predefinite.
+- **Vitest**: ambiente `jsdom` per i componenti, `fake-indexeddb/auto` per i repository.
+- **Playwright**: solo progetto `webkit` con viewport e user agent da iPhone (`devices['iPhone 15']`), contro `npm run preview`.
+
+### 4.3 Struttura delle cartelle
+
+Nomi di cartelle, file e route in inglese (decisione G1).
+
+```text
+gestione-spese/
+├── .github/workflows/ci.yml
+├── .nvmrc                          24
+├── docs/                           proposta, prototipo, punti aperti
+├── public/
+│   ├── apple-touch-icon.png        180×180, senza trasparenze
+│   └── icons/                      icon-192.png, icon-512.png, icon-512-maskable.png
+├── src/
+│   ├── main.tsx                    avvio, eruda solo in sviluppo
+│   ├── app/                        router.tsx, AppLayout.tsx, TabBar.tsx, useStartup.ts (seed, ricorrenti, persist)
+│   ├── features/
+│   │   ├── home/                   HomePage, MonthHeroCard, StatTile, TopCategories, useMonthSummary
+│   │   ├── expense/                ExpenseSheet, AmountDisplay, AmountKeypad, CategoryPicker, useExpenseDraft
+│   │   ├── history/                HistoryPage, FilterBar, FilterSheet, MiniCalendar, TotalBanner, useHistory
+│   │   ├── charts/                 ChartsPage, DonutChart, DailyBarChart, MonthSummaryCard, useChartsData
+│   │   ├── settings/               SettingsPage, BackupSection, AppStatusSection, useBackup
+│   │   ├── categories/             CategoriesPage, CategorySheet, useCategories
+│   │   ├── recurring/              RecurringPage, useRecurringRules (fase 4)
+│   │   └── install/                InstallBanner, InstallGuide, useStandalone
+│   ├── components/                 Sheet, ActionSheet, Chip, AmountText, CategoryIcon, categoryIcons.ts,
+│   │                               ExpenseRow, DaySectionHeader, ListGroup, SegmentedControl, Toast, EmptyState…
+│   ├── domain/                     types.ts, money.ts, dates.ts, filters.ts, aggregations.ts, backup.ts,
+│   │                               csv.ts, recurring.ts, categories.ts, ids.ts (+ file .test.ts accanto)
+│   ├── i18n/                       it.ts, en.ts, index.ts (t(), lingua attiva, locale)
+│   ├── data/
+│   │   ├── db.ts                   schema Dexie (§ 3.3)
+│   │   ├── seed.ts
+│   │   └── repositories/           expenses.ts, categories.ts, recurringRules.ts, settings.ts, backup.ts
+│   ├── stores/                     prefs.ts (persist), ui.ts
+│   └── styles/                     tokens.css, global.css
+├── tests/e2e/                      add-expense, filters, delete-undo, backup, language (.spec.ts)
+├── index.html  vite.config.ts  vitest.config.ts  playwright.config.ts
+├── eslint.config.js  tsconfig.json  package.json  .gitignore
+```
+
+### 4.4 Step e criteri di completamento
+
+Ogni step segue [`workflow-step.md`](../.claude/rules/workflow-step.md) (piano confermato, controlli, riepilogo, un commit). Ogni fase ha il suo branch e si unisce in `main` quando i criteri sono veri.
+
+| Fase | Step | La fase è conclusa quando |
+|---|---|---|
+| **0. Setup** (`fase-0-setup`) | 0.1 Progetto Vite/React/TS, ESLint, Prettier, Vitest, Playwright, `.nvmrc` · 0.2 Token CSS, stili globali, tema chiaro/scuro/automatico · 0.3 Dizionari IT/EN, `t()`, store delle preferenze · 0.4 Router, `AppLayout`, tab bar con pagine vuote · 0.5 PWA (manifest, icone, service worker, toast "Aggiorna") · 0.6 Workflow CI e deploy | L'app vuota con tab bar è online su GitHub Pages, si installa sull'iPhone, si apre offline e cambia tema e lingua; CI verde |
+| **1. MVP** (`fase-1-mvp`) | 1.1 Dominio: importi, date, id, tipi (con test) · 1.2 Database, seed, repository (con test) · 1.3 Componenti di base (Sheet, Chip, AmountText, CategoryIcon, Toast, ActionSheet) · 1.4 Foglio "Nuova spesa" con tastierino · 1.5 Storico per giorno, modifica, swipe, elimina con "Annulla" · 1.6 Home (card del mese senza budget, oggi, media, top categorie, ultime spese) · 1.7 Impostazioni: lingua, tema, metodo predefinito · 1.8 Guida installazione, banner, `storage.persist()` · 1.9 Backup JSON/CSV esporta e importa | Si registrano, modificano ed eliminano spese sull'iPhone; i dati restano dopo il riavvio; backup esportato e reimportato identico; test e2e verdi |
+| **2. Filtri** (`fase-2-filtri`) | 2.1 Filtri nel dominio e nell'URL · 2.2 Foglio filtri con mese, categorie, calendario · 2.3 Ricerca nelle note, totale filtrato fisso, stato vuoto | Ogni combinazione di filtri dà il totale giusto e sopravvive alla chiusura dell'app |
+| **3. Grafici** (`fase-3-grafici`) | 3.1 Aggregazioni e confronto (D6) · 3.2 Ciambella con legenda · 3.3 Barre giornaliere · 3.4 Collegamenti allo storico filtrato | I numeri dei grafici coincidono con lo storico filtrato dello stesso periodo |
+| **4. Extra** (`fase-4-extra`) | 4.1 Budget (Impostazioni, card del mese, proiezione) · 4.2 Gestione categorie (crea, rinomina, colore, icona, archivia, elimina) · 4.3 Spese ricorrenti (regole, generazione, pagina di gestione) · 4.4 Suggerimento categoria dalla nota · 4.5 Stato app, "Cerca aggiornamenti", promemoria backup | Ricorrenti generate senza duplicati per più mesi; budget e categorie gestibili senza perdere dati |
+| **Rifiniture** (`rifiniture`) | Dalle issue aperte durante l'uso: aree sicure, gesti, animazioni, dark mode, VoiceOver, dimensione del testo | Nessuna issue aperta di priorità alta |
+
+### 4.5 Controlli automatici e pubblicazione
+
+- Il workflow **CI** ([§ 2.5](#bozza-workflow-di-pubblicazione)) gira a ogni push su qualsiasi branch: typecheck, lint, test, test end-to-end WebKit, build.
+- Su `main` pubblica su GitHub Pages **solo se tutti i controlli passano**; le modifiche solo a `docs/`, `.claude/` e file `.md` non ripubblicano l'app.
+- Un branch di fase si unisce in `main` solo con CI verde e criteri della fase soddisfatti ([`git.md`](../.claude/rules/git.md)).
+- Il feedback dai test sull'iPhone si raccoglie come **issue su GitHub**, una per problema (il repository è pubblico: niente dati personali o screenshot con importi reali nelle issue).
+- Promemoria giornaliero: non fa parte dell'app; si crea un promemoria ricorrente nell'app Promemoria di iOS **senza link** (un link aprirebbe Safari invece dell'app installata, con dati separati: R2).
 
 ---
 
@@ -1169,7 +1458,7 @@ flowchart LR
 | R2 | **Dati di Safari e dell'app installata sono separati**: spese inserite prima dell'installazione non compaiono nell'app | Medio | Alta al primo utilizzo | Guida all'installazione mostrata subito; banner in Home finché non è installata; export/import per spostarle |
 | R3 | **Cancellazione dei dati da parte del sistema** in caso di spazio quasi esaurito | Alto | Bassa | `navigator.storage.persist()`; stato visibile in Impostazioni; backup |
 | R4 | **Nessun backup automatico garantito** (telefono perso, cambio iPhone) | Alto | Bassa | Export JSON su iCloud Drive; data dell'ultimo backup evidenziata; ripristino con "Sostituisci tutto" |
-| R5 | **Cambio di indirizzo = dati non visibili**: rinominare l'utente GitHub o il repository cambia l'indirizzo (`https://<utente>.github.io/spese/`) e l'app installata ne crea una nuova, vuota | Alto | Bassa se deciso subito | Nomi definitivi **prima** di iniziare a usarla (D16); in caso di cambio, esporta → reinstalla → importa |
+| R5 | **Cambio di indirizzo = dati non visibili**: rinominare l'utente GitHub o il repository cambia l'indirizzo (`https://<utente>.github.io/gestione-spese/`) e l'app installata ne crea una nuova, vuota | Alto | Bassa se deciso subito | Nomi definitivi **prima** di iniziare a usarla (D16); in caso di cambio, esporta → reinstalla → importa |
 | R6 | **Politiche Apple sulle PWA**: il supporto potrebbe essere ridotto in futuro (precedente: annuncio e ritiro dello stop nell'UE nel 2024) | Alto | Bassa | Formato di backup aperto (JSON/CSV); l'app resta usabile anche come pagina in Safari; logica riutilizzabile per Expo |
 | R7 | **Debug su iPhone senza Mac**: il Web Inspector di Safari richiede macOS | Medio | Certa | Playwright con WebKit su Windows, `eruda` in sviluppo, test sul telefono dopo ogni pubblicazione |
 | R8 | **Service worker e cache**: rischio di restare su una versione vecchia o di caricare file incoerenti dopo un deploy; GitHub Pages applica una cache di 10 minuti non modificabile | Medio | Media | `vite-plugin-pwa` con `registerType: 'prompt'`, toast "Aggiorna", numero di versione in Impostazioni |
@@ -1207,30 +1496,44 @@ flowchart LR
 | Icona dell'app e splash coerenti con il tema | È ciò che si vede sulla Home | MVP |
 | **Ricerca testuale** sulle note ("Esselunga") | Più veloce di qualsiasi filtro per ritrovare una spesa | Filtri |
 | Suggerimento categoria dalla nota già usata | Riduce ulteriormente i tap | Extra |
-| Budget per categoria | Naturale evoluzione del budget mensile | Post-extra |
-| Promemoria giornaliero | In una PWA senza server non è realizzabile | Alternativa: promemoria ricorrente nell'app Promemoria di iOS con il link all'app |
+| Budget per categoria | Naturale evoluzione del budget mensile | Dopo la fase 4, se servirà (D7) |
+| Promemoria giornaliero | In una PWA senza server non è realizzabile | Fuori dall'app: promemoria ricorrente nell'app Promemoria di iOS, senza link (§ 4.5) |
 | Settimana che inizia di lunedì | Coerenza locale italiana | MVP |
 | Accessibilità (VoiceOver, dimensione testo) | Qualità "nativa" | Trasversale |
-| Spese in valuta estera (viaggi) | Esplicitamente fuori scopo: solo euro | Da decidere |
+| Spese in valuta estera (viaggi) | Esplicitamente fuori scopo: solo euro | Esclusa (F4) |
 
-### 5.4 Decisioni da prendere
+### 5.4 Decisioni prese
 
-| # | Decisione | Opzioni | Raccomandazione |
-|---|---|---|---|
-| D1 | Posizione del pulsante "Aggiungi" | a) tab centrale "+" · b) pulsante in barra di navigazione di Home e Storico · c) pulsante flottante | **a)** raggiungibile ovunque con 1 tap |
-| D2 | Tastierino importo | a) tastierino integrato · b) tastiera iOS (`inputmode="decimal"`) | **a)** ancora più importante in una PWA: niente tastiera che sposta il layout, niente zoom, virgola sempre presente |
-| D3 | Comportamento spese ricorrenti | a) generazione automatica mensile all'apertura · b) promemoria da confermare · c) solo etichetta | **a)** con indicatore ↻ e possibilità di interrompere la regola |
-| D4 | Categoria preselezionata | a) nessuna · b) ultima usata · c) più frequente | **a)** evita errori silenziosi; il vincolo dei 3 tap è rispettato comunque |
-| D5 | Date future ammesse? | a) no · b) sì (spese programmate) | **a)** nell'MVP; si rivaluta con le ricorrenti |
-| D6 | Confronto con il mese precedente | a) stesso periodo per il mese in corso, intero per i mesi chiusi · b) sempre mese intero | **a)** evita "-60%" fuorvianti a inizio mese |
-| D7 | Budget | a) solo mensile globale · b) anche per categoria | **a)** nella fase extra |
-| D8 | Grafici | a) componenti SVG su misura · b) `recharts` | **a)** servono solo due grafici; b) se in futuro ne servono di più complessi |
-| D9 | Formato backup | a) JSON (import/export) + CSV (solo export) · b) solo CSV | **a)** JSON è ricaricabile senza perdite, CSV serve per Excel |
-| D10 | Categorie con spese | a) archiviazione · b) eliminazione con riassegnazione ad "Altro" · c) blocco | **a)** nessuna perdita di storico |
-| D11 | Hosting | a) Cloudflare Pages · b) GitHub Pages · c) Netlify | ✅ **Deciso: b) GitHub Pages** con repository pubblico: codice e pubblicazione nello stesso posto, gratis (§ 2.5) |
-| D12 | Database nel browser | a) Dexie.js (IndexedDB) · b) SQLite WASM su OPFS | **a)** più leggero e maturo su Safari; b) solo se servissero query SQL complesse |
-| D13 | Framework UI | a) React · b) Svelte · c) JavaScript senza framework | **a)** ecosistema e riuso verso un'eventuale app Expo |
-| D14 | Uso su altri dispositivi (PC, Android) | a) best effort · b) supportato e testato | **a)** funziona "gratis", ma i dati restano separati per dispositivo |
-| D15 | Nome definitivo, icona e colore d'accento | "Spese" è un segnaposto | ✅ Icona (portafoglio bianco su `heroGradient`) e accento indaco definiti dal design system (§ 1.5). **Nome** da scegliere prima del primo deploy (compare sotto l'icona) |
-| D16 | Indirizzo definitivo | a) `https://<utente>.github.io/<repository>/` gratuito · b) dominio personale (~10 €/anno, configurabile su GitHub Pages) | **a)**; decidere **subito** il nome del repository e non rinominarlo: cambiare indirizzo separa i dati (R5) |
-| D17 | Lingue dell'interfaccia | a) solo italiano · b) italiano e inglese con scelta in Impostazioni | ✅ **Deciso: b)** italiano predefinito (nessun rilevamento automatico), formati `it-IT` / `en-IE`, dizionari su misura senza libreria; CSV sempre in formato italiano; categorie create dall'utente non tradotte |
+Tutte le decisioni sono chiuse (dettaglio delle risposte in [`punti-aperti.md`](punti-aperti.md), 18–19 settembre 2026).
+
+| # | Decisione | Scelta |
+|---|---|---|
+| D1 | Posizione del pulsante "Aggiungi" | ✅ Tab centrale "+" |
+| D2 | Tastierino importo | ✅ Tastierino integrato (niente tastiera iOS, niente zoom) |
+| D3 | Spese ricorrenti | ✅ Regola mensile che genera una spesa normale all'apertura, senza duplicati, sospendibile ([§ 3.6](#36-spese-ricorrenti)) |
+| D4 | Categoria preselezionata | ✅ Nessuna: si sceglie sempre (3 tap) |
+| D5 | Date future | ✅ Non ammesse |
+| D6 | Confronto con il mese precedente | ✅ Stesso periodo per il mese in corso, mese intero per quelli chiusi |
+| D7 | Budget | ✅ Solo mensile globale, un unico importo valido per tutti i mesi |
+| D8 | Grafici | ✅ Componenti SVG su misura |
+| D9 | Formato backup | ✅ JSON esporta/importa ("Sostituisci" o "Unisci" senza duplicati) + CSV solo in esportazione |
+| D10 | Categorie con spese | ✅ Archiviazione; le predefinite non si eliminano mai |
+| D11 | Hosting | ✅ GitHub Pages con repository pubblico (§ 2.5) |
+| D12 | Database nel browser | ✅ Dexie.js su IndexedDB |
+| D13 | Framework UI | ✅ Vite + React + TypeScript |
+| D14 | Uso su altri dispositivi | ✅ Best effort: si testa solo su iPhone, dati separati per dispositivo |
+| D15 | Nome, icona, accento | ✅ Nome **Spese**; portafoglio bianco su `heroGradient`; accento indaco |
+| D16 | Indirizzo | ✅ `https://fumaroladamiano.github.io/gestione-spese/`, nessun dominio personale; il repository non si rinomina |
+| D17 | Lingue | ✅ Italiano predefinito e inglese, formati `it-IT` / `en-IE`, dizionari su misura; CSV sempre in italiano |
+
+Altre scelte fissate con i punti aperti:
+
+| Tema | Scelta |
+|---|---|
+| Stack | Router con `#`, Zustand con `persist`, `motion`, `lucide-react`, `date-fns`, `zod`, CSS Modules, `vite-plugin-pwa` con aggiornamento su conferma |
+| Test e qualità | Vitest + Testing Library, `fake-indexeddb`, Playwright WebKit, ESLint + Prettier, `eruda` solo in sviluppo; la CI blocca la pubblicazione se un controllo fallisce |
+| Ambiente | Node.js 24, npm |
+| Dati | Icone salvate con nomi propri; Salute con il cuore del prototipo; `createdAt` e `updatedAt`; metodo di pagamento opzionale senza grafici; limiti 999.999,99 € / 40 / 20 / 15 categorie attive |
+| Comportamento | Filtri nell'indirizzo; guida all'installazione automatica al primo accesso da Safari, poi banner; tema automatico con scelta manuale |
+| Roadmap | Ricerca nelle note nella fase 2; suggerimento della categoria nella fase 4; nessun riordino manuale delle categorie; funzioni escluse confermate (Face ID, valute, widget/Siri, sincronizzazione, banche, entrate, altre lingue) |
+| Processo | Nomi nel codice in inglese; un branch per fase; un commit per step; feedback con issue su GitHub; prototipo provato sull'iPhone prima del setup |

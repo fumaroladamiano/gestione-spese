@@ -22,7 +22,9 @@ paths:
 - Funzioni e variabili in camelCase; costanti di modulo in UPPER_SNAKE_CASE.
 - Tipi e interfacce in PascalCase, senza prefisso `I`.
 - Campi dei dati come nel backup: `amountCents`, `categoryId`, `paymentMethod`.
-- Cartelle delle feature come nella bozza del router: `home`, `spesa`, `storico`, `grafici`, `impostazioni`, `categorie`.
+- Tutti i nomi nel codice sono in inglese (cartelle, file, componenti, route, variabili, chiavi dei dizionari); l'italiano resta per commenti e commit.
+- Cartelle delle feature: `home`, `expense`, `history`, `charts`, `settings`, `categories`, `install`, `recurring` (proposta § 4.3).
+- Eccezione: i valori già salvati nei dati restano come sono (id delle categorie predefinite `spesa`, `trasporti`…; metodi di pagamento `carta`, `contanti`, `altro`).
 - Nomi che contengono importi terminano in `Cents` se sono in centesimi.
 - Usa export nominati; non usare `export default`, salvo dove un file di configurazione lo richiede.
 

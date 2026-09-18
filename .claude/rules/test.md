@@ -11,11 +11,11 @@ paths:
 - **Importi** (`src/domain/money`): input del tastierino in centesimi (separatore doppio, terzo decimale, massimo 6 cifre intere), formattazione con separatore delle migliaia in `it-IT` (`1.500 €`, `1.234,56 €`) e in `en-IE` (`€1,500.00`, `€1,234.56`), lettura di importi digitati in entrambi i formati (`1.234,50` / `1,234.50`).
 - **Date** (`src/domain/dates`): etichette "Oggi"/"Ieri" e "Today"/"Yesterday", nomi di giorni e mesi in entrambe le lingue, inizio e fine mese, anni bisestili, settimana da lunedì anche in inglese, mese precedente.
 - **Lingue** (`src/i18n`): lingua mancante o non valida → `it`; plurali (1 spesa / 2 spese, 1 expense / 2 expenses); nome tradotto per le categorie predefinite non rinominate, nome originale per quelle rinominate o create dall'utente. La completezza dei dizionari la garantisce il `typecheck`, non un test.
-- **Filtri** (`src/domain/filters`): AND tra mese, categorie e giorno; OR tra più categorie; il giorno imposta il mese; cambio di mese che azzera il giorno.
+- **Filtri** (`src/domain/filters`): AND tra mese, categorie, giorno e testo; OR tra più categorie; il giorno imposta il mese; cambio di mese che azzera il giorno; ricerca nelle note senza distinzione di maiuscole e accenti; lettura e scrittura dei filtri nell'URL con valori non validi scartati.
 - **Aggregazioni** (`src/domain/aggregations`): totale del mese, totale per categoria e percentuali, totali giornalieri, media giornaliera, confronto sullo stesso periodo per il mese in corso e sul mese intero per quelli chiusi, proiezione del budget.
 - **Backup** (`src/domain/backup`): validazione di file validi e non validi, "Unisci" senza duplicati, "Sostituisci", CSV con `;` e virgola decimale anche con l'app in inglese.
-- **Repository** (`src/data/repositories`): inserimento, modifica, eliminazione, archiviazione delle categorie, rifiuto di importi non validi, seed idempotente, ogni `upgrade` dello schema.
-- **Ricorrenti** (fase 4): generazione idempotente, nessun duplicato riaprendo l'app più volte.
+- **Repository** (`src/data/repositories`, con `fake-indexeddb`): inserimento, modifica (con `updatedAt`), eliminazione e ripristino con lo stesso `id`, archiviazione delle categorie, rifiuto di importi non validi e date future, limite di 15 categorie attive, seed idempotente, ogni `upgrade` dello schema.
+- **Ricorrenti** (fase 4): generazione idempotente, nessun duplicato riaprendo l'app più volte, più mesi arretrati in un solo avvio, giorno 31 nei mesi corti, riattivazione senza mesi saltati.
 
 ## Test end-to-end (Playwright, WebKit)
 

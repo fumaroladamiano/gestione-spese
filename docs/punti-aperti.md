@@ -1,5 +1,7 @@
 # Spese — Punti aperti da decidere
 
+> ✅ **Tutti i punti sono risolti** (19 settembre 2026). Le decisioni sono riportate in `CLAUDE.md`, nelle regole di `.claude/rules/` e nella proposta (§ 3, § 4 e § 5.4). Decisioni aggiunte dopo le risposte: **Node.js 24** invece di 22 (B14); per i dettagli non specificati si segue il consiglio indicato. Questo file resta come storico delle scelte.
+
 > Aggiornato al 18 settembre 2026. Raccoglie le decisioni non ancora prese su progetto, tecnologie, dati, comportamento, design e processo.
 >
 > **Come rispondere**: compila la riga **Risposta** di ogni punto.
@@ -59,7 +61,7 @@ Nota: il repository è pubblico, quindi i documenti sarebbero visibili a tutti (
 
 **Consiglio:** a)
 
-**Risposta:**
+**Risposta:** a - è già così
 
 ---
 
@@ -73,7 +75,7 @@ Il nome del repository su GitHub diventa parte dell'indirizzo (`https://<utente>
 
 **Consiglio:** a) — indirizzo più corto, già usato nelle bozze (`base: '/spese/'`).
 
-**Risposta:**
+**Risposta:** b
 
 ---
 
@@ -84,7 +86,7 @@ Il nome del repository su GitHub diventa parte dell'indirizzo (`https://<utente>
 
 **Consiglio:** a)
 
-**Risposta:**
+**Risposta:** a
 
 ---
 
@@ -99,7 +101,7 @@ Design e lingue sono già confermati. Resta da confermare il resto della propost
 
 **Consiglio:** a)
 
-**Risposta:**
+**Risposta:** a
 
 ---
 
@@ -111,7 +113,7 @@ Design e lingue sono già confermati. Resta da confermare il resto della propost
 
 **Consiglio:** a) — ecosistema ampio, molti esempi, tipizzazione di importi e date.
 
-**Risposta:**
+**Risposta:** a
 
 ---
 
@@ -122,7 +124,7 @@ Design e lingue sono già confermati. Resta da confermare il resto della propost
 
 **Consiglio:** a) — più leggero e maturo su Safari; b) solo se servissero query SQL complesse.
 
-**Risposta:**
+**Risposta:** a
 
 ---
 
@@ -133,7 +135,7 @@ Design e lingue sono già confermati. Resta da confermare il resto della propost
 
 **Consiglio:** a)
 
-**Risposta:**
+**Risposta:** a
 
 ---
 
@@ -146,7 +148,7 @@ Tra le preferenze ora c'è anche la lingua.
 
 **Consiglio:** a)
 
-**Risposta:**
+**Risposta:** a
 
 ---
 
@@ -157,7 +159,7 @@ Tra le preferenze ora c'è anche la lingua.
 
 **Consiglio:** a) — trascinamento dei fogli e swipe più fluidi con meno codice.
 
-**Risposta:**
+**Risposta:** a
 
 ---
 
@@ -168,7 +170,7 @@ Tra le preferenze ora c'è anche la lingua.
 
 **Consiglio:** a)
 
-**Risposta:**
+**Risposta:** a
 
 ---
 
@@ -180,7 +182,7 @@ Tra le preferenze ora c'è anche la lingua.
 
 **Consiglio:** a)
 
-**Risposta:**
+**Risposta:** a
 
 ---
 
@@ -191,7 +193,7 @@ Tra le preferenze ora c'è anche la lingua.
 
 **Consiglio:** a)
 
-**Risposta:**
+**Risposta:** a
 
 ---
 
@@ -204,9 +206,9 @@ Con due lingue le date vanno formattate in italiano e in inglese. Il prototipo l
 
 **Consiglio:** a) per entrambi.
 
-**Risposta date:**
+**Risposta date:** a
 
-**Risposta validazione:**
+**Risposta validazione:** a
 
 ---
 
@@ -217,7 +219,7 @@ Con due lingue le date vanno formattate in italiano e in inglese. Il prototipo l
 
 **Consiglio:** a) — evita di ricaricare l'app mentre si inserisce una spesa.
 
-**Risposta:**
+**Risposta:** a
 
 ---
 
@@ -229,11 +231,11 @@ Con due lingue le date vanno formattate in italiano e in inglese. Il prototipo l
 
 **Consiglio:** a) per tutti e tre.
 
-**Risposta unitari:**
+**Risposta unitari:** a
 
-**Risposta end-to-end:**
+**Risposta end-to-end:** a
 
-**Risposta IndexedDB simulato:**
+**Risposta IndexedDB simulato:** a
 
 ---
 
@@ -246,7 +248,7 @@ Senza Mac non si può usare il Web Inspector di Safari.
 
 **Consiglio:** a)
 
-**Risposta:**
+**Risposta:** a
 
 ---
 
@@ -259,13 +261,13 @@ Senza Mac non si può usare il Web Inspector di Safari.
 
 **Consiglio:** a) per tutti.
 
-**Risposta Node:**
+**Risposta Node:** a
 
-**Risposta package manager:**
+**Risposta package manager:** a
 
-**Risposta lint:**
+**Risposta lint:** a
 
-**Risposta controlli CI:**
+**Risposta controlli CI:** a
 
 ---
 
@@ -280,7 +282,7 @@ Nel prototipo il budget è un'impostazione (un solo importo); non è deciso se d
 
 **Consiglio:** a) nell'MVP; b) solo se vuoi budget diversi per mese.
 
-**Risposta:**
+**Risposta:** a
 
 ---
 
@@ -292,7 +294,7 @@ Nel prototipo il budget è un'impostazione (un solo importo); non è deciso se d
 
 **Consiglio:** a)
 
-**Risposta:**
+**Risposta:** a
 
 ---
 
@@ -305,7 +307,7 @@ La proposta salva il nome Lucide (`ShoppingCart`, `Briefcase`), il prototipo usa
 
 **Consiglio:** a)
 
-**Risposta:**
+**Risposta:** a
 
 ---
 
@@ -317,7 +319,7 @@ La proposta salva il nome Lucide (`ShoppingCart`, `Briefcase`), il prototipo usa
 
 **Consiglio:** b)
 
-**Risposta:**
+**Risposta:** voglio quello del prototipo
 
 ---
 
@@ -330,7 +332,7 @@ Il seed aggiunge a ogni avvio le categorie predefinite mancanti (serve per far a
 
 **Consiglio:** a) — più semplice, e archiviare una categoria la toglie comunque da inserimento e filtri.
 
-**Risposta:**
+**Risposta:** a
 
 ---
 
@@ -350,7 +352,7 @@ Con Lavoro le predefinite sono 9: con il limite di 15 restano 6 categorie person
 
 **Consiglio:** a) — con più di 16 categorie la griglia di inserimento supera le 4 righe e spinge il tastierino in basso.
 
-**Risposta:**
+**Risposta:** a
 
 ---
 
@@ -361,7 +363,7 @@ Con Lavoro le predefinite sono 9: con il limite di 15 restano 6 categorie person
 
 **Consiglio:** a)
 
-**Risposta:**
+**Risposta:** a
 
 ---
 
@@ -374,7 +376,7 @@ Senza report dedicati aggiunge poco valore.
 
 **Consiglio:** a)
 
-**Risposta:**
+**Risposta:** a
 
 ---
 
@@ -388,7 +390,7 @@ Senza report dedicati aggiunge poco valore.
 
 **Consiglio:** a)
 
-**Risposta:**
+**Risposta:** a
 
 ---
 
@@ -399,7 +401,7 @@ Senza report dedicati aggiunge poco valore.
 
 **Consiglio:** a)
 
-**Risposta:**
+**Risposta:** a
 
 ---
 
@@ -410,7 +412,7 @@ Senza report dedicati aggiunge poco valore.
 
 **Consiglio:** a)
 
-**Risposta:**
+**Risposta:** a
 
 ---
 
@@ -421,7 +423,7 @@ Senza report dedicati aggiunge poco valore.
 
 **Consiglio:** a)
 
-**Risposta:**
+**Risposta:** a
 
 ---
 
@@ -432,7 +434,7 @@ Senza report dedicati aggiunge poco valore.
 
 **Consiglio:** a)
 
-**Risposta:**
+**Risposta:** a
 
 ---
 
@@ -443,7 +445,7 @@ Senza report dedicati aggiunge poco valore.
 
 **Consiglio:** a) — b) eventualmente dopo la fase 4.
 
-**Risposta:**
+**Risposta:** a
 
 ---
 
@@ -455,7 +457,7 @@ Senza report dedicati aggiunge poco valore.
 
 **Consiglio:** a)
 
-**Risposta:**
+**Risposta:** a
 
 ---
 
@@ -467,7 +469,7 @@ Senza report dedicati aggiunge poco valore.
 
 **Consiglio:** a)
 
-**Risposta:**
+**Risposta:** a
 
 ---
 
@@ -481,7 +483,7 @@ Quando due spese si considerano la stessa (e quindi non vengono duplicate)?
 
 **Consiglio:** a)
 
-**Risposta:**
+**Risposta:** a
 
 ---
 
@@ -492,7 +494,7 @@ Quando due spese si considerano la stessa (e quindi non vengono duplicate)?
 
 **Consiglio:** a)
 
-**Risposta:**
+**Risposta:** a
 
 ---
 
@@ -503,7 +505,7 @@ Quando due spese si considerano la stessa (e quindi non vengono duplicate)?
 
 **Consiglio:** a)
 
-**Risposta:**
+**Risposta:** a
 
 ---
 
@@ -514,7 +516,7 @@ Quando due spese si considerano la stessa (e quindi non vengono duplicate)?
 
 **Consiglio:** a)
 
-**Risposta:**
+**Risposta:** a
 
 ---
 
@@ -529,7 +531,7 @@ Icona (portafoglio bianco su gradiente indaco) e colore d'accento sono definiti 
 
 **Consiglio:** a)
 
-**Risposta:**
+**Risposta:** a
 
 ---
 
@@ -541,7 +543,7 @@ Icona (portafoglio bianco su gradiente indaco) e colore d'accento sono definiti 
 
 **Consiglio:** a)
 
-**Risposta:**
+**Risposta:** a
 
 ---
 
@@ -555,7 +557,7 @@ Icona (portafoglio bianco su gradiente indaco) e colore d'accento sono definiti 
 
 **Consiglio:** a)
 
-**Risposta:**
+**Risposta:** a
 
 ---
 
@@ -566,7 +568,7 @@ Icona (portafoglio bianco su gradiente indaco) e colore d'accento sono definiti 
 
 **Consiglio:** a)
 
-**Risposta:**
+**Risposta:** a
 
 ---
 
@@ -579,7 +581,7 @@ Una PWA senza server non può inviare notifiche.
 
 **Consiglio:** a) (non richiede sviluppo)
 
-**Risposta:**
+**Risposta:** a
 
 ---
 
@@ -600,7 +602,7 @@ Conferma che restano **fuori** dal progetto:
 
 **Consiglio:** a)
 
-**Risposta:**
+**Risposta:** a
 
 ---
 
@@ -625,7 +627,7 @@ Nel prototipo la card del mese in Home mostra già il budget, e la gestione cate
 
 **Consiglio:** a) — l'MVP resta piccolo e usabile prima.
 
-**Risposta:**
+**Risposta:** a
 
 ---
 
@@ -638,7 +640,7 @@ L'ordine è deciso (predefinite fisse, poi quelle dell'utente per data di creazi
 
 **Consiglio:** b) — con 9 categorie fisse in ordine logico il guadagno è piccolo; si può riaprire dopo l'uso reale.
 
-**Risposta:**
+**Risposta:** b
 
 ---
 
@@ -654,7 +656,7 @@ Già deciso che le chiavi dei dizionari dei testi sono in inglese (`addExpense`,
 
 **Consiglio:** b) — più coerente con librerie, esempi e chiavi dei dizionari; con a) si mescolano due lingue.
 
-**Risposta:**
+**Risposta:** b
 
 ---
 
@@ -666,7 +668,7 @@ Già deciso che le chiavi dei dizionari dei testi sono in inglese (`addExpense`,
 
 **Consiglio:** a) — l'app sull'iPhone cambia solo a fasi concluse.
 
-**Risposta:**
+**Risposta:** a
 
 ---
 
@@ -678,7 +680,7 @@ Già deciso che le chiavi dei dizionari dei testi sono in inglese (`addExpense`,
 
 **Consiglio:** a)
 
-**Risposta:**
+**Risposta:** un commit per stet, lo crei tu con titolo e descrizione in italiano, e lo committi e pushi tu, ti autorizzo
 
 ---
 
@@ -689,7 +691,7 @@ Già deciso che le chiavi dei dizionari dei testi sono in inglese (`addExpense`,
 
 **Consiglio:** a)
 
-**Risposta:**
+**Risposta:** gestisci tu le unioni, ovviamente prima di farlo assicurati che sia safe, ti autorizzo
 
 ---
 
@@ -701,7 +703,7 @@ Già deciso che le chiavi dei dizionari dei testi sono in inglese (`addExpense`,
 
 **Consiglio:** a) — nota: il repository è pubblico, quindi le issue sono visibili.
 
-**Risposta:**
+**Risposta:** a
 
 ---
 
@@ -714,7 +716,7 @@ Le sezioni 3 (Database) e 4 (Implementazione) della proposta sono ancora da scri
 
 **Consiglio:** a)
 
-**Risposta:**
+**Risposta:** a
 
 ---
 
@@ -728,4 +730,4 @@ Il prototipo è stato verificato solo su Chromium dal PC, non in Safari su iPhon
 
 **Consiglio:** a) — richiede pochi minuti e non dipende dal repository.
 
-**Risposta:**
+**Risposta:** a — provato su iPhone il 19 settembre 2026: ok, nessuna modifica.
