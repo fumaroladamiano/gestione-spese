@@ -1,0 +1,44 @@
+# Dipendenze
+node_modules/
+
+# Build (Vite e service worker di sviluppo di vite-plugin-pwa)
+dist/
+dist-ssr/
+dev-dist/
+*.tsbuildinfo
+.vite/
+
+# Variabili d'ambiente e file locali
+.env
+.env.*
+*.local
+
+# Test (Vitest coverage, Playwright)
+coverage/
+test-results/
+playwright-report/
+blob-report/
+playwright/.cache/
+
+# Log
+logs/
+*.log
+npm-debug.log*
+
+# Dati personali: backup ed esportazioni dell'app
+spese-backup-*.json
+spese-*.csv
+backup/
+
+# Claude Code: impostazioni personali
+.claude/settings.local.json
+
+# Editor e sistema operativo
+.vscode/*
+!.vscode/extensions.json
+!.vscode/settings.json
+.idea/
+Thumbs.db
+Desktop.ini
+.DS_Store
+*.swp
