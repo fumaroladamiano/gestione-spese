@@ -39,6 +39,14 @@
   --color-hero-track: rgba(255, 255, 255, 0.22);
   --color-hero-budget-warning: #ffd60a;
   --color-hero-budget-over: #ff8a80;
+  /* fondi pieni delle icone in Impostazioni (colori di sistema iOS) */
+  --color-system-gray: #636366;
+  --color-system-blue: #007aff;
+  --color-system-orange: #ff9500;
+  --color-system-green: #34c759;
+  --color-system-purple: #af52de;
+  --color-system-teal: #30b0c7;
+  --color-system-indigo: #5856d6;
 
   /* gradiente e ombre */
   --gradient-hero: linear-gradient(
@@ -56,6 +64,9 @@
     inset 0 1px 0 rgba(255, 255, 255, 0.18);
   --shadow-fab:
     0 10px 22px -8px var(--color-tint), inset 0 1px 0 rgba(255, 255, 255, 0.25);
+  --shadow-segment:
+    0 3px 8px rgba(0, 0, 0, 0.12), 0 0 0 0.5px rgba(0, 0, 0, 0.04);
+  --shadow-icon: inset 0 -8px 12px -8px rgba(0, 0, 0, 0.18);
 
   /* spaziature (griglia di 4 px) */
   --space-xs: 4px;
