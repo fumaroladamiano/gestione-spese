@@ -26,7 +26,7 @@
 |---|---|
 | `vite` + `typescript` | Build e dev server (TypeScript fermo a 6.0.x finché `typescript-eslint` non supporta la 7) |
 | `react` + `react-dom` | Interfaccia |
-| `vite-plugin-pwa` (Workbox) | Manifest, service worker, offline, avviso "Aggiorna" (`registerType: 'prompt'`) |
+| `vite-plugin-pwa` (Workbox) + `workbox-window` | Manifest, service worker, offline, avviso "Aggiorna" (`registerType: 'prompt'`); icone PNG generate con `npm run icons` (WebKit di Playwright, nessuna libreria di immagini) |
 | `react-router` (`createHashRouter`) | Tab e pagine; filtri nella query dopo il `#` |
 | `dexie` + `dexie-react-hooks` | IndexedDB, schema versionato, `useLiveQuery` |
 | `zustand` (+ `persist`) | Stato UI e preferenze del dispositivo |
