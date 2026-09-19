@@ -75,6 +75,7 @@ export const en = {
   paymentMethod: "Payment method",
   notePlaceholder: "Note (e.g. supermarket, fuel)",
   note: "Note",
+  fieldValue: (field: string, value: string) => `${field}: ${value}`,
   deleteKey: "Delete",
   deleteExpense: "Delete expense",
   expenseAdded: (amount: string, category: string) =>

@@ -33,7 +33,6 @@ export function SheetHeader({
             styles.action,
             !actionEnabled && styles.disabled,
           )}
-          aria-disabled={!actionEnabled}
           onClick={onAction}
         >
           {actionLabel}

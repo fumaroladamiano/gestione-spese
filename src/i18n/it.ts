@@ -82,6 +82,7 @@ export const it = {
   paymentMethod: "Metodo di pagamento",
   notePlaceholder: "Nota (es. Esselunga, benzina)",
   note: "Nota",
+  fieldValue: (field: string, value: string) => `${field}: ${value}`,
   deleteKey: "Cancella",
   deleteExpense: "Elimina spesa",
   expenseAdded: (amount: string, category: string) =>

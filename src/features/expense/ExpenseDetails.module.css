@@ -1,0 +1,47 @@
+.chips,
+.dates {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--space-sm);
+  padding: var(--space-lg) var(--space-lg) 0;
+}
+
+.dates {
+  padding-top: var(--space-md);
+}
+
+.dateInput {
+  height: var(--size-chip);
+  padding: 0 var(--space-md);
+  border: 0;
+  border-radius: var(--radius-full);
+  background: var(--color-surface);
+  box-shadow: var(--shadow-card);
+  color: var(--color-label);
+  outline: none;
+}
+
+.note {
+  display: block;
+  width: calc(100% - 2 * var(--space-lg));
+  height: 48px;
+  margin: var(--space-md) var(--space-lg) 0;
+  padding: 0 var(--space-lg);
+  border: 0;
+  border-radius: var(--radius-md);
+  background: var(--color-surface);
+  box-shadow: var(--shadow-card);
+  color: var(--color-label);
+  font-size: var(--text-body);
+  outline: none;
+  transition: box-shadow 0.2s;
+}
+
+.note::placeholder {
+  color: var(--color-tertiary-label);
+}
+
+.note:focus {
+  box-shadow: 0 0 0 2px var(--color-tint);
+}

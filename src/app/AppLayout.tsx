@@ -1,4 +1,5 @@
 import { Outlet } from "react-router";
+import { ExpenseSheet } from "../features/expense/ExpenseSheet";
 import { useUi } from "../stores/ui";
 import styles from "./AppLayout.module.css";
 import { TabBar } from "./TabBar";
@@ -15,6 +16,7 @@ export function AppLayout() {
         <Outlet />
         <TabBar onAdd={openNewExpense} />
       </div>
+      <ExpenseSheet />
       <ToastHost />
       <UpdatePrompt />
     </>

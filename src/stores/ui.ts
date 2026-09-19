@@ -7,8 +7,16 @@ export type ToastMessage = {
   onAction?: () => void;
 };
 
-export type ExpenseSheetState =
-  { mode: "closed" } | { mode: "new" } | { mode: "edit"; expenseId: string };
+/**
+ * Foglio "Nuova / Modifica spesa". Chiudendolo si mantengono sessione e spesa,
+ * così il foglio resta montato per l'animazione di uscita; ogni apertura è una nuova sessione.
+ */
+export type ExpenseSheetState = {
+  open: boolean;
+  session: number;
+  /** null = nuova spesa. */
+  expenseId: string | null;
+};
 
 type UiState = {
   toast: ToastMessage | null;
@@ -27,7 +35,7 @@ let nextToastId = 1;
 /** Stato temporaneo dell'interfaccia (non salvato): fogli aperti e toast. */
 export const useUi = create<UiState>()((set) => ({
   toast: null,
-  expenseSheet: { mode: "closed" },
+  expenseSheet: { open: false, session: 0, expenseId: null },
   installGuideOpen: false,
   showToast: (toast) => {
     set({ toast: { ...toast, id: nextToastId++ } });
@@ -36,13 +44,27 @@ export const useUi = create<UiState>()((set) => ({
     set({ toast: null });
   },
   openNewExpense: () => {
-    set({ expenseSheet: { mode: "new" }, toast: null });
+    set((state) => ({
+      toast: null,
+      expenseSheet: {
+        open: true,
+        session: state.expenseSheet.session + 1,
+        expenseId: null,
+      },
+    }));
   },
   openEditExpense: (expenseId) => {
-    set({ expenseSheet: { mode: "edit", expenseId }, toast: null });
+    set((state) => ({
+      toast: null,
+      expenseSheet: {
+        open: true,
+        session: state.expenseSheet.session + 1,
+        expenseId,
+      },
+    }));
   },
   closeExpenseSheet: () => {
-    set({ expenseSheet: { mode: "closed" } });
+    set((state) => ({ expenseSheet: { ...state.expenseSheet, open: false } }));
   },
   setInstallGuideOpen: (installGuideOpen) => {
     set({ installGuideOpen });

@@ -1,0 +1,62 @@
+.grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: var(--space-xs);
+  padding: 0 var(--space-md);
+}
+
+.cell {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+  min-width: 0;
+  padding: 6px 2px;
+  border-radius: var(--radius-md);
+}
+
+.name {
+  max-width: 100%;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  font-size: var(--text-caption-1);
+  font-weight: 500;
+  color: var(--color-secondary-label);
+}
+
+/* scelta: pieno, anello colorato staccato di 3 px e ingrandimento del 6% */
+.selected .icon {
+  transform: scale(1.06);
+  box-shadow:
+    0 0 0 3px var(--color-background),
+    0 0 0 5px color-mix(in srgb, var(--c) 45%, transparent),
+    0 10px 18px -8px var(--c);
+}
+
+.selected .name {
+  color: var(--color-label);
+  font-weight: 650;
+}
+
+.shake {
+  animation: shake 0.34s;
+}
+
+@keyframes shake {
+  25% {
+    transform: translateX(-8px);
+  }
+  50% {
+    transform: translateX(7px);
+  }
+  75% {
+    transform: translateX(-4px);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .shake {
+    animation: none;
+  }
+}
