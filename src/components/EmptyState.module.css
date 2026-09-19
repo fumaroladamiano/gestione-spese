@@ -1,0 +1,38 @@
+.empty {
+  padding: var(--space-xxxl) var(--space-xxxl) var(--space-xxl);
+  text-align: center;
+  color: var(--color-secondary-label);
+}
+
+.icon {
+  display: grid;
+  place-items: center;
+  width: 72px;
+  height: 72px;
+  margin: 0 auto;
+  border-radius: 24px;
+  background: var(--color-tint-soft);
+  color: var(--color-tint);
+}
+
+.title {
+  margin: var(--space-md) 0 var(--space-xs);
+  font-size: var(--text-section-title);
+  font-weight: 700;
+  color: var(--color-label);
+}
+
+.message {
+  margin-bottom: var(--space-lg);
+  font-size: var(--text-callout);
+}
+
+.action {
+  min-height: var(--size-touch);
+  padding: 0 var(--space-lg);
+  border-radius: var(--radius-md);
+  background: var(--color-tint-soft);
+  color: var(--color-tint);
+  font-size: var(--text-callout);
+  font-weight: 600;
+}

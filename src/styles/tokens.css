@@ -32,6 +32,8 @@
   --color-chrome: rgba(255, 255, 255, 0.72);
   --color-chrome-highlight: rgba(255, 255, 255, 0.5);
   --color-overlay: rgba(0, 0, 0, 0.4);
+  /* sfondo dietro la schermata rimpicciolita quando si apre un foglio */
+  --color-sheet-backdrop: #000000;
   --color-toast: rgba(28, 28, 34, 0.94);
   --color-toast-action: #b3b2ff;
   --color-on-tint: #ffffff;

@@ -1,0 +1,31 @@
+.icon {
+  --c: var(--c-light);
+  --soft: 15%;
+  display: grid;
+  place-items: center;
+  flex: none;
+  color: var(--c);
+  background: color-mix(in srgb, var(--c) var(--soft), var(--color-surface));
+  transition:
+    background 0.2s,
+    color 0.2s,
+    transform 0.25s cubic-bezier(0.3, 1.6, 0.5, 1),
+    box-shadow 0.2s;
+}
+
+@media (prefers-color-scheme: dark) {
+  :global(:root:not([data-theme="light"])) .icon {
+    --c: var(--c-dark);
+    --soft: 22%;
+  }
+}
+
+:global(:root[data-theme="dark"]) .icon {
+  --c: var(--c-dark);
+  --soft: 22%;
+}
+
+.solid {
+  background: var(--c);
+  color: var(--color-on-tint);
+}

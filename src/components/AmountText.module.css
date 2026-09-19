@@ -1,0 +1,18 @@
+.amount {
+  font-family: var(--font-rounded);
+  font-variant-numeric: tabular-nums;
+  letter-spacing: -0.02em;
+  white-space: nowrap;
+}
+
+.fraction {
+  font-size: 0.6em;
+  font-weight: 600;
+  opacity: 0.72;
+}
+
+.currency {
+  font-size: 0.62em;
+  font-weight: 600;
+  opacity: 0.8;
+}

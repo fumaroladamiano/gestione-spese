@@ -684,7 +684,7 @@ Colori aggiuntivi per categorie personalizzate: giallo `#FFCC00`/`#FFD60A`, ment
 - **Stile delle icone categoria**: squircle con fondo tenue del colore della categoria (15% su `surface` in chiaro, 22% in scuro) e glifo colorato. Vale in liste, legenda dei grafici, top categorie e griglia di inserimento.
 - **Categoria scelta nella griglia**: fondo pieno, glifo bianco, anello colorato al 45% staccato di 3 px e ingrandimento del 6%.
 - **Glifo bianco su colore pieno** solo nell'anteprima del foglio categoria.
-- **Salvataggio**: nel database e nel backup si salva un **nome proprio stabile** (`cart`, `heart`…), convertito nel componente Lucide solo in `src/components/categoryIcons.ts`: se un giorno cambia la libreria di icone, dati e backup restano validi.
+- **Salvataggio**: nel database e nel backup si salva un **nome proprio stabile** (`cart`, `heart`…), convertito nel componente Lucide solo in `src/components/CategoryGlyph.ts`: se un giorno cambia la libreria di icone, dati e backup restano validi.
 - **Nomi**: i nomi delle categorie predefinite seguono la lingua finché non vengono rinominati; le categorie create dall'utente non si traducono (§ 5.4, D17).
 
 #### Tipografia
@@ -1409,7 +1409,7 @@ gestione-spese/
 │   │   ├── categories/             CategoriesPage, CategorySheet, useCategories
 │   │   ├── recurring/              RecurringPage, useRecurringRules (fase 4)
 │   │   └── install/                InstallBanner, InstallGuide, useStandalone
-│   ├── components/                 Sheet, ActionSheet, Chip, AmountText, CategoryIcon, categoryIcons.ts,
+│   ├── components/                 Sheet, ActionSheet, Chip, AmountText, CategoryIcon, CategoryGlyph.ts,
 │   │                               ExpenseRow, DaySectionHeader, ListGroup, SegmentedControl, Toast, EmptyState…
 │   ├── domain/                     types.ts, money.ts, dates.ts, filters.ts, aggregations.ts, backup.ts,
 │   │                               csv.ts, recurring.ts, categories.ts, ids.ts (+ file .test.ts accanto)

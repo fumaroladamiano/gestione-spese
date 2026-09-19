@@ -1,16 +1,21 @@
 import { Outlet } from "react-router";
+import { useUi } from "../stores/ui";
+import styles from "./AppLayout.module.css";
 import { TabBar } from "./TabBar";
+import { ToastHost } from "./ToastHost";
 import { UpdatePrompt } from "./UpdatePrompt";
 
-/** Struttura comune: pagina della tab attiva, tab bar sospesa e avviso di nuova versione. */
+/** Struttura comune: pagina della tab attiva, tab bar sospesa, fogli, toast e aggiornamenti. */
 export function AppLayout() {
-  // Il foglio "Nuova spesa" arriva nella fase 1 (step 1.4): per ora il "+" non apre nulla
-  const openNewExpense = () => undefined;
+  const openNewExpense = useUi((state) => state.openNewExpense);
 
   return (
     <>
-      <Outlet />
-      <TabBar onAdd={openNewExpense} />
+      <div className={styles.shell}>
+        <Outlet />
+        <TabBar onAdd={openNewExpense} />
+      </div>
+      <ToastHost />
       <UpdatePrompt />
     </>
   );
