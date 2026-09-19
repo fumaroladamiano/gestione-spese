@@ -148,6 +148,34 @@ export const en = {
   projectionOver: (amount: string) =>
     `Projected month end: ${amount} — over budget`,
 
+  activeCategories: "Active",
+  archivedCategories: "Archived",
+  newCategory: "New category",
+  editCategory: "Edit category",
+  categoryName: "Name",
+  categoryNamePlaceholder: "Name (e.g. Gym)",
+  color: "Colour",
+  colorN: (n: number) => `Colour ${String(n)}`,
+  icon: "Icon",
+  iconN: (n: number) => `Icon ${String(n)}`,
+  categoriesFooter:
+    "Built-in categories can be renamed and recoloured. Categories with expenses are archived instead of deleted.",
+  archiveCategory: "Archive category",
+  restoreCategory: "Restore category",
+  deleteCategory: "Delete category",
+  otherNotArchivable:
+    "“Other” cannot be archived: it collects generic expenses.",
+  keepExpenses: (n: number) =>
+    n === 1
+      ? "Its existing expense stays in history."
+      : `Its ${String(n)} existing expenses stay in history.`,
+  categoryCreated: (name: string) => `Category “${name}” created`,
+  categoryUpdated: "Category updated",
+  categoryArchived: (name: string) => `“${name}” archived`,
+  categoryRestored: (name: string) => `“${name}” restored`,
+  categoryDeleted: "Category deleted",
+  back: (label: string) => `Back to ${label}`,
+
   dataAndBackup: "Data & backup",
   exportJson: "Export backup (JSON)",
   exportCsv: "Export for Excel (CSV)",
@@ -215,6 +243,9 @@ export const en = {
   errorInvalidAmount: "Invalid amount",
   errorFutureDate: "Future expenses cannot be added",
   errorCategory: "Category not available",
+  errorDuplicateCategory: "A category with this name already exists",
+  errorCategoryLimit: "You can have at most 15 active categories",
+  errorCategoryName: "Enter a name of 1 to 20 characters",
   errorGeneric: "Something went wrong, please try again",
 
   nExpenses: (n: number) => (n === 1 ? "1 expense" : `${String(n)} expenses`),

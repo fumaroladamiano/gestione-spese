@@ -1,0 +1,120 @@
+.preview {
+  display: grid;
+  place-items: center;
+  padding: 6px 0 18px;
+}
+
+.name {
+  display: block;
+  width: calc(100% - 2 * var(--space-lg));
+  height: 48px;
+  margin: 0 var(--space-lg);
+  padding: 0 var(--space-lg);
+  border: 0;
+  border-radius: var(--radius-md);
+  background: var(--color-surface);
+  box-shadow: var(--shadow-card);
+  color: var(--color-label);
+  outline: none;
+}
+
+.name:focus {
+  box-shadow: 0 0 0 2px var(--color-tint);
+}
+
+.name::placeholder {
+  color: var(--color-tertiary-label);
+}
+
+.title {
+  padding: var(--space-xl) var(--space-xxxl) var(--space-sm);
+  font-size: var(--text-footnote);
+  font-weight: 600;
+  color: var(--color-secondary-label);
+}
+
+.card {
+  margin: 0 var(--space-lg);
+  padding: var(--space-lg) 18px;
+  border-radius: var(--radius-lg);
+  background: var(--color-surface);
+  box-shadow: var(--shadow-card);
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  gap: var(--space-md);
+}
+
+.swatch,
+.iconOption {
+  --c: var(--c-light);
+  display: grid;
+  place-items: center;
+  aspect-ratio: 1;
+  min-height: var(--size-touch);
+}
+
+@media (prefers-color-scheme: dark) {
+  :global(:root:not([data-theme="light"])) .swatch,
+  :global(:root:not([data-theme="light"])) .iconOption {
+    --c: var(--c-dark);
+  }
+}
+
+:global(:root[data-theme="dark"]) .swatch,
+:global(:root[data-theme="dark"]) .iconOption {
+  --c: var(--c-dark);
+}
+
+.swatch {
+  border-radius: 50%;
+  background: var(--c);
+  color: var(--color-on-tint);
+}
+
+.selected {
+  box-shadow:
+    0 0 0 3px var(--color-surface),
+    0 0 0 5px var(--c);
+}
+
+.iconOption {
+  border-radius: 13px;
+  background: var(--color-fill-soft);
+  color: var(--color-secondary-label);
+}
+
+.iconSelected {
+  background: var(--c);
+  color: var(--color-on-tint);
+}
+
+.footer {
+  padding: var(--space-lg) var(--space-lg) 0;
+  text-align: center;
+}
+
+.danger,
+.restore {
+  min-height: var(--size-touch);
+  padding: 0 var(--space-lg);
+  font-size: var(--text-body);
+  font-weight: 500;
+}
+
+.danger {
+  color: var(--color-danger);
+}
+
+.restore {
+  color: var(--color-tint);
+}
+
+.note {
+  padding-top: var(--space-sm);
+  font-size: var(--text-footnote);
+  line-height: 1.4;
+  color: var(--color-secondary-label);
+}

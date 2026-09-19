@@ -1,4 +1,6 @@
-import { CreditCard, Globe, Moon } from "lucide-react";
+import { CreditCard, Globe, Moon, Tag } from "lucide-react";
+import { useNavigate } from "react-router";
+import { useCategories } from "../categories/useCategories";
 import { ListGroup } from "../../components/ListGroup";
 import { Page } from "../../components/Page";
 import { SegmentedControl } from "../../components/SegmentedControl";
@@ -14,6 +16,10 @@ import { SettingsRow } from "./SettingsRow";
 
 export function SettingsPage() {
   const t = useT();
+  const navigate = useNavigate();
+  const activeCount = (useCategories() ?? []).filter(
+    (category) => !category.archived,
+  ).length;
   const theme = usePrefs((state) => state.theme);
   const language = usePrefs((state) => state.language);
   const paymentMethod = usePrefs((state) => state.defaultPaymentMethod);
@@ -41,6 +47,13 @@ export function SettingsPage() {
     <Page title={t("settingsTitle")}>
       <BudgetSection />
       <ListGroup title={t("personalization")}>
+        <SettingsRow
+          icon={Tag}
+          color="var(--color-system-orange)"
+          label={t("categories")}
+          value={String(activeCount)}
+          onClick={() => void navigate("/settings/categories")}
+        />
         <SettingsRow
           icon={CreditCard}
           color="var(--color-system-green)"

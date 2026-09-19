@@ -22,3 +22,20 @@
   font-weight: 800;
   letter-spacing: -0.025em;
 }
+
+.nav {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  min-height: var(--size-touch);
+  padding: 0 var(--space-sm) 0 var(--space-xs);
+}
+
+.back {
+  display: inline-flex;
+  align-items: center;
+  min-height: var(--size-touch);
+  color: var(--color-tint);
+  font-size: var(--text-body);
+  text-decoration: none;
+}

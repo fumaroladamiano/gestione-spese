@@ -159,6 +159,35 @@ export const it = {
   projectionOver: (amount: string) =>
     `Proiezione a fine mese: ${amount} — oltre il budget`,
 
+  // gestione categorie
+  activeCategories: "Attive",
+  archivedCategories: "Archiviate",
+  newCategory: "Nuova categoria",
+  editCategory: "Modifica categoria",
+  categoryName: "Nome",
+  categoryNamePlaceholder: "Nome (es. Palestra)",
+  color: "Colore",
+  colorN: (n: number) => `Colore ${String(n)}`,
+  icon: "Icona",
+  iconN: (n: number) => `Icona ${String(n)}`,
+  categoriesFooter:
+    "Le categorie predefinite si possono rinominare e ricolorare. Quelle con spese si archiviano invece di essere eliminate.",
+  archiveCategory: "Archivia categoria",
+  restoreCategory: "Ripristina categoria",
+  deleteCategory: "Elimina categoria",
+  otherNotArchivable:
+    "“Altro” non si può archiviare: raccoglie le spese generiche.",
+  keepExpenses: (n: number) =>
+    n === 1
+      ? "La spesa esistente resta nello storico."
+      : `Le ${String(n)} spese esistenti restano nello storico.`,
+  categoryCreated: (name: string) => `Categoria “${name}” creata`,
+  categoryUpdated: "Categoria aggiornata",
+  categoryArchived: (name: string) => `“${name}” archiviata`,
+  categoryRestored: (name: string) => `“${name}” ripristinata`,
+  categoryDeleted: "Categoria eliminata",
+  back: (label: string) => `Torna a ${label}`,
+
   // dati e backup
   dataAndBackup: "Dati e backup",
   exportJson: "Esporta backup (JSON)",
@@ -231,6 +260,9 @@ export const it = {
   errorInvalidAmount: "Importo non valido",
   errorFutureDate: "Non si possono registrare spese future",
   errorCategory: "Categoria non disponibile",
+  errorDuplicateCategory: "Esiste già una categoria con questo nome",
+  errorCategoryLimit: "Puoi avere al massimo 15 categorie attive",
+  errorCategoryName: "Scrivi un nome da 1 a 20 caratteri",
   errorGeneric: "Operazione non riuscita, riprova",
 
   // conteggi
