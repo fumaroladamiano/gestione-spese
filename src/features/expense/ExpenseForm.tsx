@@ -18,6 +18,7 @@ import { useCategories } from "../categories/useCategories";
 import { AmountDisplay } from "./AmountDisplay";
 import { AmountKeypad } from "./AmountKeypad";
 import { CategoryPicker } from "./CategoryPicker";
+import { CategorySuggestion } from "./CategorySuggestion";
 import { ExpenseDetails } from "./ExpenseDetails";
 import styles from "./ExpenseForm.module.css";
 import { useSaveExpense } from "./useSaveExpense";
@@ -151,6 +152,14 @@ export function ExpenseForm({
           onChange={change}
           onSubmit={() => void submit()}
         />
+        {expenseId === null && draft.categoryId === null ? (
+          <CategorySuggestion
+            note={draft.note}
+            onSelect={(categoryId) => {
+              change({ categoryId });
+            }}
+          />
+        ) : null}
         {expenseId !== null ? (
           <button
             type="button"

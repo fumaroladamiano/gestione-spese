@@ -1,5 +1,6 @@
 import { Dexie } from "dexie";
 import { isISODate, todayISO } from "../../domain/dates";
+import { normalizeSearch } from "../../domain/filters";
 import { newId } from "../../domain/ids";
 import { isValidAmount } from "../../domain/money";
 import {
@@ -152,6 +153,23 @@ export async function getRecentExpenses(limit: number): Promise<Expense[]> {
 
 export async function getExpense(id: string): Promise<Expense | undefined> {
   return db.expenses.get(id);
+}
+
+/**
+ * Categoria dell'ultima spesa con la stessa nota (senza maiuscole né accenti), per
+ * suggerirla nel foglio. Scorre le spese dalla più recente: la nota non è indicizzata.
+ */
+export async function findCategoryForNote(
+  note: string,
+): Promise<string | null> {
+  const wanted = normalizeSearch(note);
+  if (wanted.length < 2) return null;
+  const match = await db.expenses
+    .orderBy("[date+createdAt]")
+    .reverse()
+    .filter((expense) => normalizeSearch(expense.note) === wanted)
+    .first();
+  return match?.categoryId ?? null;
 }
 
 export async function countExpenses(): Promise<number> {

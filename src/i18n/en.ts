@@ -111,6 +111,7 @@ export const en = {
   notePlaceholder: "Note (e.g. supermarket, fuel)",
   note: "Note",
   fieldValue: (field: string, value: string) => `${field}: ${value}`,
+  categorySuggestion: (category: string) => `Suggested category: ${category}`,
   deleteKey: "Delete",
   deleteExpense: "Delete expense",
   expenseAdded: (amount: string, category: string) =>

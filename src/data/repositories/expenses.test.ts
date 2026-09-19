@@ -6,6 +6,7 @@ import {
   addExpense,
   deleteExpense,
   getExpensesBetween,
+  findCategoryForNote,
   getExpensesFiltered,
   getOldestExpenseDate,
   getRecentExpenses,
@@ -175,5 +176,19 @@ describe("repository delle spese", () => {
       await getExpensesFiltered("2026-09-01", "2026-09-30", []),
     ).toHaveLength(3);
     expect(await getOldestExpenseDate()).toBe("2026-08-20");
+  });
+
+  it("suggerisce la categoria dell'ultima spesa con la stessa nota", async () => {
+    await addExpense(
+      { ...input, categoryId: "spesa", note: "Caffè", date: "2026-09-01" },
+      NOW,
+    );
+    await addExpense(
+      { ...input, categoryId: "ristoranti", note: "caffe", date: "2026-09-10" },
+      NOW,
+    );
+    expect(await findCategoryForNote("CAFFÈ")).toBe("ristoranti");
+    expect(await findCategoryForNote("benzina")).toBeNull();
+    expect(await findCategoryForNote("c")).toBeNull();
   });
 });

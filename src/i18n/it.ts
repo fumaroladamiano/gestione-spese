@@ -120,6 +120,7 @@ export const it = {
   notePlaceholder: "Nota (es. Esselunga, benzina)",
   note: "Nota",
   fieldValue: (field: string, value: string) => `${field}: ${value}`,
+  categorySuggestion: (category: string) => `Categoria suggerita: ${category}`,
   deleteKey: "Cancella",
   deleteExpense: "Elimina spesa",
   expenseAdded: (amount: string, category: string) =>

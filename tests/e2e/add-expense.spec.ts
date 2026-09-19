@@ -81,3 +81,30 @@ test("in inglese il tastierino usa il punto e il simbolo davanti", async ({
   }
   await expect(sheet.getByTestId("amount-display")).toHaveText("€4.20");
 });
+
+test("una nota già usata suggerisce la sua categoria", async ({ page }) => {
+  await page.goto("./");
+  const open = () =>
+    page
+      .getByRole("navigation")
+      .getByRole("button", { name: "Aggiungi spesa" })
+      .click();
+  await open();
+  let sheet = page.getByRole("dialog", { name: "Nuova spesa" });
+  await sheet.getByRole("button", { name: "9", exact: true }).click();
+  await sheet.getByRole("radio", { name: "Trasporti" }).click();
+  await sheet.getByRole("textbox", { name: "Nota" }).fill("Benzina");
+  await sheet.getByRole("button", { name: "Salva" }).click();
+  await expect(sheet).toBeHidden();
+
+  await open();
+  sheet = page.getByRole("dialog", { name: "Nuova spesa" });
+  await sheet.getByRole("textbox", { name: "Nota" }).fill("benzina");
+  await sheet
+    .getByRole("button", { name: "Categoria suggerita: Trasporti" })
+    .click();
+  await expect(sheet.getByRole("radio", { name: "Trasporti" })).toHaveAttribute(
+    "aria-checked",
+    "true",
+  );
+});
