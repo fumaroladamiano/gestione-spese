@@ -1,0 +1,186 @@
+/*
+  Token del design system "iOS raffinato" (proposta § 1.5).
+  Valori chiari in :root; scuri con prefers-color-scheme (tema automatico)
+  oppure con data-theme="dark" quando l'utente forza il tema.
+*/
+
+:root {
+  color-scheme: light;
+
+  /* colori */
+  --color-background: #f3f3f8;
+  --color-surface: #ffffff;
+  --color-surface-elevated: #ffffff;
+  --color-key: #ffffff;
+  --color-fill: #e6e6ee;
+  --color-fill-soft: rgba(118, 118, 140, 0.12);
+  --color-segment-selected: #ffffff;
+  --color-label: #0b0b12;
+  --color-secondary-label: #6b6b74;
+  --color-tertiary-label: #b8b8c2;
+  --color-separator: rgba(60, 60, 67, 0.13);
+  --color-tint: #5856d6;
+  --color-tint-fill: #5856d6;
+  --color-tint-soft: #ececfd;
+  --color-positive: #34c759;
+  --color-positive-text: #1f7a36;
+  --color-warning: #ff9500;
+  --color-warning-text: #c93400;
+  --color-danger: #ff3b30;
+  --color-danger-text: #d70015;
+  --color-bar-neutral: #d9d9e2;
+  --color-chrome: rgba(255, 255, 255, 0.72);
+  --color-chrome-highlight: rgba(255, 255, 255, 0.5);
+  --color-overlay: rgba(0, 0, 0, 0.4);
+  --color-toast: rgba(28, 28, 34, 0.94);
+  --color-toast-action: #b3b2ff;
+  --color-on-tint: #ffffff;
+  --color-hero-text: rgba(255, 255, 255, 0.95);
+  --color-hero-track: rgba(255, 255, 255, 0.22);
+  --color-hero-budget-warning: #ffd60a;
+  --color-hero-budget-over: #ff8a80;
+
+  /* gradiente e ombre */
+  --gradient-hero: linear-gradient(
+    150deg,
+    #6260e8 0%,
+    #5856d6 48%,
+    #3e3cb6 100%
+  );
+  --shadow-card:
+    0 1px 2px rgba(18, 18, 40, 0.04), 0 8px 24px -14px rgba(18, 18, 40, 0.16);
+  --shadow-float:
+    0 1px 1px rgba(18, 18, 40, 0.05), 0 12px 32px -10px rgba(18, 18, 40, 0.22);
+  --shadow-hero:
+    0 18px 36px -18px rgba(76, 74, 210, 0.75),
+    inset 0 1px 0 rgba(255, 255, 255, 0.18);
+  --shadow-fab:
+    0 10px 22px -8px var(--color-tint), inset 0 1px 0 rgba(255, 255, 255, 0.25);
+
+  /* spaziature (griglia di 4 px) */
+  --space-xs: 4px;
+  --space-sm: 8px;
+  --space-md: 12px;
+  --space-lg: 16px;
+  --space-xl: 20px;
+  --space-xxl: 24px;
+  --space-xxxl: 32px;
+
+  /* raggi */
+  --radius-xs: 8px;
+  --radius-sm: 10px;
+  --radius-md: 16px;
+  --radius-lg: 22px;
+  --radius-xl: 28px;
+  --radius-full: 999px;
+
+  /* tipografia: 1rem = testo Body di iOS (17 px con la dimensione standard) */
+  --font-text:
+    -apple-system, system-ui, BlinkMacSystemFont, "Segoe UI", Roboto,
+    "Helvetica Neue", sans-serif;
+  --font-rounded:
+    ui-rounded, "SF Pro Rounded", -apple-system, system-ui, sans-serif;
+  --text-amount-xl: 3.53rem; /* 60 */
+  --text-amount-hero: 2.824rem; /* 48 */
+  --text-large-title: 2rem; /* 34 */
+  --text-amount-l: 2.118rem; /* 36 */
+  --text-title-2: 1.412rem; /* 24 */
+  --text-section-title: 1.176rem; /* 20 */
+  --text-headline: 1rem; /* 17 */
+  --text-body: 1rem; /* 17 */
+  --text-callout: 0.882rem; /* 15 */
+  --text-subheadline: 0.824rem; /* 14 */
+  --text-footnote: 0.765rem; /* 13 */
+  --text-caption-1: 0.706rem; /* 12 */
+  --text-caption-2: 0.588rem; /* 10 */
+
+  /* dimensioni */
+  --size-touch: 44px;
+  --size-tab-bar: 64px;
+  --size-fab: 52px;
+  --size-chip: 36px;
+  --tab-bar-inset: 14px;
+  --tab-bar-bottom: max(calc(env(safe-area-inset-bottom) - 8px), 10px);
+  --content-bottom: calc(104px + env(safe-area-inset-bottom));
+
+  /* sfocatura dei materiali traslucidi */
+  --blur-chrome: saturate(180%) blur(24px);
+}
+
+/* Tema scuro: automatico (se l'utente non ha forzato il chiaro) … */
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    color-scheme: dark;
+    --color-background: #000000;
+    --color-surface: #161618;
+    --color-surface-elevated: #242427;
+    --color-key: #2a2a2e;
+    --color-fill: #2c2c2f;
+    --color-fill-soft: rgba(118, 118, 128, 0.24);
+    --color-segment-selected: #5a5a60;
+    --color-label: #f5f5f7;
+    --color-secondary-label: #9a9aa2;
+    --color-tertiary-label: #4a4a51;
+    --color-separator: rgba(84, 84, 88, 0.45);
+    --color-tint: #8e8cf8;
+    --color-tint-fill: #5e5ce6;
+    --color-tint-soft: #1e1d40;
+    --color-positive: #30d158;
+    --color-positive-text: #30d158;
+    --color-warning: #ff9f0a;
+    --color-warning-text: #ff9f0a;
+    --color-danger: #ff453a;
+    --color-danger-text: #ff6961;
+    --color-bar-neutral: #3a3a40;
+    --color-chrome: rgba(36, 36, 40, 0.72);
+    --color-chrome-highlight: rgba(255, 255, 255, 0.08);
+    --color-toast: rgba(58, 58, 64, 0.96);
+    --gradient-hero: linear-gradient(
+      150deg,
+      #5f5de6 0%,
+      #4543c2 55%,
+      #2c2a8e 100%
+    );
+    --shadow-card: 0 0 0 0.5px rgba(255, 255, 255, 0.06);
+    --shadow-float:
+      0 0 0 0.5px rgba(255, 255, 255, 0.1), 0 16px 36px -12px rgba(0, 0, 0, 0.8);
+  }
+}
+
+/* … oppure forzato dall'utente in Impostazioni (stessi valori del blocco sopra) */
+:root[data-theme="dark"] {
+  color-scheme: dark;
+  --color-background: #000000;
+  --color-surface: #161618;
+  --color-surface-elevated: #242427;
+  --color-key: #2a2a2e;
+  --color-fill: #2c2c2f;
+  --color-fill-soft: rgba(118, 118, 128, 0.24);
+  --color-segment-selected: #5a5a60;
+  --color-label: #f5f5f7;
+  --color-secondary-label: #9a9aa2;
+  --color-tertiary-label: #4a4a51;
+  --color-separator: rgba(84, 84, 88, 0.45);
+  --color-tint: #8e8cf8;
+  --color-tint-fill: #5e5ce6;
+  --color-tint-soft: #1e1d40;
+  --color-positive: #30d158;
+  --color-positive-text: #30d158;
+  --color-warning: #ff9f0a;
+  --color-warning-text: #ff9f0a;
+  --color-danger: #ff453a;
+  --color-danger-text: #ff6961;
+  --color-bar-neutral: #3a3a40;
+  --color-chrome: rgba(36, 36, 40, 0.72);
+  --color-chrome-highlight: rgba(255, 255, 255, 0.08);
+  --color-toast: rgba(58, 58, 64, 0.96);
+  --gradient-hero: linear-gradient(
+    150deg,
+    #5f5de6 0%,
+    #4543c2 55%,
+    #2c2a8e 100%
+  );
+  --shadow-card: 0 0 0 0.5px rgba(255, 255, 255, 0.06);
+  --shadow-float:
+    0 0 0 0.5px rgba(255, 255, 255, 0.1), 0 16px 36px -12px rgba(0, 0, 0, 0.8);
+}
