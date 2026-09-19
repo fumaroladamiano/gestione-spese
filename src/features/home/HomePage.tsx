@@ -9,6 +9,7 @@ import { usePrefs } from "../../stores/prefs";
 import { useUi } from "../../stores/ui";
 import { useExpenseRow } from "../expense/useExpenseRow";
 import { InstallBanner } from "../install/InstallBanner";
+import { useBudget } from "../settings/useBudget";
 import styles from "./HomePage.module.css";
 import { MonthHeroCard } from "./MonthHeroCard";
 import { Sparkline } from "./Sparkline";
@@ -21,6 +22,7 @@ export function HomePage() {
   const language = usePrefs((state) => state.language);
   const openNewExpense = useUi((state) => state.openNewExpense);
   const summary = useMonthSummary();
+  const budget = useBudget() ?? null;
   const rowProps = useExpenseRow();
 
   return (
@@ -32,6 +34,8 @@ export function HomePage() {
             month={summary.month}
             totalCents={summary.totalCents}
             comparison={summary.comparison}
+            budgetCents={budget}
+            daysLeft={summary.daysLeft}
           />
           <div className={styles.tiles}>
             <StatTile

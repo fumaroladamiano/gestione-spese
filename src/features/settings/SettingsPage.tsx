@@ -9,6 +9,7 @@ import { useT } from "../../i18n/useT";
 import { usePrefs, type ThemePreference } from "../../stores/prefs";
 import { AppStatusSection } from "./AppStatusSection";
 import { BackupSection } from "./BackupSection";
+import { BudgetSection } from "./BudgetSection";
 import { SettingsRow } from "./SettingsRow";
 
 export function SettingsPage() {
@@ -38,6 +39,7 @@ export function SettingsPage() {
 
   return (
     <Page title={t("settingsTitle")}>
+      <BudgetSection />
       <ListGroup title={t("personalization")}>
         <SettingsRow
           icon={CreditCard}

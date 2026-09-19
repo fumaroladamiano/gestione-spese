@@ -9,6 +9,7 @@ import { SectionHeader } from "../../components/SectionHeader";
 import {
   capitalizeFirst,
   dayOfMonth,
+  daysInMonth,
   formatDayHeader,
   formatMonthName,
   isMonthKey,
@@ -21,6 +22,8 @@ import type { MonthKey } from "../../domain/types";
 import { useLocale, useT } from "../../i18n/useT";
 import { usePrefs } from "../../stores/prefs";
 import { useMonthBounds } from "../history/useHistory";
+import { useBudget } from "../settings/useBudget";
+import { BudgetCard } from "./BudgetCard";
 import { CategoryBreakdown } from "./CategoryBreakdown";
 import styles from "./ChartsPage.module.css";
 import { DailyBarChart } from "./DailyBarChart";
@@ -41,6 +44,7 @@ export function ChartsPage() {
       : monthOf(today);
   const bounds = useMonthBounds();
   const data = useChartsData(month);
+  const budget = useBudget() ?? null;
   const [selectedCategory, setSelectedCategory] = useState<string | null>(null);
   const [selectedDay, setSelectedDay] = useState<number | null>(null);
 
@@ -176,6 +180,24 @@ export function ChartsPage() {
               }
             />
           </section>
+
+          {budget !== null ? (
+            <>
+              <SectionHeader title={t("budget")} />
+              <BudgetCard
+                spentCents={data.totalCents}
+                budgetCents={budget}
+                projection={
+                  data.isCurrentMonth
+                    ? {
+                        elapsedDays: dayOfMonth(today),
+                        daysInMonth: daysInMonth(month),
+                      }
+                    : null
+                }
+              />
+            </>
+          ) : null}
         </>
       ) : null}
     </Page>

@@ -1,6 +1,7 @@
 import { ArrowUpRight } from "lucide-react";
 import { Link } from "react-router";
 import { AmountText } from "../../components/AmountText";
+import { BudgetProgress } from "../../components/BudgetProgress";
 import { DeltaPill } from "../../components/DeltaPill";
 import type { MonthComparison } from "../../domain/aggregations";
 import { capitalizeFirst, formatMonthName } from "../../domain/dates";
@@ -13,6 +14,9 @@ type MonthHeroCardProps = {
   month: MonthKey;
   totalCents: number;
   comparison: MonthComparison;
+  /** Budget mensile; null = nessuna barra. */
+  budgetCents: number | null;
+  daysLeft: number;
 };
 
 /** Card del mese in gradiente: totale, confronto con il mese precedente, link ai grafici. */
@@ -20,6 +24,8 @@ export function MonthHeroCard({
   month,
   totalCents,
   comparison,
+  budgetCents,
+  daysLeft,
 }: MonthHeroCardProps) {
   const t = useT();
   const locale = useLocale();
@@ -52,6 +58,14 @@ export function MonthHeroCard({
               : t("versus", previousName)}
         </span>
       </div>
+      {budgetCents !== null ? (
+        <BudgetProgress
+          spentCents={totalCents}
+          budgetCents={budgetCents}
+          daysLeft={daysLeft}
+          onHero
+        />
+      ) : null}
     </Link>
   );
 }

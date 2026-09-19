@@ -1,0 +1,60 @@
+.budget {
+  margin-top: var(--space-lg);
+}
+
+.track {
+  height: 10px;
+  overflow: hidden;
+  border-radius: 5px;
+  background: var(--color-fill-soft);
+}
+
+.fill {
+  display: block;
+  height: 100%;
+  border-radius: 5px;
+  transition: width 0.7s cubic-bezier(0.2, 0.8, 0.2, 1);
+}
+
+.ok {
+  background: var(--color-positive);
+}
+
+.warning {
+  background: var(--color-warning);
+}
+
+.over {
+  background: var(--color-danger);
+}
+
+.meta {
+  display: flex;
+  justify-content: space-between;
+  gap: var(--space-sm);
+  margin-top: 7px;
+  font-size: var(--text-footnote);
+  color: var(--color-secondary-label);
+}
+
+/* sulla card in gradiente: traccia bianca traslucida e colori chiari */
+.hero .track {
+  height: 8px;
+  background: var(--color-hero-track);
+}
+
+.hero .ok {
+  background: var(--color-on-tint);
+}
+
+.hero .warning {
+  background: var(--color-hero-budget-warning);
+}
+
+.hero .over {
+  background: var(--color-hero-budget-over);
+}
+
+.hero .meta {
+  color: var(--color-hero-text);
+}

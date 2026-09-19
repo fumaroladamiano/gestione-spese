@@ -79,6 +79,15 @@ export function formatPercent(
   }).format(ratio);
 }
 
+/** Importo per un campo di testo, senza simbolo: "1.500,00" / "1,500.00". */
+export function formatAmountField(cents: number, locale: NumberLocale): string {
+  return new Intl.NumberFormat(locale, {
+    minimumFractionDigits: 2,
+    maximumFractionDigits: 2,
+    useGrouping: "always",
+  }).format(cents / 100);
+}
+
 /** Spazio occupato in kilobyte senza decimali: "48 kB". */
 export function formatKilobytes(bytes: number, locale: NumberLocale): string {
   return new Intl.NumberFormat(locale, {

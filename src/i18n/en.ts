@@ -134,6 +134,20 @@ export const en = {
   languageEnglish: "English",
   defaultPaymentMethod: "Default payment",
 
+  budget: "Budget",
+  monthlyBudget: "Monthly budget",
+  noBudget: "None",
+  budgetFooter: "Leave empty to hide the budget from Home and Charts.",
+  budgetSet: (amount: string) => `Budget set to ${amount}`,
+  budgetRemoved: "Budget turned off",
+  budgetOf: (percent: string, budget: string) => `${percent} of ${budget}`,
+  budgetRemaining: (amount: string) => `${amount} left`,
+  budgetOver: (amount: string) => `${amount} over`,
+  daysLeft: (n: number) => (n === 1 ? "1 day" : `${String(n)} days`),
+  projection: (amount: string) => `Projected month end: ${amount}`,
+  projectionOver: (amount: string) =>
+    `Projected month end: ${amount} — over budget`,
+
   dataAndBackup: "Data & backup",
   exportJson: "Export backup (JSON)",
   exportCsv: "Export for Excel (CSV)",

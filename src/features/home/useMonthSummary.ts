@@ -14,7 +14,14 @@ import {
   type CategoryTotal,
   type MonthComparison,
 } from "../../domain/aggregations";
-import { addMonths, monthOf, monthRange, todayISO } from "../../domain/dates";
+import {
+  addMonths,
+  dayOfMonth,
+  daysInMonth,
+  monthOf,
+  monthRange,
+  todayISO,
+} from "../../domain/dates";
 import type { Expense, MonthKey } from "../../domain/types";
 
 export type MonthSummary = {
@@ -29,6 +36,8 @@ export type MonthSummary = {
   topCategories: CategoryTotal[];
   recent: Expense[];
   isEmpty: boolean;
+  /** Giorni rimanenti nel mese dopo oggi. */
+  daysLeft: number;
 };
 
 const RECENT_COUNT = 5;
@@ -79,6 +88,7 @@ export function useMonthSummary(): MonthSummary | undefined {
       topCategories: totalsByCategory(current).slice(0, TOP_COUNT),
       recent,
       isEmpty: recent.length === 0,
+      daysLeft: daysInMonth(month) - dayOfMonth(today),
     };
   }, [expenses, recent, month, previousMonth, today]);
 }
