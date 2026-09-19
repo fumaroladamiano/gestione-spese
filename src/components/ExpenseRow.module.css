@@ -1,0 +1,94 @@
+.row {
+  position: relative;
+  overflow: hidden;
+  background: var(--color-surface);
+}
+
+.actions {
+  position: absolute;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  display: flex;
+}
+
+.edit,
+.delete {
+  width: 78px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-xs);
+  color: var(--color-on-tint);
+  font-size: var(--text-caption-1);
+  font-weight: 600;
+}
+
+.edit {
+  background: var(--color-tint-fill);
+}
+
+.delete {
+  background: var(--color-danger);
+}
+
+.content {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  width: 100%;
+  min-height: 64px;
+  padding: 11px var(--space-lg);
+  background: var(--color-surface);
+  text-align: left;
+  /* lo scorrimento verticale della pagina resta al browser */
+  touch-action: pan-y;
+}
+
+.content:active {
+  background: color-mix(in srgb, var(--color-label) 6%, var(--color-surface));
+}
+
+.main {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+}
+
+.title {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  font-size: var(--text-body);
+  font-weight: 500;
+  letter-spacing: -0.015em;
+}
+
+.titleText {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.recurring {
+  flex: none;
+  color: var(--color-tint);
+}
+
+.subtitle {
+  margin-top: 1px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  font-size: var(--text-footnote);
+  color: var(--color-secondary-label);
+}
+
+.amount {
+  font-size: var(--text-body);
+  font-weight: 650;
+}

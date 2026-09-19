@@ -1,0 +1,48 @@
+.day {
+  margin-bottom: var(--space-xs);
+}
+
+.dayHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  gap: var(--space-md);
+  padding: var(--space-xl) var(--space-xxxl) var(--space-sm);
+  font-size: var(--text-callout);
+  font-weight: 600;
+  letter-spacing: -0.01em;
+}
+
+.dayTotal {
+  font-size: var(--text-subheadline);
+  font-weight: 600;
+  color: var(--color-secondary-label);
+}
+
+.card {
+  margin: 0 var(--space-lg);
+  overflow: hidden;
+  border-radius: var(--radius-lg);
+  background: var(--color-surface);
+  box-shadow: var(--shadow-card);
+}
+
+.item {
+  overflow: hidden;
+}
+
+/* separatore hairline rientrato allineato al testo (icona 40 + spazio) */
+.item + .item {
+  position: relative;
+}
+
+.item + .item::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  right: 0;
+  left: 70px;
+  z-index: 2;
+  height: 0.5px;
+  background: var(--color-separator);
+}

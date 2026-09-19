@@ -1,0 +1,30 @@
+.cancel {
+  min-height: var(--size-touch);
+  color: var(--color-tint);
+  font-size: var(--text-body);
+}
+
+.title {
+  font-size: var(--text-headline);
+  font-weight: 650;
+  text-align: center;
+}
+
+/* resta toccabile anche se disattivato: il tocco mostra lo "shake" sull'elemento mancante */
+.action {
+  min-height: 36px;
+  padding: 0 var(--space-lg);
+  border-radius: var(--radius-full);
+  background: var(--color-tint-fill);
+  color: var(--color-on-tint);
+  font-size: var(--text-body);
+  font-weight: 600;
+  transition:
+    background 0.2s,
+    color 0.2s;
+}
+
+.disabled {
+  background: var(--color-fill-soft);
+  color: var(--color-tertiary-label);
+}

@@ -1,4 +1,4 @@
-import { expect, test } from "@playwright/test";
+import { expect, test } from "./fixtures";
 
 test("l'app si apre in italiano all'indirizzo di GitHub Pages", async ({
   page,

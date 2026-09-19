@@ -1,0 +1,23 @@
+/* con un foglio aperto la schermata sotto si rimpicciolisce e si arrotonda, come su iOS */
+.shell {
+  min-height: 100dvh;
+  background: var(--color-background);
+  transform-origin: 50% 0;
+  transition:
+    transform 0.45s cubic-bezier(0.32, 0.72, 0, 1),
+    border-radius 0.45s;
+}
+
+:global(html[data-sheet-open]) .shell {
+  transform: translateY(calc(max(env(safe-area-inset-top), 12px) - 4px))
+    scale(0.94);
+  border-radius: var(--radius-xl);
+  overflow: hidden;
+  height: 100dvh;
+}
+
+:global(html[data-sheet-open]),
+:global(html[data-sheet-open] body) {
+  overflow: hidden;
+  background: var(--color-sheet-backdrop);
+}

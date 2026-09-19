@@ -1,0 +1,127 @@
+.hero {
+  padding: var(--space-sm) var(--space-xxl) var(--space-xl);
+  text-align: center;
+}
+
+.appIcon {
+  display: grid;
+  place-items: center;
+  width: 84px;
+  height: 84px;
+  margin: 0 auto var(--space-lg);
+  border-radius: var(--radius-lg);
+  background: var(--gradient-hero);
+  color: var(--color-on-tint);
+  box-shadow: var(--shadow-hero);
+}
+
+.title {
+  margin-bottom: 6px;
+  font-size: 1.647rem;
+  font-weight: 700;
+  letter-spacing: -0.025em;
+}
+
+.intro {
+  font-size: var(--text-callout);
+  line-height: 1.45;
+  color: var(--color-secondary-label);
+}
+
+.steps {
+  margin: 0 var(--space-lg);
+  padding: 0;
+  list-style: none;
+  overflow: hidden;
+  border-radius: var(--radius-lg);
+  background: var(--color-surface);
+  box-shadow: var(--shadow-card);
+}
+
+.step {
+  display: flex;
+  align-items: center;
+  gap: var(--space-md);
+  padding: 14px var(--space-lg);
+}
+
+.step + .step {
+  border-top: 0.5px solid var(--color-separator);
+}
+
+.number {
+  display: grid;
+  place-items: center;
+  flex: none;
+  width: 28px;
+  height: 28px;
+  border-radius: var(--radius-xs);
+  background: var(--color-tint-soft);
+  color: var(--color-tint);
+  font-size: var(--text-subheadline);
+  font-weight: 700;
+}
+
+.stepText {
+  flex: 1;
+  font-size: var(--text-body);
+  line-height: 1.4;
+}
+
+.stepIcon {
+  display: grid;
+  place-items: center;
+  flex: none;
+  width: 30px;
+  height: 30px;
+  border-radius: var(--radius-xs);
+  background: var(--color-fill-soft);
+  color: var(--color-tint);
+}
+
+.warning {
+  display: flex;
+  gap: var(--space-sm);
+  margin: var(--space-lg) var(--space-lg) 0;
+  padding: 14px;
+  border-radius: var(--radius-md);
+  background: color-mix(
+    in srgb,
+    var(--color-warning) 13%,
+    var(--color-surface)
+  );
+  font-size: var(--text-subheadline);
+  line-height: 1.45;
+}
+
+.warningIcon {
+  flex: none;
+  color: var(--color-warning);
+}
+
+.footer {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-sm);
+  padding: var(--space-md) var(--space-lg) 0;
+}
+
+.primary,
+.secondary {
+  width: 100%;
+  min-height: 52px;
+  border-radius: var(--radius-md);
+  font-size: var(--text-body);
+  font-weight: 600;
+  text-align: center;
+}
+
+.primary {
+  background: var(--gradient-hero);
+  color: var(--color-on-tint);
+}
+
+.secondary {
+  background: var(--color-tint-soft);
+  color: var(--color-tint);
+}

@@ -1,0 +1,9 @@
+.delete {
+  display: block;
+  min-height: var(--size-touch);
+  margin: var(--space-lg) auto 0;
+  padding: 0 var(--space-lg);
+  color: var(--color-danger);
+  font-size: var(--text-body);
+  font-weight: 500;
+}

@@ -1,0 +1,18 @@
+.spark {
+  display: flex;
+  align-items: flex-end;
+  gap: var(--space-xs);
+  height: 26px;
+  margin-top: var(--space-md);
+}
+
+.bar {
+  flex: 1;
+  min-height: 3px;
+  border-radius: 3px;
+  background: color-mix(in srgb, var(--color-tint) 30%, var(--color-fill));
+}
+
+.today {
+  background: var(--color-tint);
+}

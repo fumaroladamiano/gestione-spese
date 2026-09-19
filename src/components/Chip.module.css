@@ -1,0 +1,65 @@
+.chip {
+  flex: none;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  height: var(--size-chip);
+  padding: 0 14px;
+  border-radius: var(--radius-full);
+  background: var(--color-surface);
+  box-shadow: var(--shadow-card);
+  color: var(--color-label);
+  font-size: var(--text-callout);
+  font-weight: 500;
+  white-space: nowrap;
+  transition:
+    background 0.2s,
+    color 0.2s,
+    box-shadow 0.2s;
+}
+
+/* area toccabile di 44 px anche se la pillola è alta 36 */
+.chip {
+  position: relative;
+}
+
+.chip::after {
+  content: "";
+  position: absolute;
+  inset: -4px 0;
+}
+
+.selected {
+  background: var(--color-tint-fill);
+  color: var(--color-on-tint);
+}
+
+.soft {
+  background: var(--color-fill-soft);
+  box-shadow: none;
+}
+
+.soft.selected {
+  background: var(--color-tint-soft);
+  color: var(--color-tint);
+  box-shadow: inset 0 0 0 1.5px
+    color-mix(in srgb, var(--color-tint) 40%, transparent);
+}
+
+.dot {
+  --c: var(--c-light);
+  width: 9px;
+  height: 9px;
+  border-radius: 50%;
+  background: var(--c);
+}
+
+@media (prefers-color-scheme: dark) {
+  :global(:root:not([data-theme="light"])) .dot {
+    --c: var(--c-dark);
+  }
+}
+
+:global(:root[data-theme="dark"]) .dot {
+  --c: var(--c-dark);
+}

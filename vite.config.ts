@@ -7,6 +7,10 @@ export const BASE = "/gestione-spese/";
 
 export default defineConfig({
   base: BASE,
+  define: {
+    // versione mostrata in Impostazioni → App
+    __APP_VERSION__: JSON.stringify(process.env.npm_package_version ?? "0.0.0"),
+  },
   plugins: [
     react(),
     VitePWA({

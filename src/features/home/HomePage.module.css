@@ -1,0 +1,29 @@
+.tiles {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: var(--space-md);
+  margin: var(--space-md) var(--space-lg) 0;
+}
+
+.card {
+  margin: 0 var(--space-lg);
+  overflow: hidden;
+  border-radius: var(--radius-lg);
+  background: var(--color-surface);
+  box-shadow: var(--shadow-card);
+}
+
+.item + .item {
+  position: relative;
+}
+
+.item + .item::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  right: 0;
+  left: 70px;
+  z-index: 2;
+  height: 0.5px;
+  background: var(--color-separator);
+}

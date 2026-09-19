@@ -1,0 +1,4 @@
+/* il selettore di file resta nascosto: si apre dalla riga "Importa backup" */
+.hidden {
+  display: none;
+}
