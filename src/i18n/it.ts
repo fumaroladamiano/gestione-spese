@@ -70,6 +70,26 @@ export const it = {
       : `${amount}, ${category}, ${day}, ${method}`,
   dayTotal: (day: string, amount: string) => `${day}, totale ${amount}`,
 
+  // filtri dello storico
+  filters: "Filtri",
+  month: "Mese",
+  allMonths: "Tutti i mesi",
+  categories: "Categorie",
+  oneOrMore: "anche più di una",
+  day: "Giorno",
+  anyDay: "Qualsiasi",
+  reset: "Azzera",
+  filteredTotal: "Totale filtrato",
+  noMatch: "Nessuna spesa corrisponde a questi filtri.",
+  clearFilters: "Azzera filtri",
+  showResults: (count: string, amount: string) => `Mostra ${count} · ${amount}`,
+  searchNotes: "Cerca nelle note",
+  searchPlaceholder: "Es. Esselunga, benzina",
+  searchChip: (query: string) => `“${query}”`,
+  removeSearch: "Togli la ricerca",
+  previousMonth: "Mese precedente",
+  nextMonth: "Mese successivo",
+
   // foglio spesa
   cancel: "Annulla",
   save: "Salva",
