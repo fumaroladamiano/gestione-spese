@@ -63,3 +63,8 @@
 :global(:root[data-theme="dark"]) .dot {
   --c: var(--c-dark);
 }
+
+.caret {
+  margin-left: -2px;
+  opacity: 0.6;
+}

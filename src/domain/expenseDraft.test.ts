@@ -27,6 +27,7 @@ describe("bozza della spesa", () => {
       date: "2026-09-16",
       note: "",
       paymentMethod: "carta",
+      recurring: false,
     });
   });
 
@@ -74,6 +75,13 @@ describe("bozza della spesa", () => {
 
   it("cicla i metodi di pagamento", () => {
     expect(nextPaymentMethod("carta")).toBe("contanti");
+    expect(nextPaymentMethod("altro")).toBe("carta");
+  });
+
+  it("considera modificata la bozza se cambia la ripetizione", () => {
+    const initial = draftFromExpense(expense, true);
+    expect(initial.recurring).toBe(true);
+    expect(isDraftDirty({ ...initial, recurring: false }, initial)).toBe(true);
     expect(nextPaymentMethod("contanti")).toBe("altro");
     expect(nextPaymentMethod("altro")).toBe("carta");
   });

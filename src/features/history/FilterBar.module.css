@@ -1,0 +1,21 @@
+.bar {
+  display: flex;
+  gap: var(--space-sm);
+  overflow-x: auto;
+  padding: var(--space-xs) var(--space-lg) var(--space-sm);
+  scrollbar-width: none;
+}
+
+.bar::-webkit-scrollbar {
+  display: none;
+}
+
+.reset {
+  flex: none;
+  min-height: var(--size-touch);
+  margin: -4px 0;
+  padding: 0 6px;
+  color: var(--color-tint);
+  font-size: var(--text-callout);
+  font-weight: 600;
+}

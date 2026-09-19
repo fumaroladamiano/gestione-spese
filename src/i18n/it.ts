@@ -70,6 +70,43 @@ export const it = {
       : `${amount}, ${category}, ${day}, ${method}`,
   dayTotal: (day: string, amount: string) => `${day}, totale ${amount}`,
 
+  // filtri dello storico
+  filters: "Filtri",
+  month: "Mese",
+  allMonths: "Tutti i mesi",
+  categories: "Categorie",
+  oneOrMore: "anche più di una",
+  day: "Giorno",
+  anyDay: "Qualsiasi",
+  reset: "Azzera",
+  filteredTotal: "Totale filtrato",
+  noMatch: "Nessuna spesa corrisponde a questi filtri.",
+  clearFilters: "Azzera filtri",
+  showResults: (count: string, amount: string) => `Mostra ${count} · ${amount}`,
+  searchNotes: "Cerca nelle note",
+  searchPlaceholder: "Es. Esselunga, benzina",
+  searchChip: (query: string) => `“${query}”`,
+  removeSearch: "Togli la ricerca",
+  previousMonth: "Mese precedente",
+  nextMonth: "Mese successivo",
+
+  // grafici
+  summary: "Riepilogo",
+  monthTotal: "Totale del mese",
+  byCategory: "Per categoria",
+  total: "Totale",
+  dailyTrend: "Andamento giornaliero",
+  tapBarHint: "Tocca una barra per i dettagli",
+  averagePerDayShort: (amount: string) => `media ${amount}/giorno`,
+  averageLine: "media",
+  seeInHistory: (category: string) => `Vedi ${category} nello storico`,
+  openDay: "Apri giorno",
+  monthUntilDay: (month: string, day: number) => `${month} (1–${String(day)})`,
+  previousTotal: (period: string, amount: string) => `${period}: ${amount}`,
+  dayAmount: (day: string, amount: string) => `${day}: ${amount}`,
+  categoryShare: (category: string, percent: string, amount: string) =>
+    `${category}, ${percent}, ${amount}`,
+
   // foglio spesa
   cancel: "Annulla",
   save: "Salva",
@@ -83,6 +120,7 @@ export const it = {
   notePlaceholder: "Nota (es. Esselunga, benzina)",
   note: "Nota",
   fieldValue: (field: string, value: string) => `${field}: ${value}`,
+  categorySuggestion: (category: string) => `Categoria suggerita: ${category}`,
   deleteKey: "Cancella",
   deleteExpense: "Elimina spesa",
   expenseAdded: (amount: string, category: string) =>
@@ -106,6 +144,72 @@ export const it = {
   languageItalian: "Italiano",
   languageEnglish: "English",
   defaultPaymentMethod: "Pagamento predefinito",
+
+  // budget
+  budget: "Budget",
+  monthlyBudget: "Budget mensile",
+  noBudget: "Nessuno",
+  budgetFooter: "Lascia vuoto per nascondere il budget da Home e Grafici.",
+  budgetSet: (amount: string) => `Budget impostato a ${amount}`,
+  budgetRemoved: "Budget disattivato",
+  budgetOf: (percent: string, budget: string) => `${percent} di ${budget}`,
+  budgetRemaining: (amount: string) => `Restano ${amount}`,
+  budgetOver: (amount: string) => `Sforato di ${amount}`,
+  daysLeft: (n: number) => (n === 1 ? "1 giorno" : `${String(n)} giorni`),
+  projection: (amount: string) => `Proiezione a fine mese: ${amount}`,
+  projectionOver: (amount: string) =>
+    `Proiezione a fine mese: ${amount} — oltre il budget`,
+
+  // gestione categorie
+  activeCategories: "Attive",
+  archivedCategories: "Archiviate",
+  newCategory: "Nuova categoria",
+  editCategory: "Modifica categoria",
+  categoryName: "Nome",
+  categoryNamePlaceholder: "Nome (es. Palestra)",
+  color: "Colore",
+  colorN: (n: number) => `Colore ${String(n)}`,
+  icon: "Icona",
+  iconN: (n: number) => `Icona ${String(n)}`,
+  categoriesFooter:
+    "Le categorie predefinite si possono rinominare e ricolorare. Quelle con spese si archiviano invece di essere eliminate.",
+  archiveCategory: "Archivia categoria",
+  restoreCategory: "Ripristina categoria",
+  deleteCategory: "Elimina categoria",
+  otherNotArchivable:
+    "“Altro” non si può archiviare: raccoglie le spese generiche.",
+  keepExpenses: (n: number) =>
+    n === 1
+      ? "La spesa esistente resta nello storico."
+      : `Le ${String(n)} spese esistenti restano nello storico.`,
+  categoryCreated: (name: string) => `Categoria “${name}” creata`,
+  categoryUpdated: "Categoria aggiornata",
+  categoryArchived: (name: string) => `“${name}” archiviata`,
+  categoryRestored: (name: string) => `“${name}” ripristinata`,
+  categoryDeleted: "Categoria eliminata",
+  back: (label: string) => `Torna a ${label}`,
+
+  // spese ricorrenti
+  oneOff: "Una tantum",
+  monthly: "Ogni mese",
+  recurrence: "Ripetizione",
+  expenseAddedMonthly: (amount: string, category: string) =>
+    `${amount} aggiunti a ${category} · ogni mese`,
+  recurringTitle: "Spese ricorrenti",
+  recurringEmpty:
+    "Nessuna spesa ricorrente. Scegli “Ogni mese” quando registri una spesa (es. abbonamenti, affitto).",
+  recurringFooter:
+    "All'apertura dell'app viene registrata la spesa di ogni mese dovuto. Le spese già create restano anche se sospendi o elimini la regola.",
+  ruleSummary: (amount: string, day: number) =>
+    `${amount} · ogni mese il giorno ${String(day)}`,
+  ruleActive: "Attiva",
+  ruleSuspended: "Sospesa",
+  suspendRule: "Sospendi",
+  resumeRule: "Riattiva",
+  deleteRule: "Elimina regola",
+  ruleSuspendedToast: "Spesa ricorrente sospesa",
+  ruleResumedToast: "Spesa ricorrente riattivata",
+  ruleDeletedToast: "Regola eliminata",
 
   // dati e backup
   dataAndBackup: "Dati e backup",
@@ -156,6 +260,15 @@ export const it = {
   appFooter:
     "Safari concede di norma l'archiviazione persistente alle app aggiunte alla schermata Home.",
 
+  checkUpdates: "Cerca aggiornamenti",
+  upToDate: (version: string) => `Hai già l'ultima versione (${version})`,
+  updatesUnavailable: "Aggiornamenti disponibili solo nell'app pubblicata",
+  backupReminderTitle: "Fai un backup",
+  backupReminderNever: "Non hai ancora salvato una copia delle spese.",
+  backupReminderDays: (n: number) =>
+    `L'ultimo backup è di ${String(n)} giorni fa.`,
+  backupReminderAction: "Esporta",
+
   // installazione
   installBannerTitle: "Installa Spese sulla Home",
   installBannerSubtitle: "Offline e a schermo intero · Come fare ›",
@@ -179,6 +292,9 @@ export const it = {
   errorInvalidAmount: "Importo non valido",
   errorFutureDate: "Non si possono registrare spese future",
   errorCategory: "Categoria non disponibile",
+  errorDuplicateCategory: "Esiste già una categoria con questo nome",
+  errorCategoryLimit: "Puoi avere al massimo 15 categorie attive",
+  errorCategoryName: "Scrivi un nome da 1 a 20 caratteri",
   errorGeneric: "Operazione non riuscita, riprova",
 
   // conteggi

@@ -1,4 +1,7 @@
-import { CreditCard, Globe, Moon } from "lucide-react";
+import { CreditCard, Globe, Moon, Repeat, Tag } from "lucide-react";
+import { useRecurringRules } from "../recurring/useRecurringRules";
+import { useNavigate } from "react-router";
+import { useCategories } from "../categories/useCategories";
 import { ListGroup } from "../../components/ListGroup";
 import { Page } from "../../components/Page";
 import { SegmentedControl } from "../../components/SegmentedControl";
@@ -9,10 +12,18 @@ import { useT } from "../../i18n/useT";
 import { usePrefs, type ThemePreference } from "../../stores/prefs";
 import { AppStatusSection } from "./AppStatusSection";
 import { BackupSection } from "./BackupSection";
+import { BudgetSection } from "./BudgetSection";
 import { SettingsRow } from "./SettingsRow";
 
 export function SettingsPage() {
   const t = useT();
+  const navigate = useNavigate();
+  const activeRules = (useRecurringRules() ?? []).filter(
+    (rule) => rule.active,
+  ).length;
+  const activeCount = (useCategories() ?? []).filter(
+    (category) => !category.archived,
+  ).length;
   const theme = usePrefs((state) => state.theme);
   const language = usePrefs((state) => state.language);
   const paymentMethod = usePrefs((state) => state.defaultPaymentMethod);
@@ -38,7 +49,22 @@ export function SettingsPage() {
 
   return (
     <Page title={t("settingsTitle")}>
+      <BudgetSection />
       <ListGroup title={t("personalization")}>
+        <SettingsRow
+          icon={Tag}
+          color="var(--color-system-orange)"
+          label={t("categories")}
+          value={String(activeCount)}
+          onClick={() => void navigate("/settings/categories")}
+        />
+        <SettingsRow
+          icon={Repeat}
+          color="var(--color-system-teal)"
+          label={t("recurringTitle")}
+          value={String(activeRules)}
+          onClick={() => void navigate("/settings/recurring")}
+        />
         <SettingsRow
           icon={CreditCard}
           color="var(--color-system-green)"

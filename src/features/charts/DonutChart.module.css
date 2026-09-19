@@ -1,0 +1,50 @@
+.wrap {
+  position: relative;
+  width: 212px;
+  height: 212px;
+  margin: 6px auto 10px;
+}
+
+.svg {
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+
+.track {
+  stroke: var(--color-fill-soft);
+}
+
+.slice {
+  --c: var(--c-light);
+  stroke: var(--c);
+  cursor: pointer;
+  transition:
+    stroke-width 0.25s,
+    opacity 0.25s;
+}
+
+@media (prefers-color-scheme: dark) {
+  :global(:root:not([data-theme="light"])) .slice {
+    --c: var(--c-dark);
+  }
+}
+
+:global(:root[data-theme="dark"]) .slice {
+  --c: var(--c-dark);
+}
+
+.dimmed {
+  opacity: 0.3;
+}
+
+.center {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  pointer-events: none;
+}

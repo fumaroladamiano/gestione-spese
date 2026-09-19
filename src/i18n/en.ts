@@ -64,6 +64,41 @@ export const en = {
       : `${amount}, ${category}, ${day}, ${method}`,
   dayTotal: (day: string, amount: string) => `${day}, total ${amount}`,
 
+  filters: "Filters",
+  month: "Month",
+  allMonths: "All months",
+  categories: "Categories",
+  oneOrMore: "one or more",
+  day: "Day",
+  anyDay: "Any",
+  reset: "Reset",
+  filteredTotal: "Filtered total",
+  noMatch: "No expenses match these filters.",
+  clearFilters: "Clear filters",
+  showResults: (count: string, amount: string) => `Show ${count} · ${amount}`,
+  searchNotes: "Search notes",
+  searchPlaceholder: "E.g. supermarket, fuel",
+  searchChip: (query: string) => `“${query}”`,
+  removeSearch: "Clear search",
+  previousMonth: "Previous month",
+  nextMonth: "Next month",
+
+  summary: "Summary",
+  monthTotal: "Month total",
+  byCategory: "By category",
+  total: "Total",
+  dailyTrend: "Daily trend",
+  tapBarHint: "Tap a bar for details",
+  averagePerDayShort: (amount: string) => `avg ${amount}/day`,
+  averageLine: "avg",
+  seeInHistory: (category: string) => `See ${category} in history`,
+  openDay: "Open day",
+  monthUntilDay: (month: string, day: number) => `${month} (1–${String(day)})`,
+  previousTotal: (period: string, amount: string) => `${period}: ${amount}`,
+  dayAmount: (day: string, amount: string) => `${day}: ${amount}`,
+  categoryShare: (category: string, percent: string, amount: string) =>
+    `${category}, ${percent}, ${amount}`,
+
   cancel: "Cancel",
   save: "Save",
   newExpense: "New expense",
@@ -76,6 +111,7 @@ export const en = {
   notePlaceholder: "Note (e.g. supermarket, fuel)",
   note: "Note",
   fieldValue: (field: string, value: string) => `${field}: ${value}`,
+  categorySuggestion: (category: string) => `Suggested category: ${category}`,
   deleteKey: "Delete",
   deleteExpense: "Delete expense",
   expenseAdded: (amount: string, category: string) =>
@@ -98,6 +134,69 @@ export const en = {
   languageItalian: "Italiano",
   languageEnglish: "English",
   defaultPaymentMethod: "Default payment",
+
+  budget: "Budget",
+  monthlyBudget: "Monthly budget",
+  noBudget: "None",
+  budgetFooter: "Leave empty to hide the budget from Home and Charts.",
+  budgetSet: (amount: string) => `Budget set to ${amount}`,
+  budgetRemoved: "Budget turned off",
+  budgetOf: (percent: string, budget: string) => `${percent} of ${budget}`,
+  budgetRemaining: (amount: string) => `${amount} left`,
+  budgetOver: (amount: string) => `${amount} over`,
+  daysLeft: (n: number) => (n === 1 ? "1 day" : `${String(n)} days`),
+  projection: (amount: string) => `Projected month end: ${amount}`,
+  projectionOver: (amount: string) =>
+    `Projected month end: ${amount} — over budget`,
+
+  activeCategories: "Active",
+  archivedCategories: "Archived",
+  newCategory: "New category",
+  editCategory: "Edit category",
+  categoryName: "Name",
+  categoryNamePlaceholder: "Name (e.g. Gym)",
+  color: "Colour",
+  colorN: (n: number) => `Colour ${String(n)}`,
+  icon: "Icon",
+  iconN: (n: number) => `Icon ${String(n)}`,
+  categoriesFooter:
+    "Built-in categories can be renamed and recoloured. Categories with expenses are archived instead of deleted.",
+  archiveCategory: "Archive category",
+  restoreCategory: "Restore category",
+  deleteCategory: "Delete category",
+  otherNotArchivable:
+    "“Other” cannot be archived: it collects generic expenses.",
+  keepExpenses: (n: number) =>
+    n === 1
+      ? "Its existing expense stays in history."
+      : `Its ${String(n)} existing expenses stay in history.`,
+  categoryCreated: (name: string) => `Category “${name}” created`,
+  categoryUpdated: "Category updated",
+  categoryArchived: (name: string) => `“${name}” archived`,
+  categoryRestored: (name: string) => `“${name}” restored`,
+  categoryDeleted: "Category deleted",
+  back: (label: string) => `Back to ${label}`,
+
+  oneOff: "One-off",
+  monthly: "Monthly",
+  recurrence: "Repeat",
+  expenseAddedMonthly: (amount: string, category: string) =>
+    `${amount} added to ${category} · monthly`,
+  recurringTitle: "Recurring expenses",
+  recurringEmpty:
+    "No recurring expenses. Choose “Monthly” when you log an expense (e.g. subscriptions, rent).",
+  recurringFooter:
+    "When the app opens, each month's due expense is logged. Expenses already created stay even if you pause or delete the rule.",
+  ruleSummary: (amount: string, day: number) =>
+    `${amount} · monthly on day ${String(day)}`,
+  ruleActive: "Active",
+  ruleSuspended: "Paused",
+  suspendRule: "Pause",
+  resumeRule: "Resume",
+  deleteRule: "Delete rule",
+  ruleSuspendedToast: "Recurring expense paused",
+  ruleResumedToast: "Recurring expense resumed",
+  ruleDeletedToast: "Rule deleted",
 
   dataAndBackup: "Data & backup",
   exportJson: "Export backup (JSON)",
@@ -146,6 +245,16 @@ export const en = {
   appFooter:
     "Safari usually grants persistent storage to apps added to the Home Screen.",
 
+  checkUpdates: "Check for updates",
+  upToDate: (version: string) =>
+    `You already have the latest version (${version})`,
+  updatesUnavailable: "Updates are only available in the published app",
+  backupReminderTitle: "Back up your data",
+  backupReminderNever: "You haven't saved a copy of your expenses yet.",
+  backupReminderDays: (n: number) =>
+    `Your last backup was ${String(n)} days ago.`,
+  backupReminderAction: "Export",
+
   installBannerTitle: "Add Spese to your Home Screen",
   installBannerSubtitle: "Offline and full screen · How to ›",
   installTitle: "Install Spese",
@@ -166,6 +275,9 @@ export const en = {
   errorInvalidAmount: "Invalid amount",
   errorFutureDate: "Future expenses cannot be added",
   errorCategory: "Category not available",
+  errorDuplicateCategory: "A category with this name already exists",
+  errorCategoryLimit: "You can have at most 15 active categories",
+  errorCategoryName: "Enter a name of 1 to 20 characters",
   errorGeneric: "Something went wrong, please try again",
 
   nExpenses: (n: number) => (n === 1 ? "1 expense" : `${String(n)} expenses`),

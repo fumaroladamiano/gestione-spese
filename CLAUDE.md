@@ -112,9 +112,9 @@ Schema completo: proposta § 3.
 | Analisi e prototipo | Proposta, prototipo HTML (UI "iOS raffinato", lingua IT/EN), punti aperti risolti | fatto |
 | 0. Setup | Progetto Vite/React/TS, PWA, token CSS, dizionari `src/i18n` e helper `t()`, tab bar, CI e deploy GitHub Pages | fatto |
 | 1. MVP | DB e seed categorie, inserimento con tastierino, storico per giorno, modifica/elimina con swipe e Annulla, guida installazione, backup esporta/importa, selettore lingua e tema in Impostazioni | fatto |
-| 2. Filtri | Foglio filtri (mese, categorie, giorno), mini-calendario, ricerca nelle note, totale filtrato, filtri nell'URL | da fare |
-| 3. Grafici | Ciambella per categoria, barre giornaliere, confronto con il mese precedente | da fare |
-| 4. Extra | Spese ricorrenti, budget con proiezione, gestione categorie, suggerimento categoria dalla nota, avviso nuova versione, stato app | da fare |
+| 2. Filtri | Foglio filtri (mese, categorie, giorno), mini-calendario, ricerca nelle note, totale filtrato, filtri nell'URL | fatto |
+| 3. Grafici | Ciambella per categoria, barre giornaliere, confronto con il mese precedente | fatto |
+| 4. Extra | Spese ricorrenti, budget con proiezione, gestione categorie, suggerimento categoria dalla nota, avviso nuova versione, stato app | fatto |
 | Rifiniture | Test su iPhone, aree sicure, gesti, dark mode, accessibilità | da fare |
 
 Stati ammessi: `da fare` · `in corso` · `fatto`. Aggiornali a fine step (vedi `workflow-step.md`). Step e criteri di completamento di ogni fase: proposta § 4.4.

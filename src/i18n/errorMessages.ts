@@ -13,6 +13,12 @@ export function errorTextKey(error: unknown): TextKey {
     case "unknownCategory":
     case "archivedCategory":
       return "errorCategory";
+    case "duplicateCategoryName":
+      return "errorDuplicateCategory";
+    case "categoryLimit":
+      return "errorCategoryLimit";
+    case "invalidCategoryName":
+      return "errorCategoryName";
     default:
       return "errorGeneric";
   }

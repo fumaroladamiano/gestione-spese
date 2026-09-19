@@ -1,0 +1,33 @@
+.banner {
+  position: sticky;
+  top: max(env(safe-area-inset-top), var(--space-md));
+  z-index: 20;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-md);
+  margin: var(--space-sm) var(--space-lg) var(--space-xs);
+  padding: var(--space-md) 18px;
+  border-radius: var(--radius-lg);
+  background: color-mix(in srgb, var(--color-surface) 82%, transparent);
+  -webkit-backdrop-filter: var(--blur-chrome);
+  backdrop-filter: var(--blur-chrome);
+  box-shadow: var(--shadow-float);
+}
+
+.label {
+  font-size: var(--text-subheadline);
+  font-weight: 500;
+  color: var(--color-secondary-label);
+}
+
+.count {
+  font-size: var(--text-footnote);
+  color: var(--color-secondary-label);
+}
+
+.amount {
+  font-size: var(--text-title-2);
+  font-weight: 700;
+  letter-spacing: -0.03em;
+}

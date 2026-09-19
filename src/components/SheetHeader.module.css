@@ -28,3 +28,9 @@
   background: var(--color-fill-soft);
   color: var(--color-tertiary-label);
 }
+
+.subtle {
+  min-height: var(--size-touch);
+  color: var(--color-tint);
+  font-size: var(--text-body);
+}

@@ -9,6 +9,8 @@ type SheetHeaderProps = {
   actionLabel?: string;
   actionEnabled?: boolean;
   onAction?: () => void;
+  /** Azione solo testo (es. "Azzera") invece della pillola piena. */
+  subtle?: boolean;
 };
 
 /** Barra dei fogli: Annulla · titolo · azione principale a pillola. */
@@ -19,6 +21,7 @@ export function SheetHeader({
   actionLabel,
   actionEnabled = true,
   onAction,
+  subtle = false,
 }: SheetHeaderProps) {
   return (
     <>
@@ -30,8 +33,8 @@ export function SheetHeader({
         <button
           type="button"
           className={classNames(
-            styles.action,
-            !actionEnabled && styles.disabled,
+            subtle ? styles.subtle : styles.action,
+            !subtle && !actionEnabled && styles.disabled,
           )}
           onClick={onAction}
         >

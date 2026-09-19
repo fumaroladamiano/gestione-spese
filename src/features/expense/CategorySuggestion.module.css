@@ -1,0 +1,4 @@
+.suggestion {
+  display: flex;
+  padding: var(--space-md) var(--space-lg) 0;
+}

@@ -32,6 +32,20 @@ export const router = createHashRouter([
             .SettingsPage,
         }),
       },
+      {
+        path: "settings/categories",
+        lazy: async () => ({
+          Component: (await import("../features/categories/CategoriesPage"))
+            .CategoriesPage,
+        }),
+      },
+      {
+        path: "settings/recurring",
+        lazy: async () => ({
+          Component: (await import("../features/recurring/RecurringPage"))
+            .RecurringPage,
+        }),
+      },
       { path: "*", element: <HomePage /> },
     ],
   },

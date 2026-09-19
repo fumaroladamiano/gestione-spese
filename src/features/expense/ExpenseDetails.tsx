@@ -1,4 +1,4 @@
-import { Banknote, Calendar, CreditCard, Wallet } from "lucide-react";
+import { Banknote, Calendar, CreditCard, Repeat, Wallet } from "lucide-react";
 import { useState } from "react";
 import { Chip } from "../../components/Chip";
 import { addDays, formatRelativeDay } from "../../domain/dates";
@@ -61,6 +61,19 @@ export function ExpenseDetails({
           )}
           onClick={() => {
             onChange({ paymentMethod: nextPaymentMethod(method) });
+          }}
+        />
+        <Chip
+          icon={Repeat}
+          label={draft.recurring ? t("monthly") : t("oneOff")}
+          ariaLabel={t(
+            "fieldValue",
+            t("recurrence"),
+            draft.recurring ? t("monthly") : t("oneOff"),
+          )}
+          selected={draft.recurring}
+          onClick={() => {
+            onChange({ recurring: !draft.recurring });
           }}
         />
       </div>

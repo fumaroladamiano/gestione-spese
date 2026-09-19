@@ -1,4 +1,4 @@
-import type { LucideIcon } from "lucide-react";
+import { ChevronDown, type LucideIcon } from "lucide-react";
 import type { CSSProperties } from "react";
 import { classNames } from "./classNames";
 import styles from "./Chip.module.css";
@@ -13,6 +13,8 @@ type ChipProps = {
   variant?: "surface" | "soft";
   onClick: () => void;
   ariaLabel?: string;
+  /** Freccia ▾: il chip apre un foglio di scelta. */
+  caret?: boolean;
 };
 
 /** Pillola a un tocco per dettagli e filtri. */
@@ -24,6 +26,7 @@ export function Chip({
   variant = "surface",
   onClick,
   ariaLabel,
+  caret = false,
 }: ChipProps) {
   const dotStyle: CSSProperties | undefined = dot
     ? { "--c-light": dot.light, "--c-dark": dot.dark }
@@ -43,6 +46,14 @@ export function Chip({
       {Icon ? <Icon size={16} strokeWidth={2} aria-hidden /> : null}
       {dot ? <span className={styles.dot} style={dotStyle} /> : null}
       {label}
+      {caret ? (
+        <ChevronDown
+          className={styles.caret}
+          size={14}
+          strokeWidth={2.6}
+          aria-hidden
+        />
+      ) : null}
     </button>
   );
 }

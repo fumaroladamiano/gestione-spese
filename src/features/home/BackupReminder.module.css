@@ -1,0 +1,36 @@
+.reminder {
+  display: flex;
+  align-items: center;
+  gap: var(--space-md);
+  margin: var(--space-md) var(--space-lg) 0;
+  padding: var(--space-md) var(--space-lg);
+  border-radius: var(--radius-md);
+  background: color-mix(
+    in srgb,
+    var(--color-warning) 13%,
+    var(--color-surface)
+  );
+  font-size: var(--text-subheadline);
+  line-height: 1.35;
+}
+
+.icon {
+  flex: none;
+  color: var(--color-warning);
+}
+
+.text {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+}
+
+.action {
+  display: grid;
+  place-items: center;
+  min-height: var(--size-touch);
+  padding: 0 var(--space-md);
+  color: var(--color-tint);
+  font-weight: 600;
+  text-decoration: none;
+}
