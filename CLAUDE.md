@@ -24,7 +24,7 @@
 
 | Libreria | Uso |
 |---|---|
-| `vite` + `typescript` | Build e dev server |
+| `vite` + `typescript` | Build e dev server (TypeScript fermo a 6.0.x finché `typescript-eslint` non supporta la 7) |
 | `react` + `react-dom` | Interfaccia |
 | `vite-plugin-pwa` (Workbox) | Manifest, service worker, offline, avviso "Aggiorna" (`registerType: 'prompt'`) |
 | `react-router` (`createHashRouter`) | Tab e pagine; filtri nella query dopo il `#` |
@@ -38,11 +38,12 @@
 | `zod` | Validazione del backup importato e dei parametri dell'URL |
 | CSS Modules + variabili CSS | Stili e token del design system (no framework CSS) |
 | Componenti SVG su misura | Ciambella e barre giornaliere (nessuna libreria grafici) |
-| `vitest` + Testing Library | Test unitari e di componenti |
+| `vitest` + Testing Library (+ `jsdom`) | Test unitari e di componenti |
 | `fake-indexeddb` (solo sviluppo) | IndexedDB simulato per testare i repository in Node |
 | Playwright (WebKit) | Test end-to-end sul motore di Safari |
 | `eruda` (solo sviluppo) | Console dentro la pagina per il debug sull'iPhone; mai nella build di produzione |
-| ESLint + Prettier | Qualità del codice |
+| ESLint + Prettier | Qualità del codice (`typescript-eslint` strict, `react-hooks`, `react-refresh`, `globals`; Prettier con impostazioni predefinite) |
+| `@types/react`, `@types/react-dom`, `@types/node` (24) | Tipi per TypeScript, solo sviluppo |
 | GitHub Actions + GitHub Pages | Controlli su ogni push; pubblicazione a ogni push su `main` solo se i controlli passano |
 
 ## Architettura
@@ -109,7 +110,7 @@ Schema completo: proposta § 3.
 | Fase | Contenuto | Stato |
 |---|---|---|
 | Analisi e prototipo | Proposta, prototipo HTML (UI "iOS raffinato", lingua IT/EN), punti aperti risolti | fatto |
-| 0. Setup | Progetto Vite/React/TS, PWA, token CSS, dizionari `src/i18n` e helper `t()`, tab bar, CI e deploy GitHub Pages | da fare |
+| 0. Setup | Progetto Vite/React/TS, PWA, token CSS, dizionari `src/i18n` e helper `t()`, tab bar, CI e deploy GitHub Pages | in corso |
 | 1. MVP | DB e seed categorie, inserimento con tastierino, storico per giorno, modifica/elimina con swipe e Annulla, guida installazione, backup esporta/importa, selettore lingua e tema in Impostazioni | da fare |
 | 2. Filtri | Foglio filtri (mese, categorie, giorno), mini-calendario, ricerca nelle note, totale filtrato, filtri nell'URL | da fare |
 | 3. Grafici | Ciambella per categoria, barre giornaliere, confronto con il mese precedente | da fare |
