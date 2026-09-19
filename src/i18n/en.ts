@@ -83,6 +83,22 @@ export const en = {
   previousMonth: "Previous month",
   nextMonth: "Next month",
 
+  summary: "Summary",
+  monthTotal: "Month total",
+  byCategory: "By category",
+  total: "Total",
+  dailyTrend: "Daily trend",
+  tapBarHint: "Tap a bar for details",
+  averagePerDayShort: (amount: string) => `avg ${amount}/day`,
+  averageLine: "avg",
+  seeInHistory: (category: string) => `See ${category} in history`,
+  openDay: "Open day",
+  monthUntilDay: (month: string, day: number) => `${month} (1–${String(day)})`,
+  previousTotal: (period: string, amount: string) => `${period}: ${amount}`,
+  dayAmount: (day: string, amount: string) => `${day}: ${amount}`,
+  categoryShare: (category: string, percent: string, amount: string) =>
+    `${category}, ${percent}, ${amount}`,
+
   cancel: "Cancel",
   save: "Save",
   newExpense: "New expense",

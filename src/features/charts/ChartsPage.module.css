@@ -1,0 +1,61 @@
+.card {
+  margin: 0 var(--space-lg);
+  padding: var(--space-lg) 18px;
+  border-radius: var(--radius-lg);
+  background: var(--color-surface);
+  box-shadow: var(--shadow-card);
+}
+
+.eyebrow {
+  display: block;
+  font-size: var(--text-subheadline);
+  font-weight: 500;
+  color: var(--color-secondary-label);
+}
+
+.bigAmount {
+  display: block;
+  margin-top: 2px;
+  font-size: var(--text-amount-l);
+  font-weight: 700;
+  line-height: 1.15;
+  letter-spacing: -0.035em;
+}
+
+.delta {
+  margin-top: 10px;
+}
+
+.previous {
+  margin-top: var(--space-sm);
+  font-size: var(--text-footnote);
+  color: var(--color-secondary-label);
+}
+
+.barHead {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: var(--space-sm);
+  min-height: var(--size-touch);
+  margin-bottom: var(--space-xs);
+  font-size: var(--text-callout);
+  font-weight: 600;
+}
+
+.hint {
+  font-size: var(--text-footnote);
+  font-weight: 400;
+  color: var(--color-secondary-label);
+}
+
+.link {
+  display: inline-flex;
+  align-items: center;
+  gap: 2px;
+  min-height: var(--size-touch);
+  color: var(--color-tint);
+  font-size: var(--text-callout);
+  font-weight: 600;
+  white-space: nowrap;
+}

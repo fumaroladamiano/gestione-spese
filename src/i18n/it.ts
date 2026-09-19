@@ -90,6 +90,23 @@ export const it = {
   previousMonth: "Mese precedente",
   nextMonth: "Mese successivo",
 
+  // grafici
+  summary: "Riepilogo",
+  monthTotal: "Totale del mese",
+  byCategory: "Per categoria",
+  total: "Totale",
+  dailyTrend: "Andamento giornaliero",
+  tapBarHint: "Tocca una barra per i dettagli",
+  averagePerDayShort: (amount: string) => `media ${amount}/giorno`,
+  averageLine: "media",
+  seeInHistory: (category: string) => `Vedi ${category} nello storico`,
+  openDay: "Apri giorno",
+  monthUntilDay: (month: string, day: number) => `${month} (1–${String(day)})`,
+  previousTotal: (period: string, amount: string) => `${period}: ${amount}`,
+  dayAmount: (day: string, amount: string) => `${day}: ${amount}`,
+  categoryShare: (category: string, percent: string, amount: string) =>
+    `${category}, ${percent}, ${amount}`,
+
   // foglio spesa
   cancel: "Annulla",
   save: "Salva",
