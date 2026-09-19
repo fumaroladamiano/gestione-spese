@@ -1,4 +1,7 @@
-// Pagina provvisoria della fase 0.1: il nome dell'app non si traduce (vedi lingue.md)
+import { useT } from "../i18n/useT";
+
+// Pagina provvisoria: diventa il layout con la tab bar nello step 0.4
 export function App() {
-  return <h1>Spese</h1>;
+  const t = useT();
+  return <h1>{t("appName")}</h1>;
 }

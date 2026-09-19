@@ -1,5 +1,4 @@
-export const THEME_PREFERENCES = ["auto", "light", "dark"] as const;
-export type ThemePreference = (typeof THEME_PREFERENCES)[number];
+import type { ThemePreference } from "../stores/prefs";
 
 // Colore della barra di stato e dello sfondo di sistema: coincide con --color-background
 const THEME_COLOR = { light: "#F3F3F8", dark: "#000000" } as const;
