@@ -1,4 +1,4 @@
-import { AnimatePresence, motion } from "motion/react";
+import { AnimatePresence, m } from "motion/react";
 import { useEffect } from "react";
 import { createPortal } from "react-dom";
 import { classNames } from "./classNames";
@@ -43,7 +43,7 @@ export function ActionSheet({
     <AnimatePresence>
       {open ? (
         <>
-          <motion.div
+          <m.div
             key="overlay"
             className={styles.overlay}
             initial={{ opacity: 0 }}
@@ -51,7 +51,7 @@ export function ActionSheet({
             exit={{ opacity: 0, pointerEvents: "none" }}
             onClick={onCancel}
           />
-          <motion.div
+          <m.div
             key="sheet"
             className={styles.container}
             role="alertdialog"
@@ -88,7 +88,7 @@ export function ActionSheet({
             >
               {cancelLabel}
             </button>
-          </motion.div>
+          </m.div>
         </>
       ) : null}
     </AnimatePresence>,

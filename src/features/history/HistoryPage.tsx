@@ -1,5 +1,5 @@
 import { ReceiptText } from "lucide-react";
-import { AnimatePresence, motion } from "motion/react";
+import { AnimatePresence, m } from "motion/react";
 import { AmountText } from "../../components/AmountText";
 import { EmptyState } from "../../components/EmptyState";
 import { ExpenseRow } from "../../components/ExpenseRow";
@@ -40,14 +40,14 @@ export function HistoryPage() {
           <div className={styles.card}>
             <AnimatePresence initial={false}>
               {group.expenses.map((expense) => (
-                <motion.div
+                <m.div
                   key={expense.id}
                   className={styles.item}
                   exit={{ height: 0, opacity: 0 }}
                   transition={{ duration: 0.26 }}
                 >
                   <ExpenseRow {...rowProps(expense)} />
-                </motion.div>
+                </m.div>
               ))}
             </AnimatePresence>
           </div>

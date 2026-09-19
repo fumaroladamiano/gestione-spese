@@ -1,5 +1,5 @@
 import { Pencil, Repeat, Trash2 } from "lucide-react";
-import { animate, motion, useMotionValue, type PanInfo } from "motion/react";
+import { m, type PanInfo } from "motion/react";
 import { useEffect, useRef, useState } from "react";
 import type { Category } from "../domain/types";
 import { AmountText } from "./AmountText";
@@ -37,7 +37,6 @@ export function ExpenseRow({
   onEdit,
   onDelete,
 }: ExpenseRowProps) {
-  const x = useMotionValue(0);
   const [open, setOpen] = useState(false);
   const rowRef = useRef<HTMLDivElement>(null);
   // dopo uno swipe il rilascio del dito non deve contare anche come tocco (modifica):
@@ -47,11 +46,6 @@ export function ExpenseRow({
 
   const settle = (nextOpen: boolean) => {
     setOpen(nextOpen);
-    void animate(x, nextOpen ? -ACTIONS_WIDTH : 0, {
-      type: "spring",
-      damping: 30,
-      stiffness: 400,
-    });
   };
 
   // un tocco fuori dalla riga aperta la richiude
@@ -64,16 +58,16 @@ export function ExpenseRow({
       )
         return;
       setOpen(false);
-      void animate(x, 0, { type: "spring", damping: 30, stiffness: 400 });
     };
     document.addEventListener("pointerdown", onPointerDown, true);
     return () => {
       document.removeEventListener("pointerdown", onPointerDown, true);
     };
-  }, [open, x]);
+  }, [open]);
 
   const onDragEnd = (_event: PointerEvent, info: PanInfo) => {
-    const position = x.get();
+    // posizione finale: punto di partenza (aperta o chiusa) più lo spostamento del dito
+    const position = (open ? -ACTIONS_WIDTH : 0) + info.offset.x;
     if (position < -FULL_SWIPE) {
       settle(false);
       onDelete();
@@ -110,10 +104,11 @@ export function ExpenseRow({
           {labels.delete}
         </button>
       </div>
-      <motion.button
+      <m.button
         type="button"
         className={styles.content}
-        style={{ x }}
+        animate={{ x: open ? -ACTIONS_WIDTH : 0 }}
+        transition={{ type: "spring", damping: 30, stiffness: 400 }}
         drag="x"
         dragDirectionLock
         dragConstraints={{ left: -FULL_SWIPE - 40, right: 0 }}
@@ -154,7 +149,7 @@ export function ExpenseRow({
           <span className={styles.subtitle}>{subtitle}</span>
         </span>
         <AmountText cents={amountCents} className={styles.amount} />
-      </motion.button>
+      </m.button>
     </div>
   );
 }

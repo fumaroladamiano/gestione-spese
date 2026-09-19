@@ -122,6 +122,10 @@ export async function getExpense(id: string): Promise<Expense | undefined> {
   return db.expenses.get(id);
 }
 
+export async function countExpenses(): Promise<number> {
+  return db.expenses.count();
+}
+
 export async function countExpensesInCategory(
   categoryId: string,
 ): Promise<number> {

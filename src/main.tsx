@@ -1,3 +1,4 @@
+import { LazyMotion } from "motion/react";
 import { StrictMode } from "react";
 import { createRoot } from "react-dom/client";
 import { RouterProvider } from "react-router";
@@ -11,6 +12,14 @@ void startApp();
 
 createRoot(document.getElementById("root")!).render(
   <StrictMode>
-    <RouterProvider router={router} />
+    {/* strict: vieta i componenti motion completi, così il pacchetto iniziale resta leggero */}
+    <LazyMotion
+      features={() =>
+        import("./app/motionFeatures").then((module) => module.default)
+      }
+      strict
+    >
+      <RouterProvider router={router} />
+    </LazyMotion>
   </StrictMode>,
 );

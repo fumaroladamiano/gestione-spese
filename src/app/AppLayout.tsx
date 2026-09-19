@@ -1,7 +1,10 @@
 import { Outlet } from "react-router";
 import { useEffect } from "react";
 import { ExpenseSheet } from "../features/expense/ExpenseSheet";
+import { useExpenseCount } from "../features/expense/useExpenseCount";
 import { InstallGuide } from "../features/install/InstallGuide";
+import { useBackupExport } from "../features/settings/useBackupExport";
+import { useT } from "../i18n/useT";
 import { isStandalone } from "../features/install/useStandalone";
 import { usePrefs } from "../stores/prefs";
 import { useUi } from "../stores/ui";
@@ -14,6 +17,16 @@ import { UpdatePrompt } from "./UpdatePrompt";
 export function AppLayout() {
   const openNewExpense = useUi((state) => state.openNewExpense);
   const setInstallGuideOpen = useUi((state) => state.setInstallGuideOpen);
+  const t = useT();
+  const exporter = useBackupExport();
+  const expenseCount = useExpenseCount();
+
+  // spese già inserite in Safari: prima di installare conviene esportarle (R2)
+  const exportBeforeInstall = async () => {
+    const exported = await exporter.build("json");
+    if (exporter.canShare(exported.file)) await exporter.share(exported);
+    else exporter.download(exported);
+  };
 
   // al primo accesso da Safari la guida all'installazione si apre da sola (D11)
   useEffect(() => {
@@ -34,7 +47,16 @@ export function AppLayout() {
         <TabBar onAdd={openNewExpense} />
       </div>
       <ExpenseSheet />
-      <InstallGuide />
+      <InstallGuide
+        extraAction={
+          expenseCount > 0 && !isStandalone()
+            ? {
+                label: t("installExportFirst"),
+                onClick: () => void exportBeforeInstall(),
+              }
+            : undefined
+        }
+      />
       <ToastHost />
       <UpdatePrompt />
     </>

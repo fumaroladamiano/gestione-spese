@@ -1,6 +1,6 @@
 import {
   AnimatePresence,
-  motion,
+  m,
   useDragControls,
   type PanInfo,
 } from "motion/react";
@@ -68,7 +68,7 @@ export function Sheet({
     <AnimatePresence>
       {open ? (
         <>
-          <motion.div
+          <m.div
             key="overlay"
             className={styles.overlay}
             initial={{ opacity: 0 }}
@@ -76,7 +76,7 @@ export function Sheet({
             exit={{ opacity: 0, pointerEvents: "none" }}
             onClick={requestClose}
           />
-          <motion.div
+          <m.div
             key="sheet"
             className={styles.sheet}
             role="dialog"
@@ -104,7 +104,7 @@ export function Sheet({
             </div>
             <div className={styles.body}>{children}</div>
             {footer ? <div className={styles.footer}>{footer}</div> : null}
-          </motion.div>
+          </m.div>
         </>
       ) : null}
     </AnimatePresence>,

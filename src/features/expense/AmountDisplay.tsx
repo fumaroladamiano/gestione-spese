@@ -3,6 +3,9 @@ import { useLocale, useT } from "../../i18n/useT";
 import { classNames } from "../../components/classNames";
 import styles from "./AmountDisplay.module.css";
 
+// spazio non separabile tra importo e "€", come in Intl.NumberFormat
+const NBSP = String.fromCharCode(0xa0);
+
 type AmountDisplayProps = {
   input: string;
   /** Cambia a ogni errore per far ripartire lo "shake". */
@@ -36,7 +39,7 @@ export function AmountDisplay({ input, shakeKey }: AmountDisplayProps) {
       <span className={styles.ghost}>{display.ghost}</span>
       {display.currencyBefore ? null : (
         <>
-          {" "}
+          {NBSP}
           {currency}
         </>
       )}

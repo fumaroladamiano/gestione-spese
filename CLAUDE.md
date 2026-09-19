@@ -30,12 +30,12 @@
 | `react-router` (`createHashRouter`) | Tab e pagine; filtri nella query dopo il `#` |
 | `dexie` + `dexie-react-hooks` | IndexedDB, schema versionato, `useLiveQuery` |
 | `zustand` (+ `persist`) | Stato UI e preferenze del dispositivo |
-| `motion` | Fogli dal basso, swipe delle righe, transizioni |
+| `motion` (con `LazyMotion`) | Fogli dal basso, swipe delle righe, transizioni; le funzioni si caricano dopo l'avvio per restare sotto i 200 KB iniziali |
 | `date-fns` + locale `it` e `enIE` | Date e formati nella lingua attiva |
 | `Intl.NumberFormat(<locale attivo>, { useGrouping: 'always' })` | Valuta e percentuali (`it-IT` / `en-IE`, nessuna libreria) |
 | Dizionari tipizzati in `src/i18n` | Testi IT/EN con helper `t()` su misura (nessuna libreria i18n) |
 | `lucide-react` | Icone |
-| `zod` | Validazione del backup importato e dei parametri dell'URL |
+| `zod` | Validazione del backup importato e dei parametri dell'URL (caricato solo quando serve) |
 | CSS Modules + variabili CSS | Stili e token del design system (no framework CSS) |
 | Componenti SVG su misura | Ciambella e barre giornaliere (nessuna libreria grafici) |
 | `vitest` + Testing Library (+ `jsdom`) | Test unitari e di componenti |

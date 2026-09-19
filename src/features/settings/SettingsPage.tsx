@@ -8,6 +8,7 @@ import { paymentMethodName } from "../../i18n/categoryNames";
 import { useT } from "../../i18n/useT";
 import { usePrefs, type ThemePreference } from "../../stores/prefs";
 import { AppStatusSection } from "./AppStatusSection";
+import { BackupSection } from "./BackupSection";
 import { SettingsRow } from "./SettingsRow";
 
 export function SettingsPage() {
@@ -75,6 +76,7 @@ export function SettingsPage() {
           />
         </SettingsRow>
       </ListGroup>
+      <BackupSection />
       <AppStatusSection />
     </Page>
   );
