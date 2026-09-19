@@ -41,7 +41,7 @@
 | `vitest` + Testing Library (+ `jsdom`) | Test unitari e di componenti |
 | `fake-indexeddb` (solo sviluppo) | IndexedDB simulato per testare i repository in Node |
 | Playwright (WebKit) | Test end-to-end sul motore di Safari |
-| `eruda` (solo sviluppo) | Console dentro la pagina per il debug sull'iPhone; mai nella build di produzione |
+| `eruda` (solo sviluppo, **non ancora installato**) | Console dentro la pagina per il debug sull'iPhone; mai nella build di produzione. Deciso in `punti-aperti.md`, da aggiungere quando servirà il debug sul telefono |
 | ESLint + Prettier | Qualità del codice (`typescript-eslint` strict, `react-hooks`, `react-refresh`, `globals`; Prettier con impostazioni predefinite) |
 | `@types/react`, `@types/react-dom`, `@types/node` (24) | Tipi per TypeScript, solo sviluppo |
 | GitHub Actions + GitHub Pages | Controlli su ogni push; pubblicazione a ogni push su `main` solo se i controlli passano |
@@ -60,7 +60,7 @@ Repository: unico accesso ai dati        src/data/repositories
 Dexie → IndexedDB sul dispositivo        src/data/db.ts
 ```
 
-Logica pura (importi, date, filtri, aggregazioni, backup, ricorrenti) in `src/domain`, senza import da React o Dexie.
+Logica pura (importi, date, filtri, aggregazioni, budget, backup, ricorrenti) in `src/domain`, senza import da React o Dexie.
 
 Albero delle cartelle (dettaglio nella proposta § 4.3):
 
@@ -68,19 +68,22 @@ Albero delle cartelle (dettaglio nella proposta § 4.3):
 gestione-spese/              radice del repository
 ├── .github/workflows/ci.yml controlli su ogni push, deploy da main
 ├── docs/                    proposta, prototipo, punti aperti
-├── public/                  apple-touch-icon.png, icons/
+├── public/                  favicon.svg, apple-touch-icon.png, icons/
 ├── src/
 │   ├── main.tsx
-│   ├── app/                 router.tsx, AppLayout.tsx (tab bar, fogli, toast)
+│   ├── app/                 router.tsx, AppLayout.tsx (tab bar, fogli, toast), startup.ts, UpdatePrompt.tsx
 │   ├── features/            home/ expense/ history/ charts/ settings/ categories/ install/ recurring/
 │   ├── components/          componenti del design system (Sheet, Chip, AmountText…)
-│   ├── domain/              money, dates, filters, aggregations, backup, csv, recurring, categories, ids
-│   ├── i18n/                it.ts, en.ts (dizionari), index.ts (t(), lingua attiva, locale)
-│   ├── data/                db.ts, seed.ts, repositories/
-│   ├── stores/              store Zustand (preferenze, stato UI)
+│   ├── domain/              types, money, dates, filters, filterParams, aggregations, budget, expenseDraft,
+│   │                        backup, backupSchema, csv, recurring, categories, ids
+│   ├── i18n/                it.ts, en.ts (dizionari), index.ts (t(), lingua attiva, locale), useT.ts
+│   ├── data/                db.ts, seed.ts, errors.ts, repositories/
+│   ├── stores/              store Zustand (preferenze, stato UI, aggiornamenti)
 │   └── styles/              tokens.css, global.css
 ├── tests/e2e/               Playwright WebKit
-├── index.html  vite.config.ts  tsconfig.json  package.json  .nvmrc
+├── scripts/                 generate-icons.ts (npm run icons)
+├── index.html  vite.config.ts  vitest.config.ts  playwright.config.ts  eslint.config.js
+├── tsconfig*.json  package.json  .nvmrc  README.md  LICENSE (GPL-3.0)
 ```
 
 Route: `#/`, `#/history`, `#/charts`, `#/settings`, `#/settings/categories`, `#/settings/recurring`. Filtri dello storico nella query: `#/history?month=2026-09&cat=spesa,casa&day=2026-09-16&q=esselunga` (`month=all` per tutti i mesi).
@@ -126,18 +129,22 @@ Disponibili dopo la fase 0 (script in `package.json`):
 ```bash
 npm install              # dipendenze
 npm run dev              # dev server; aggiungi -- --host per aprirlo dall'iPhone in rete locale
-npm run build            # build di produzione in dist/
+npm run build            # typecheck + build di produzione in dist/
 npm run preview          # build servita su http://localhost:4173/gestione-spese/ (service worker attivo)
 npm run typecheck        # tsc senza emissione
-npm run lint             # ESLint
+npm run lint             # ESLint, nessun warning ammesso
+npm run format           # Prettier (scrive i file)
 npm test                 # Vitest
 npm run test:e2e         # Playwright su WebKit
+npm run check            # typecheck + lint + prettier --check + test
+npm run icons            # rigenera le icone PNG in public/ (WebKit di Playwright)
 ```
 
 ## Riferimenti
 
 - Proposta completa: [`proposta-app-spese.md`](docs/proposta-app-spese.md) (design system § 1.5, stack § 2, GitHub Pages § 2.5, database § 3, implementazione § 4, rischi e decisioni § 5)
-- Prototipo di riferimento visivo (da implementare): [`prototipo-app-spese.html`](docs/prototipo-app-spese.html)
+- Panoramica per chi arriva sul repository: [`README.md`](README.md)
+- Prototipo di riferimento visivo (implementato nelle fasi 0–4): [`prototipo-app-spese.html`](docs/prototipo-app-spese.html)
 - Decisioni prese: [`punti-aperti.md`](docs/punti-aperti.md) (tutti risolti) e proposta § 5.4
 - Feedback dai test sull'iPhone: issue su GitHub, una per problema
 - Regole operative: [`.claude/rules/`](.claude/rules/)
