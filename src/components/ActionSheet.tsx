@@ -48,7 +48,7 @@ export function ActionSheet({
             className={styles.overlay}
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
+            exit={{ opacity: 0, pointerEvents: "none" }}
             onClick={onCancel}
           />
           <motion.div
@@ -59,7 +59,7 @@ export function ActionSheet({
             aria-label={title}
             initial={{ y: "110%" }}
             animate={{ y: 0 }}
-            exit={{ y: "110%" }}
+            exit={{ y: "110%", pointerEvents: "none" }}
             transition={{ type: "spring", damping: 34, stiffness: 380 }}
           >
             <div className={styles.card}>

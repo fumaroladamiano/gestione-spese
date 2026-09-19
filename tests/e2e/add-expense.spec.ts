@@ -11,7 +11,10 @@ test("si aggiunge una spesa in 3 tocchi più l'importo", async ({ page }) => {
   await page.goto("./");
 
   // tocco 1: "+"
-  await page.getByRole("button", { name: "Aggiungi spesa" }).click();
+  await page
+    .getByRole("navigation")
+    .getByRole("button", { name: "Aggiungi spesa" })
+    .click();
   const sheet = page.getByRole("dialog", { name: "Nuova spesa" });
   await expect(sheet).toBeVisible();
 
@@ -35,7 +38,10 @@ test("si aggiunge una spesa in 3 tocchi più l'importo", async ({ page }) => {
 
 test("Salva senza categoria non chiude il foglio", async ({ page }) => {
   await page.goto("./");
-  await page.getByRole("button", { name: "Aggiungi spesa" }).click();
+  await page
+    .getByRole("navigation")
+    .getByRole("button", { name: "Aggiungi spesa" })
+    .click();
   const sheet = page.getByRole("dialog", { name: "Nuova spesa" });
   await typeAmount(page, ["8"]);
   await sheet.getByRole("button", { name: "Salva" }).click();
@@ -44,7 +50,10 @@ test("Salva senza categoria non chiude il foglio", async ({ page }) => {
 
 test("chiudere con dati inseriti chiede se scartarli", async ({ page }) => {
   await page.goto("./");
-  await page.getByRole("button", { name: "Aggiungi spesa" }).click();
+  await page
+    .getByRole("navigation")
+    .getByRole("button", { name: "Aggiungi spesa" })
+    .click();
   const sheet = page.getByRole("dialog", { name: "Nuova spesa" });
   await typeAmount(page, ["5"]);
   await sheet.getByRole("button", { name: "Annulla" }).click();
@@ -62,7 +71,10 @@ test("in inglese il tastierino usa il punto e il simbolo davanti", async ({
 }) => {
   await page.goto("./#/settings");
   await page.getByRole("radio", { name: "English" }).click();
-  await page.getByRole("button", { name: "Add expense" }).click();
+  await page
+    .getByRole("navigation")
+    .getByRole("button", { name: "Add expense" })
+    .click();
   const sheet = page.getByRole("dialog", { name: "New expense" });
   for (const key of ["4", ".", "2"]) {
     await sheet.getByRole("button", { name: key, exact: true }).click();

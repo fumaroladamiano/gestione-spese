@@ -4,7 +4,7 @@ import {
   useDragControls,
   type PanInfo,
 } from "motion/react";
-import { useEffect, type ReactNode } from "react";
+import { useEffect, useRef, type ReactNode } from "react";
 import { createPortal } from "react-dom";
 import styles from "./Sheet.module.css";
 
@@ -34,6 +34,15 @@ export function Sheet({
   footer,
 }: SheetProps) {
   const dragControls = useDragControls();
+  // durante l'animazione di uscita il foglio resta a schermo con i gestori dell'ultimo render:
+  // un tocco sullo sfondo in quel momento non deve chiedere di nuovo la chiusura
+  const openRef = useRef(open);
+  useEffect(() => {
+    openRef.current = open;
+  }, [open]);
+  const requestClose = () => {
+    if (openRef.current) onRequestClose();
+  };
 
   useEffect(() => {
     if (!open) return;
@@ -51,7 +60,7 @@ export function Sheet({
 
   const onDragEnd = (_event: PointerEvent, info: PanInfo) => {
     if (info.offset.y > CLOSE_OFFSET || info.velocity.y > CLOSE_VELOCITY) {
-      onRequestClose();
+      requestClose();
     }
   };
 
@@ -64,8 +73,8 @@ export function Sheet({
             className={styles.overlay}
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
-            onClick={onRequestClose}
+            exit={{ opacity: 0, pointerEvents: "none" }}
+            onClick={requestClose}
           />
           <motion.div
             key="sheet"
@@ -75,7 +84,7 @@ export function Sheet({
             aria-label={label}
             initial={{ y: "100%" }}
             animate={{ y: 0 }}
-            exit={{ y: "100%" }}
+            exit={{ y: "100%", pointerEvents: "none" }}
             transition={{ type: "spring", damping: 32, stiffness: 320 }}
             drag="y"
             dragControls={dragControls}
