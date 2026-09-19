@@ -110,7 +110,7 @@ Schema completo: proposta § 3.
 | Fase | Contenuto | Stato |
 |---|---|---|
 | Analisi e prototipo | Proposta, prototipo HTML (UI "iOS raffinato", lingua IT/EN), punti aperti risolti | fatto |
-| 0. Setup | Progetto Vite/React/TS, PWA, token CSS, dizionari `src/i18n` e helper `t()`, tab bar, CI e deploy GitHub Pages | in corso |
+| 0. Setup | Progetto Vite/React/TS, PWA, token CSS, dizionari `src/i18n` e helper `t()`, tab bar, CI e deploy GitHub Pages | fatto |
 | 1. MVP | DB e seed categorie, inserimento con tastierino, storico per giorno, modifica/elimina con swipe e Annulla, guida installazione, backup esporta/importa, selettore lingua e tema in Impostazioni | da fare |
 | 2. Filtri | Foglio filtri (mese, categorie, giorno), mini-calendario, ricerca nelle note, totale filtrato, filtri nell'URL | da fare |
 | 3. Grafici | Ciambella per categoria, barre giornaliere, confronto con il mese precedente | da fare |
