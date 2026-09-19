@@ -176,6 +176,27 @@ export const en = {
   categoryDeleted: "Category deleted",
   back: (label: string) => `Back to ${label}`,
 
+  oneOff: "One-off",
+  monthly: "Monthly",
+  recurrence: "Repeat",
+  expenseAddedMonthly: (amount: string, category: string) =>
+    `${amount} added to ${category} · monthly`,
+  recurringTitle: "Recurring expenses",
+  recurringEmpty:
+    "No recurring expenses. Choose “Monthly” when you log an expense (e.g. subscriptions, rent).",
+  recurringFooter:
+    "When the app opens, each month's due expense is logged. Expenses already created stay even if you pause or delete the rule.",
+  ruleSummary: (amount: string, day: number) =>
+    `${amount} · monthly on day ${String(day)}`,
+  ruleActive: "Active",
+  ruleSuspended: "Paused",
+  suspendRule: "Pause",
+  resumeRule: "Resume",
+  deleteRule: "Delete rule",
+  ruleSuspendedToast: "Recurring expense paused",
+  ruleResumedToast: "Recurring expense resumed",
+  ruleDeletedToast: "Rule deleted",
+
   dataAndBackup: "Data & backup",
   exportJson: "Export backup (JSON)",
   exportCsv: "Export for Excel (CSV)",

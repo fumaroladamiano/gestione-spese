@@ -11,7 +11,7 @@ import {
   type ExpenseDraft,
 } from "../../domain/expenseDraft";
 import { pressKey, type KeypadKey } from "../../domain/money";
-import type { Expense } from "../../domain/types";
+import type { Expense, RecurringRule } from "../../domain/types";
 import { useT } from "../../i18n/useT";
 import { usePrefs } from "../../stores/prefs";
 import { useCategories } from "../categories/useCategories";
@@ -26,6 +26,8 @@ type ExpenseFormProps = {
   open: boolean;
   /** Spesa da modificare, oppure null per una nuova spesa. Letta solo all'apertura. */
   expense: Expense | null;
+  /** Regola ricorrente collegata alla spesa in modifica, se esiste. */
+  rule: RecurringRule | null;
   onClose: () => void;
   onDelete: (id: string) => void;
 };
@@ -34,6 +36,7 @@ type ExpenseFormProps = {
 export function ExpenseForm({
   open,
   expense,
+  rule,
   onClose,
   onDelete,
 }: ExpenseFormProps) {
@@ -41,9 +44,12 @@ export function ExpenseForm({
   const defaultMethod = usePrefs((state) => state.defaultPaymentMethod);
   const [today] = useState(() => todayISO());
   const [initial] = useState<ExpenseDraft>(() =>
-    expense ? draftFromExpense(expense) : newDraft(today, defaultMethod),
+    expense
+      ? draftFromExpense(expense, rule?.active ?? false)
+      : newDraft(today, defaultMethod),
   );
   const [expenseId] = useState(() => expense?.id ?? null);
+  const [ruleId] = useState(() => rule?.id ?? null);
   const [draft, setDraft] = useState(initial);
   const [amountShake, setAmountShake] = useState(0);
   const [categoryShake, setCategoryShake] = useState(0);
@@ -77,7 +83,12 @@ export function ExpenseForm({
       (item) => item.id === check.input.categoryId,
     );
     if (!category) return;
-    if (await save(check.input, category, expenseId)) onClose();
+    const recurring = {
+      enabled: draft.recurring,
+      ruleId,
+      wasActive: initial.recurring,
+    };
+    if (await save(check.input, category, expenseId, recurring)) onClose();
   };
 
   const requestClose = () => {

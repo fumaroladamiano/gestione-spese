@@ -10,6 +10,8 @@ export type ExpenseDraft = {
   date: ISODate;
   note: string;
   paymentMethod: PaymentMethod;
+  /** "Ogni mese": la spesa è collegata a una regola ricorrente attiva. */
+  recurring: boolean;
 };
 
 export function newDraft(
@@ -22,16 +24,22 @@ export function newDraft(
     date: today,
     note: "",
     paymentMethod,
+    recurring: false,
   };
 }
 
-export function draftFromExpense(expense: Expense): ExpenseDraft {
+/** `recurring`: true se la spesa è collegata a una regola ancora attiva. */
+export function draftFromExpense(
+  expense: Expense,
+  recurring = false,
+): ExpenseDraft {
   return {
     amountInput: centsToInput(expense.amountCents),
     categoryId: expense.categoryId,
     date: expense.date,
     note: expense.note,
     paymentMethod: expense.paymentMethod,
+    recurring,
   };
 }
 
@@ -45,7 +53,8 @@ export function isDraftDirty(
     draft.categoryId !== initial.categoryId ||
     draft.date !== initial.date ||
     draft.note.trim() !== initial.note.trim() ||
-    draft.paymentMethod !== initial.paymentMethod
+    draft.paymentMethod !== initial.paymentMethod ||
+    draft.recurring !== initial.recurring
   );
 }
 

@@ -188,6 +188,28 @@ export const it = {
   categoryDeleted: "Categoria eliminata",
   back: (label: string) => `Torna a ${label}`,
 
+  // spese ricorrenti
+  oneOff: "Una tantum",
+  monthly: "Ogni mese",
+  recurrence: "Ripetizione",
+  expenseAddedMonthly: (amount: string, category: string) =>
+    `${amount} aggiunti a ${category} · ogni mese`,
+  recurringTitle: "Spese ricorrenti",
+  recurringEmpty:
+    "Nessuna spesa ricorrente. Scegli “Ogni mese” quando registri una spesa (es. abbonamenti, affitto).",
+  recurringFooter:
+    "All'apertura dell'app viene registrata la spesa di ogni mese dovuto. Le spese già create restano anche se sospendi o elimini la regola.",
+  ruleSummary: (amount: string, day: number) =>
+    `${amount} · ogni mese il giorno ${String(day)}`,
+  ruleActive: "Attiva",
+  ruleSuspended: "Sospesa",
+  suspendRule: "Sospendi",
+  resumeRule: "Riattiva",
+  deleteRule: "Elimina regola",
+  ruleSuspendedToast: "Spesa ricorrente sospesa",
+  ruleResumedToast: "Spesa ricorrente riattivata",
+  ruleDeletedToast: "Regola eliminata",
+
   // dati e backup
   dataAndBackup: "Dati e backup",
   exportJson: "Esporta backup (JSON)",

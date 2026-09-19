@@ -1,4 +1,5 @@
-import { CreditCard, Globe, Moon, Tag } from "lucide-react";
+import { CreditCard, Globe, Moon, Repeat, Tag } from "lucide-react";
+import { useRecurringRules } from "../recurring/useRecurringRules";
 import { useNavigate } from "react-router";
 import { useCategories } from "../categories/useCategories";
 import { ListGroup } from "../../components/ListGroup";
@@ -17,6 +18,9 @@ import { SettingsRow } from "./SettingsRow";
 export function SettingsPage() {
   const t = useT();
   const navigate = useNavigate();
+  const activeRules = (useRecurringRules() ?? []).filter(
+    (rule) => rule.active,
+  ).length;
   const activeCount = (useCategories() ?? []).filter(
     (category) => !category.archived,
   ).length;
@@ -53,6 +57,13 @@ export function SettingsPage() {
           label={t("categories")}
           value={String(activeCount)}
           onClick={() => void navigate("/settings/categories")}
+        />
+        <SettingsRow
+          icon={Repeat}
+          color="var(--color-system-teal)"
+          label={t("recurringTitle")}
+          value={String(activeRules)}
+          onClick={() => void navigate("/settings/recurring")}
         />
         <SettingsRow
           icon={CreditCard}
