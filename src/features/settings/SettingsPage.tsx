@@ -1,19 +1,29 @@
-import { Globe, Moon } from "lucide-react";
+import { CreditCard, Globe, Moon } from "lucide-react";
 import { ListGroup } from "../../components/ListGroup";
 import { Page } from "../../components/Page";
 import { SegmentedControl } from "../../components/SegmentedControl";
+import { PAYMENT_METHODS, type PaymentMethod } from "../../domain/types";
 import type { Language } from "../../i18n";
+import { paymentMethodName } from "../../i18n/categoryNames";
 import { useT } from "../../i18n/useT";
 import { usePrefs, type ThemePreference } from "../../stores/prefs";
+import { AppStatusSection } from "./AppStatusSection";
 import { SettingsRow } from "./SettingsRow";
 
 export function SettingsPage() {
   const t = useT();
   const theme = usePrefs((state) => state.theme);
   const language = usePrefs((state) => state.language);
+  const paymentMethod = usePrefs((state) => state.defaultPaymentMethod);
   const setTheme = usePrefs((state) => state.setTheme);
   const setLanguage = usePrefs((state) => state.setLanguage);
+  const setPaymentMethod = usePrefs((state) => state.setDefaultPaymentMethod);
 
+  const paymentOptions: { value: PaymentMethod; label: string }[] =
+    PAYMENT_METHODS.map((method) => ({
+      value: method,
+      label: paymentMethodName(method, t),
+    }));
   const themeOptions: { value: ThemePreference; label: string }[] = [
     { value: "auto", label: t("themeAuto") },
     { value: "light", label: t("themeLight") },
@@ -28,6 +38,18 @@ export function SettingsPage() {
   return (
     <Page title={t("settingsTitle")}>
       <ListGroup title={t("personalization")}>
+        <SettingsRow
+          icon={CreditCard}
+          color="var(--color-system-green)"
+          label={t("defaultPaymentMethod")}
+        >
+          <SegmentedControl
+            label={t("defaultPaymentMethod")}
+            options={paymentOptions}
+            value={paymentMethod}
+            onChange={setPaymentMethod}
+          />
+        </SettingsRow>
         <SettingsRow
           icon={Moon}
           color="var(--color-system-gray)"
@@ -53,6 +75,7 @@ export function SettingsPage() {
           />
         </SettingsRow>
       </ListGroup>
+      <AppStatusSection />
     </Page>
   );
 }

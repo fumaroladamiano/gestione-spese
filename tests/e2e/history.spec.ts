@@ -1,4 +1,4 @@
-import { expect, test, type Page } from "@playwright/test";
+import { expect, test, type Page } from "./fixtures";
 
 /** Aggiunge una spesa dal foglio: importo come tasti del tastierino, poi categoria e nota. */
 async function addExpense(

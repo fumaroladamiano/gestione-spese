@@ -8,6 +8,7 @@ import { useT } from "../../i18n/useT";
 import { usePrefs } from "../../stores/prefs";
 import { useUi } from "../../stores/ui";
 import { useExpenseRow } from "../expense/useExpenseRow";
+import { InstallBanner } from "../install/InstallBanner";
 import styles from "./HomePage.module.css";
 import { MonthHeroCard } from "./MonthHeroCard";
 import { Sparkline } from "./Sparkline";
@@ -24,6 +25,7 @@ export function HomePage() {
 
   return (
     <Page title={t("homeTitle")} caption={formatLongDate(todayISO(), language)}>
+      <InstallBanner />
       {summary ? (
         <>
           <MonthHeroCard

@@ -22,12 +22,15 @@ type UiState = {
   toast: ToastMessage | null;
   expenseSheet: ExpenseSheetState;
   installGuideOpen: boolean;
+  /** Banner di installazione chiuso: ricompare al prossimo avvio finché l'app non è installata. */
+  installBannerDismissed: boolean;
   showToast: (toast: Omit<ToastMessage, "id">) => void;
   hideToast: () => void;
   openNewExpense: () => void;
   openEditExpense: (expenseId: string) => void;
   closeExpenseSheet: () => void;
   setInstallGuideOpen: (open: boolean) => void;
+  dismissInstallBanner: () => void;
 };
 
 let nextToastId = 1;
@@ -37,6 +40,7 @@ export const useUi = create<UiState>()((set) => ({
   toast: null,
   expenseSheet: { open: false, session: 0, expenseId: null },
   installGuideOpen: false,
+  installBannerDismissed: false,
   showToast: (toast) => {
     set({ toast: { ...toast, id: nextToastId++ } });
   },
@@ -68,5 +72,8 @@ export const useUi = create<UiState>()((set) => ({
   },
   setInstallGuideOpen: (installGuideOpen) => {
     set({ installGuideOpen });
+  },
+  dismissInstallBanner: () => {
+    set({ installBannerDismissed: true });
   },
 }));

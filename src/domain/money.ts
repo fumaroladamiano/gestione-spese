@@ -79,6 +79,15 @@ export function formatPercent(
   }).format(ratio);
 }
 
+/** Spazio occupato in kilobyte senza decimali: "48 kB". */
+export function formatKilobytes(bytes: number, locale: NumberLocale): string {
+  return new Intl.NumberFormat(locale, {
+    style: "unit",
+    unit: "kilobyte",
+    maximumFractionDigits: 0,
+  }).format(bytes / 1024);
+}
+
 /** Separatore decimale della lingua (tasto del tastierino): "," oppure ".". */
 export function decimalSeparator(locale: NumberLocale): string {
   return (
