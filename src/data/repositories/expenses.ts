@@ -104,6 +104,38 @@ export async function getExpensesBetween(
   return list.reverse();
 }
 
+/** Ordine delle liste: giorno più recente prima, nello stesso giorno ultima inserita prima. */
+function newestFirst(a: Expense, b: Expense): number {
+  return b.date.localeCompare(a.date) || b.createdAt.localeCompare(a.createdAt);
+}
+
+/**
+ * Spese tra due date incluse, solo delle categorie indicate (tutte se l'elenco è vuoto).
+ * Con le categorie usa l'indice composto [categoryId+date]: si leggono solo le spese utili.
+ */
+export async function getExpensesFiltered(
+  start: ISODate,
+  end: ISODate,
+  categoryIds: readonly string[],
+): Promise<Expense[]> {
+  if (categoryIds.length === 0) return getExpensesBetween(start, end);
+  const lists = await Promise.all(
+    categoryIds.map((categoryId) =>
+      db.expenses
+        .where("[categoryId+date]")
+        .between([categoryId, start], [categoryId, end], true, true)
+        .toArray(),
+    ),
+  );
+  return lists.flat().sort(newestFirst);
+}
+
+/** Data della prima spesa registrata (per non andare indietro oltre nei selettori del mese). */
+export async function getOldestExpenseDate(): Promise<ISODate | null> {
+  const oldest = await db.expenses.orderBy("date").first();
+  return oldest?.date ?? null;
+}
+
 /** Tutte le spese, dalla più recente. */
 export async function getAllExpenses(): Promise<Expense[]> {
   return db.expenses.orderBy("[date+createdAt]").reverse().toArray();

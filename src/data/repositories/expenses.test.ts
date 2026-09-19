@@ -6,6 +6,8 @@ import {
   addExpense,
   deleteExpense,
   getExpensesBetween,
+  getExpensesFiltered,
+  getOldestExpenseDate,
   getRecentExpenses,
   restoreExpense,
   updateExpense,
@@ -144,5 +146,34 @@ describe("repository delle spese", () => {
     expect(
       (await getExpensesBetween("2026-08-01", "2026-08-31")).map((e) => e.id),
     ).toEqual([d.id]);
+  });
+
+  it("filtra per categorie e intervallo con l'indice composto", async () => {
+    const a = await addExpense(
+      { ...input, categoryId: "spesa", date: "2026-09-10" },
+      NOW,
+    );
+    const b = await addExpense(
+      { ...input, categoryId: "casa", date: "2026-09-12" },
+      NOW,
+    );
+    await addExpense(
+      { ...input, categoryId: "svago", date: "2026-09-11" },
+      NOW,
+    );
+    await addExpense(
+      { ...input, categoryId: "spesa", date: "2026-08-20" },
+      NOW,
+    );
+
+    const result = await getExpensesFiltered("2026-09-01", "2026-09-30", [
+      "spesa",
+      "casa",
+    ]);
+    expect(result.map((e) => e.id)).toEqual([b.id, a.id]);
+    expect(
+      await getExpensesFiltered("2026-09-01", "2026-09-30", []),
+    ).toHaveLength(3);
+    expect(await getOldestExpenseDate()).toBe("2026-08-20");
   });
 });
