@@ -1,4 +1,4 @@
-import { Database, HardDrive, Info, Smartphone } from "lucide-react";
+import { Database, HardDrive, Info, RefreshCw, Smartphone } from "lucide-react";
 import { ListGroup } from "../../components/ListGroup";
 import { formatKilobytes } from "../../domain/money";
 import type { TextKey } from "../../i18n";
@@ -6,6 +6,7 @@ import { useLocale, useT } from "../../i18n/useT";
 import { useUi } from "../../stores/ui";
 import { useStandalone } from "../install/useStandalone";
 import { SettingsRow } from "./SettingsRow";
+import { useCheckUpdates } from "./useCheckUpdates";
 import { useStorageStatus, type PersistState } from "./useStorageStatus";
 
 const PERSIST_TEXT: Record<PersistState, TextKey> = {
@@ -22,6 +23,7 @@ export function AppStatusSection() {
   const standalone = useStandalone();
   const storage = useStorageStatus();
   const openGuide = useUi((state) => state.setInstallGuideOpen);
+  const checkUpdates = useCheckUpdates();
 
   return (
     <ListGroup title={t("appSection")} footer={t("appFooter")}>
@@ -71,6 +73,12 @@ export function AppStatusSection() {
         color="var(--color-system-indigo)"
         label={t("version")}
         value={__APP_VERSION__}
+      />
+      <SettingsRow
+        icon={RefreshCw}
+        color="var(--color-system-teal)"
+        label={t("checkUpdates")}
+        onClick={() => void checkUpdates()}
       />
     </ListGroup>
   );

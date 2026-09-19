@@ -245,6 +245,16 @@ export const en = {
   appFooter:
     "Safari usually grants persistent storage to apps added to the Home Screen.",
 
+  checkUpdates: "Check for updates",
+  upToDate: (version: string) =>
+    `You already have the latest version (${version})`,
+  updatesUnavailable: "Updates are only available in the published app",
+  backupReminderTitle: "Back up your data",
+  backupReminderNever: "You haven't saved a copy of your expenses yet.",
+  backupReminderDays: (n: number) =>
+    `Your last backup was ${String(n)} days ago.`,
+  backupReminderAction: "Export",
+
   installBannerTitle: "Add Spese to your Home Screen",
   installBannerSubtitle: "Offline and full screen · How to ›",
   installTitle: "Install Spese",

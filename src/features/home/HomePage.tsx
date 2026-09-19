@@ -9,6 +9,7 @@ import { usePrefs } from "../../stores/prefs";
 import { useUi } from "../../stores/ui";
 import { useExpenseRow } from "../expense/useExpenseRow";
 import { InstallBanner } from "../install/InstallBanner";
+import { BackupReminder } from "./BackupReminder";
 import { useBudget } from "../settings/useBudget";
 import styles from "./HomePage.module.css";
 import { MonthHeroCard } from "./MonthHeroCard";
@@ -37,6 +38,7 @@ export function HomePage() {
             budgetCents={budget}
             daysLeft={summary.daysLeft}
           />
+          <BackupReminder hasExpenses={!summary.isEmpty} />
           <div className={styles.tiles}>
             <StatTile
               icon={Calendar}

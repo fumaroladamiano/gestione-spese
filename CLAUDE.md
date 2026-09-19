@@ -114,7 +114,7 @@ Schema completo: proposta § 3.
 | 1. MVP | DB e seed categorie, inserimento con tastierino, storico per giorno, modifica/elimina con swipe e Annulla, guida installazione, backup esporta/importa, selettore lingua e tema in Impostazioni | fatto |
 | 2. Filtri | Foglio filtri (mese, categorie, giorno), mini-calendario, ricerca nelle note, totale filtrato, filtri nell'URL | fatto |
 | 3. Grafici | Ciambella per categoria, barre giornaliere, confronto con il mese precedente | fatto |
-| 4. Extra | Spese ricorrenti, budget con proiezione, gestione categorie, suggerimento categoria dalla nota, avviso nuova versione, stato app | da fare |
+| 4. Extra | Spese ricorrenti, budget con proiezione, gestione categorie, suggerimento categoria dalla nota, avviso nuova versione, stato app | fatto |
 | Rifiniture | Test su iPhone, aree sicure, gesti, dark mode, accessibilità | da fare |
 
 Stati ammessi: `da fare` · `in corso` · `fatto`. Aggiornali a fine step (vedi `workflow-step.md`). Step e criteri di completamento di ogni fase: proposta § 4.4.

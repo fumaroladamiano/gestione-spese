@@ -260,6 +260,15 @@ export const it = {
   appFooter:
     "Safari concede di norma l'archiviazione persistente alle app aggiunte alla schermata Home.",
 
+  checkUpdates: "Cerca aggiornamenti",
+  upToDate: (version: string) => `Hai già l'ultima versione (${version})`,
+  updatesUnavailable: "Aggiornamenti disponibili solo nell'app pubblicata",
+  backupReminderTitle: "Fai un backup",
+  backupReminderNever: "Non hai ancora salvato una copia delle spese.",
+  backupReminderDays: (n: number) =>
+    `L'ultimo backup è di ${String(n)} giorni fa.`,
+  backupReminderAction: "Esporta",
+
   // installazione
   installBannerTitle: "Installa Spese sulla Home",
   installBannerSubtitle: "Offline e a schermo intero · Come fare ›",
