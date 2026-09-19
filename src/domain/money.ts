@@ -208,7 +208,8 @@ export function parseLocaleAmount(
   text: string,
   locale: NumberLocale,
 ): number | null {
-  const compact = text.replace(/[\s €]/g, "");
+  // \s comprende anche lo spazio non separabile che Intl mette prima di "€"
+  const compact = text.replace(/[\s€]/g, "");
   const normalized =
     locale === "it-IT"
       ? compact.replace(/\./g, "").replace(",", ".")

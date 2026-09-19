@@ -15,7 +15,8 @@
     "format": "prettier --write .",
     "test": "vitest run",
     "test:e2e": "playwright test",
-    "icons": "node scripts/generate-icons.ts"
+    "icons": "node scripts/generate-icons.ts",
+    "check": "npm run typecheck && npm run lint && prettier --check . && npm test"
   },
   "dependencies": {
     "date-fns": "^4.4.0",
