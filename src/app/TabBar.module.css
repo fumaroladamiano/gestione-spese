@@ -1,0 +1,67 @@
+.bar {
+  position: fixed;
+  left: var(--tab-bar-inset);
+  right: var(--tab-bar-inset);
+  bottom: var(--tab-bar-bottom);
+  z-index: 50;
+  max-width: 480px;
+  margin: 0 auto;
+  height: var(--size-tab-bar);
+  padding: 0 var(--space-xs);
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  align-items: center;
+  border-radius: var(--radius-full);
+  background: var(--color-chrome);
+  -webkit-backdrop-filter: var(--blur-chrome);
+  backdrop-filter: var(--blur-chrome);
+  box-shadow:
+    var(--shadow-float),
+    inset 0 0.5px 0 var(--color-chrome-highlight);
+}
+
+.tab {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 2px;
+  height: 54px;
+  border-radius: var(--radius-full);
+  /* le etichette della tab bar restano piccole come su iOS */
+  font-size: 10px;
+  font-weight: 600;
+  color: var(--color-secondary-label);
+  text-decoration: none;
+  transition:
+    color 0.2s,
+    background 0.25s;
+}
+
+.active {
+  color: var(--color-tint);
+  background: var(--color-tint-soft);
+}
+
+.add {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 54px;
+}
+
+.addCircle {
+  display: grid;
+  place-items: center;
+  width: var(--size-fab);
+  height: var(--size-fab);
+  border-radius: 50%;
+  background: var(--gradient-hero);
+  color: var(--color-on-tint);
+  box-shadow: var(--shadow-fab);
+  transition: transform 0.15s;
+}
+
+.add:active .addCircle {
+  transform: scale(0.9);
+}

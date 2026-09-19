@@ -1,0 +1,5 @@
+.note {
+  padding: 0 var(--space-xl);
+  font-size: var(--text-callout);
+  color: var(--color-secondary-label);
+}

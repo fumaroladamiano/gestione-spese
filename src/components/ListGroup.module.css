@@ -1,0 +1,30 @@
+.group {
+  margin-bottom: var(--space-xxl);
+}
+
+.title {
+  padding: var(--space-xl) var(--space-xxxl) var(--space-sm);
+  font-size: var(--text-footnote);
+  font-weight: 600;
+  color: var(--color-secondary-label);
+}
+
+.card {
+  margin: 0 var(--space-lg);
+  border-radius: var(--radius-lg);
+  background: var(--color-surface);
+  box-shadow: var(--shadow-card);
+  overflow: hidden;
+}
+
+/* separatori hairline rientrati allineati al testo delle righe */
+.card > * + * {
+  border-top: 0.5px solid var(--color-separator);
+}
+
+.footer {
+  padding: var(--space-sm) var(--space-xxxl) 0;
+  font-size: var(--text-footnote);
+  line-height: 1.4;
+  color: var(--color-secondary-label);
+}

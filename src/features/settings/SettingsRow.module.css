@@ -1,0 +1,30 @@
+.row {
+  padding: var(--space-md) var(--space-lg);
+  min-height: 48px;
+}
+
+.head {
+  display: flex;
+  align-items: center;
+  gap: var(--space-md);
+}
+
+.icon {
+  display: grid;
+  place-items: center;
+  flex: none;
+  width: 32px;
+  height: 32px;
+  border-radius: var(--radius-sm);
+  color: var(--color-on-tint);
+  box-shadow: var(--shadow-icon);
+}
+
+.label {
+  font-size: var(--text-body);
+}
+
+/* il controllo parte allineato al testo, dopo l'icona (32 + 12 px) */
+.control {
+  margin: var(--space-sm) 0 0 44px;
+}
