@@ -1,0 +1,89 @@
+.hero {
+  position: relative;
+  display: block;
+  margin: 0 var(--space-lg);
+  padding: 18px var(--space-xl);
+  overflow: hidden;
+  border-radius: var(--radius-xl);
+  background: var(--gradient-hero);
+  box-shadow: var(--shadow-hero);
+  color: var(--color-on-tint);
+  text-decoration: none;
+}
+
+/* riflessi morbidi come nel prototipo */
+.hero::before,
+.hero::after {
+  content: "";
+  position: absolute;
+  border-radius: 50%;
+  pointer-events: none;
+}
+
+.hero::before {
+  right: -60px;
+  top: -80px;
+  width: 220px;
+  height: 220px;
+  background: radial-gradient(
+    closest-side,
+    var(--color-hero-glow),
+    transparent
+  );
+}
+
+.hero::after {
+  left: -40px;
+  bottom: -120px;
+  width: 260px;
+  height: 200px;
+  background: radial-gradient(
+    closest-side,
+    var(--color-hero-shade),
+    transparent
+  );
+}
+
+.hero > * {
+  position: relative;
+  z-index: 1;
+}
+
+.top {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.eyebrow {
+  font-size: var(--text-subheadline);
+  font-weight: 600;
+  color: var(--color-hero-text);
+}
+
+.go {
+  display: grid;
+  place-items: center;
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  background: var(--color-hero-track);
+}
+
+.amount {
+  display: block;
+  margin: var(--space-sm) 0 var(--space-md);
+  font-size: var(--text-amount-hero);
+  font-weight: 700;
+  line-height: 1.05;
+  letter-spacing: -0.035em;
+}
+
+.delta {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--space-sm);
+  font-size: var(--text-subheadline);
+  color: var(--color-hero-text);
+}

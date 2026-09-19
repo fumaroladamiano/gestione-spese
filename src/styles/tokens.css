@@ -39,6 +39,8 @@
   --color-on-tint: #ffffff;
   --color-hero-text: rgba(255, 255, 255, 0.95);
   --color-hero-track: rgba(255, 255, 255, 0.22);
+  --color-hero-glow: rgba(255, 255, 255, 0.22);
+  --color-hero-shade: rgba(20, 10, 90, 0.35);
   --color-hero-budget-warning: #ffd60a;
   --color-hero-budget-over: #ff8a80;
   /* fondi pieni delle icone in Impostazioni (colori di sistema iOS) */

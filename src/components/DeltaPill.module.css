@@ -1,0 +1,30 @@
+.pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 3px;
+  padding: 3px 9px;
+  border-radius: var(--radius-full);
+  font-size: var(--text-footnote);
+  font-weight: 700;
+  white-space: nowrap;
+}
+
+.up {
+  color: var(--color-danger-text);
+  background: color-mix(in srgb, var(--color-danger) 14%, transparent);
+}
+
+.down {
+  color: var(--color-positive-text);
+  background: color-mix(in srgb, var(--color-positive) 16%, transparent);
+}
+
+.neutral {
+  color: var(--color-secondary-label);
+  background: var(--color-fill-soft);
+}
+
+.hero {
+  color: var(--color-on-tint);
+  background: var(--color-hero-track);
+}

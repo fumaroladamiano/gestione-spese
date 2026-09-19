@@ -42,7 +42,7 @@ export const it = {
   spentIn: (month: string) => `Speso a ${month}`,
   openCharts: "Apri i grafici del mese",
   versus: (month: string) => `vs ${month}`,
-  samePeriod: "(stesso periodo)",
+  versusSamePeriod: (month: string) => `vs ${month} (stesso periodo)`,
   noComparison: "Nessun confronto",
   previousMonthEmpty: (month: string) => `${month} senza spese`,
   averagePerDay: "Media al giorno",

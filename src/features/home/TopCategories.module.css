@@ -1,0 +1,69 @@
+.card {
+  margin: 0 var(--space-lg);
+  padding: var(--space-sm) 18px;
+  border-radius: var(--radius-lg);
+  background: var(--color-surface);
+  box-shadow: var(--shadow-card);
+}
+
+.row {
+  display: flex;
+  align-items: center;
+  gap: var(--space-md);
+  padding: var(--space-sm) 0;
+}
+
+.main {
+  flex: 1;
+  min-width: 0;
+}
+
+.line {
+  display: flex;
+  justify-content: space-between;
+  gap: var(--space-sm);
+  margin-bottom: 7px;
+  font-size: var(--text-callout);
+  font-weight: 500;
+}
+
+.name {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.percent {
+  margin-left: 6px;
+  font-size: var(--text-footnote);
+  color: var(--color-secondary-label);
+}
+
+.amount {
+  font-weight: 650;
+}
+
+.track {
+  height: 7px;
+  overflow: hidden;
+  border-radius: 4px;
+  background: var(--color-fill-soft);
+}
+
+.bar {
+  --c: var(--c-light);
+  display: block;
+  height: 100%;
+  border-radius: 4px;
+  background: var(--c);
+}
+
+@media (prefers-color-scheme: dark) {
+  :global(:root:not([data-theme="light"])) .bar {
+    --c: var(--c-dark);
+  }
+}
+
+:global(:root[data-theme="dark"]) .bar {
+  --c: var(--c-dark);
+}

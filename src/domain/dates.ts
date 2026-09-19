@@ -174,3 +174,8 @@ export function weekdayInitials(language: DateLanguage): string[] {
 export function mondayBasedWeekday(iso: ISODate): number {
   return (parseISODate(iso).getDay() + 6) % 7;
 }
+
+/** Prima lettera maiuscola (es. mese a inizio frase: "Agosto senza spese"). */
+export function capitalizeFirst(text: string): string {
+  return capitalize(text);
+}

@@ -37,7 +37,7 @@ export const en = {
   spentIn: (month: string) => `Spent in ${month}`,
   openCharts: "Open this month's charts",
   versus: (month: string) => `vs ${month}`,
-  samePeriod: "(same period)",
+  versusSamePeriod: (month: string) => `vs ${month} (same period)`,
   noComparison: "No comparison",
   previousMonthEmpty: (month: string) => `No expenses in ${month}`,
   averagePerDay: "Daily average",

@@ -1,0 +1,24 @@
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  padding: var(--space-xxl) var(--space-xl) var(--space-sm);
+}
+
+.title {
+  font-size: var(--text-section-title);
+  font-weight: 700;
+  letter-spacing: -0.02em;
+}
+
+.link {
+  display: inline-flex;
+  align-items: center;
+  gap: 2px;
+  min-height: var(--size-touch);
+  margin: calc(var(--space-md) * -1) 0;
+  color: var(--color-tint);
+  font-size: var(--text-callout);
+  font-weight: 600;
+  text-decoration: none;
+}
