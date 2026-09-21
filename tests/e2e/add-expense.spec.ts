@@ -89,6 +89,38 @@ test("scrivendo la nota il tastierino si nasconde e poi torna", async ({
   await expect(sheet.getByTestId("amount-display")).toHaveText("7,00 €");
 });
 
+test("la nota viene subito dopo le categorie, prima dei chip", async ({
+  page,
+}) => {
+  await page.goto("./");
+  await page
+    .getByRole("navigation")
+    .getByRole("button", { name: "Aggiungi spesa" })
+    .click();
+  const sheet = page.getByRole("dialog", { name: "Nuova spesa" });
+  // ordine nel documento: il foglio è una colonna, quindi è anche l'ordine a schermo
+  const elements = await sheet
+    .locator(
+      '[role="radio"], input[aria-label="Nota"], button[aria-label^="Data"]',
+    )
+    .all();
+  const order: string[] = [];
+  for (const element of elements) {
+    // le categorie hanno role="radio", nota e chip data un aria-label
+    order.push(
+      (await element.getAttribute("role")) ??
+        (await element.getAttribute("aria-label")) ??
+        "",
+    );
+  }
+  const note = order.indexOf("Nota");
+  expect(order.lastIndexOf("radio")).toBeGreaterThanOrEqual(0);
+  expect(order.lastIndexOf("radio")).toBeLessThan(note);
+  expect(note).toBeLessThan(
+    order.findIndex((label) => label.startsWith("Data")),
+  );
+});
+
 test("in inglese il tastierino usa il punto e il simbolo davanti", async ({
   page,
 }) => {

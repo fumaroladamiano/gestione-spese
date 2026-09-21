@@ -26,7 +26,7 @@
   display: block;
   width: calc(100% - 2 * var(--space-lg));
   height: 48px;
-  margin: var(--space-md) var(--space-lg) 0;
+  margin: var(--space-lg) var(--space-lg) 0;
   padding: 0 var(--space-lg);
   border: 0;
   border-radius: var(--radius-md);
