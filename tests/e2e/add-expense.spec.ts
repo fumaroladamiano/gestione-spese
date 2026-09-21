@@ -66,6 +66,29 @@ test("chiudere con dati inseriti chiede se scartarli", async ({ page }) => {
   await expect(sheet).toBeHidden();
 });
 
+test("scrivendo la nota il tastierino si nasconde e poi torna", async ({
+  page,
+}) => {
+  await page.goto("./");
+  await page
+    .getByRole("navigation")
+    .getByRole("button", { name: "Aggiungi spesa" })
+    .click();
+  const sheet = page.getByRole("dialog", { name: "Nuova spesa" });
+  const key = sheet.getByRole("button", { name: "7", exact: true });
+  await expect(key).toBeVisible();
+
+  // con il focus sulla nota resta solo la tastiera del sistema
+  await sheet.getByRole("textbox", { name: "Nota" }).click();
+  await expect(key).toBeHidden();
+
+  // toccando l'importo la nota perde il focus e il tastierino ricompare
+  await sheet.getByTestId("amount-display").click();
+  await expect(key).toBeVisible();
+  await key.click();
+  await expect(sheet.getByTestId("amount-display")).toHaveText("7,00 €");
+});
+
 test("in inglese il tastierino usa il punto e il simbolo davanti", async ({
   page,
 }) => {

@@ -10,10 +10,16 @@ type AmountDisplayProps = {
   input: string;
   /** Cambia a ogni errore per far ripartire lo "shake". */
   shakeKey: number;
+  /** Tocco sull'importo: serve a tornare al tastierino mentre si scrive la nota. */
+  onPress?: () => void;
 };
 
 /** Importo grande: le cifre non ancora digitate sono "fantasma" in grigio. */
-export function AmountDisplay({ input, shakeKey }: AmountDisplayProps) {
+export function AmountDisplay({
+  input,
+  shakeKey,
+  onPress,
+}: AmountDisplayProps) {
   const locale = useLocale();
   const t = useT();
   const display = formatInput(input, locale);
@@ -31,6 +37,7 @@ export function AmountDisplay({ input, shakeKey }: AmountDisplayProps) {
       role="status"
       aria-label={t("amount")}
       data-testid="amount-display"
+      onClick={onPress}
     >
       {display.currencyBefore ? currency : null}
       {display.integer}

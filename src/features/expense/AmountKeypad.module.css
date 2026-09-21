@@ -1,8 +1,14 @@
+/* contenitore che si chiude in altezza quando si scrive la nota */
+.collapse {
+  overflow: hidden;
+}
+
+/* il margine in basso lascia spazio all'ombra dei tasti, altrimenti tagliata */
 .keypad {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
   gap: var(--space-sm);
-  padding: var(--space-md) var(--space-md) 0;
+  padding: var(--space-md) var(--space-md) var(--space-xs);
 }
 
 .key {
