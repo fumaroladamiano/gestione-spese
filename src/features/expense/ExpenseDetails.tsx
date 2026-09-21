@@ -1,5 +1,5 @@
 import { Banknote, Calendar, CreditCard, Repeat, Wallet } from "lucide-react";
-import { useState } from "react";
+import { useState, type ReactNode } from "react";
 import { Chip } from "../../components/Chip";
 import { addDays, formatRelativeDay } from "../../domain/dates";
 import {
@@ -21,15 +21,18 @@ type ExpenseDetailsProps = {
   onSubmit: () => void;
   /** Il campo nota prende o perde il focus (e con lui la tastiera di iOS). */
   onNoteFocusChange: (focused: boolean) => void;
+  /** Contenuto subito sotto la nota (es. la categoria suggerita). */
+  afterNote?: ReactNode;
 };
 
-/** Dettagli opzionali a un tocco: data, metodo di pagamento, nota. */
+/** Dettagli opzionali: la nota, poi data, metodo di pagamento e ricorrenza a un tocco. */
 export function ExpenseDetails({
   draft,
   today,
   onChange,
   onSubmit,
   onNoteFocusChange,
+  afterNote,
 }: ExpenseDetailsProps) {
   const t = useT();
   const language = usePrefs((state) => state.language);
@@ -40,6 +43,33 @@ export function ExpenseDetails({
 
   return (
     <>
+      <input
+        className={styles.note}
+        aria-label={t("note")}
+        placeholder={t("notePlaceholder")}
+        maxLength={LIMITS.noteLength}
+        autoComplete="off"
+        enterKeyHint="done"
+        value={draft.note}
+        onChange={(event) => {
+          onChange({ note: event.target.value });
+        }}
+        onFocus={() => {
+          onNoteFocusChange(true);
+        }}
+        onBlur={() => {
+          onNoteFocusChange(false);
+        }}
+        onKeyDown={(event) => {
+          if (event.key === "Enter") {
+            event.preventDefault();
+            event.currentTarget.blur();
+            onSubmit();
+          }
+        }}
+      />
+      {afterNote}
+
       <div className={styles.chips}>
         <Chip
           icon={Calendar}
@@ -113,32 +143,6 @@ export function ExpenseDetails({
           />
         </div>
       ) : null}
-
-      <input
-        className={styles.note}
-        aria-label={t("note")}
-        placeholder={t("notePlaceholder")}
-        maxLength={LIMITS.noteLength}
-        autoComplete="off"
-        enterKeyHint="done"
-        value={draft.note}
-        onChange={(event) => {
-          onChange({ note: event.target.value });
-        }}
-        onFocus={() => {
-          onNoteFocusChange(true);
-        }}
-        onBlur={() => {
-          onNoteFocusChange(false);
-        }}
-        onKeyDown={(event) => {
-          if (event.key === "Enter") {
-            event.preventDefault();
-            event.currentTarget.blur();
-            onSubmit();
-          }
-        }}
-      />
     </>
   );
 }

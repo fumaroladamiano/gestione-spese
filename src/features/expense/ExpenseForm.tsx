@@ -163,15 +163,17 @@ export function ExpenseForm({
           onChange={change}
           onSubmit={() => void submit()}
           onNoteFocusChange={setNoteFocused}
+          afterNote={
+            expenseId === null && draft.categoryId === null ? (
+              <CategorySuggestion
+                note={draft.note}
+                onSelect={(categoryId) => {
+                  change({ categoryId });
+                }}
+              />
+            ) : null
+          }
         />
-        {expenseId === null && draft.categoryId === null ? (
-          <CategorySuggestion
-            note={draft.note}
-            onSelect={(categoryId) => {
-              change({ categoryId });
-            }}
-          />
-        ) : null}
         {expenseId !== null ? (
           <button
             type="button"
