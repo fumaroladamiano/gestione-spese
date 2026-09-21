@@ -19,6 +19,8 @@ type ExpenseDetailsProps = {
   today: string;
   onChange: (changes: Partial<ExpenseDraft>) => void;
   onSubmit: () => void;
+  /** Il campo nota prende o perde il focus (e con lui la tastiera di iOS). */
+  onNoteFocusChange: (focused: boolean) => void;
 };
 
 /** Dettagli opzionali a un tocco: data, metodo di pagamento, nota. */
@@ -27,6 +29,7 @@ export function ExpenseDetails({
   today,
   onChange,
   onSubmit,
+  onNoteFocusChange,
 }: ExpenseDetailsProps) {
   const t = useT();
   const language = usePrefs((state) => state.language);
@@ -121,6 +124,12 @@ export function ExpenseDetails({
         value={draft.note}
         onChange={(event) => {
           onChange({ note: event.target.value });
+        }}
+        onFocus={() => {
+          onNoteFocusChange(true);
+        }}
+        onBlur={() => {
+          onNoteFocusChange(false);
         }}
         onKeyDown={(event) => {
           if (event.key === "Enter") {

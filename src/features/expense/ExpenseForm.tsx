@@ -55,6 +55,8 @@ export function ExpenseForm({
   const [amountShake, setAmountShake] = useState(0);
   const [categoryShake, setCategoryShake] = useState(0);
   const [confirmDiscard, setConfirmDiscard] = useState(false);
+  // mentre si scrive la nota c'è la tastiera di iOS: il tastierino si nasconde
+  const [noteFocused, setNoteFocused] = useState(false);
   const categories = useCategories() ?? [];
   const save = useSaveExpense();
 
@@ -135,9 +137,18 @@ export function ExpenseForm({
             onAction={() => void submit()}
           />
         }
-        footer={<AmountKeypad onKey={pressAmountKey} />}
+        footer={<AmountKeypad onKey={pressAmountKey} visible={!noteFocused} />}
       >
-        <AmountDisplay input={draft.amountInput} shakeKey={amountShake} />
+        <AmountDisplay
+          input={draft.amountInput}
+          shakeKey={amountShake}
+          onPress={() => {
+            // su iOS toccare un elemento non focalizzabile non chiude la tastiera
+            if (document.activeElement instanceof HTMLInputElement) {
+              document.activeElement.blur();
+            }
+          }}
+        />
         <CategoryPicker
           categories={selectable}
           value={draft.categoryId}
@@ -151,6 +162,7 @@ export function ExpenseForm({
           today={today}
           onChange={change}
           onSubmit={() => void submit()}
+          onNoteFocusChange={setNoteFocused}
         />
         {expenseId === null && draft.categoryId === null ? (
           <CategorySuggestion
