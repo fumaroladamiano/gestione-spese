@@ -2,7 +2,8 @@ import { Download, Info, Share } from "lucide-react";
 import { useRef, useState } from "react";
 import { ActionSheet, type SheetAction } from "../../components/ActionSheet";
 import { ListGroup } from "../../components/ListGroup";
-import { daysBetween, todayISO } from "../../domain/dates";
+import { useToday } from "../../app/useToday";
+import { daysBetween } from "../../domain/dates";
 import { formatKilobytes } from "../../domain/money";
 import { useLocale, useT } from "../../i18n/useT";
 import { usePrefs } from "../../stores/prefs";
@@ -22,6 +23,7 @@ export function BackupSection() {
   const t = useT();
   const locale = useLocale();
   const lastBackup = usePrefs((state) => state.lastBackupDate);
+  const today = useToday();
   const exporter = useBackupExport();
   const importer = useBackupImport();
   const fileInput = useRef<HTMLInputElement>(null);
@@ -65,7 +67,7 @@ export function BackupSection() {
     return actions;
   };
 
-  const age = lastBackup === null ? null : daysBetween(lastBackup, todayISO());
+  const age = lastBackup === null ? null : daysBetween(lastBackup, today);
   const lastBackupText =
     age === null
       ? t("never")

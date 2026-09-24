@@ -1,6 +1,7 @@
 import { ChevronRight } from "lucide-react";
 import { useState } from "react";
 import { useNavigate, useSearchParams } from "react-router";
+import { useToday } from "../../app/useToday";
 import { AmountText } from "../../components/AmountText";
 import { DeltaPill } from "../../components/DeltaPill";
 import { MonthSwitcher } from "../../components/MonthSwitcher";
@@ -14,7 +15,6 @@ import {
   formatMonthName,
   isMonthKey,
   monthOf,
-  todayISO,
 } from "../../domain/dates";
 import { filtersToSearch } from "../../domain/filters";
 import { formatAmount } from "../../domain/money";
@@ -34,7 +34,7 @@ export function ChartsPage() {
   const locale = useLocale();
   const language = usePrefs((state) => state.language);
   const navigate = useNavigate();
-  const today = todayISO();
+  const today = useToday();
   const [searchParams, setSearchParams] = useSearchParams();
   // mese nell'indirizzo (#/charts?month=2026-08), validato; non oltre il mese corrente
   const requested = searchParams.get("month");

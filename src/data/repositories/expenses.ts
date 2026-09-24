@@ -155,6 +155,9 @@ export async function getExpense(id: string): Promise<Expense | undefined> {
   return db.expenses.get(id);
 }
 
+/** Sotto questa lunghezza la nota non si cerca: poche lettere darebbero suggerimenti a caso. */
+const SUGGESTION_MIN_LENGTH = 3;
+
 /**
  * Categoria dell'ultima spesa con la stessa nota (senza maiuscole né accenti), per
  * suggerirla nel foglio. Scorre le spese dalla più recente: la nota non è indicizzata.
@@ -163,7 +166,7 @@ export async function findCategoryForNote(
   note: string,
 ): Promise<string | null> {
   const wanted = normalizeSearch(note);
-  if (wanted.length < 2) return null;
+  if (wanted.length < SUGGESTION_MIN_LENGTH) return null;
   const match = await db.expenses
     .orderBy("[date+createdAt]")
     .reverse()

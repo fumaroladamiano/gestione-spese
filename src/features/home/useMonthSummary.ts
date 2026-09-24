@@ -1,5 +1,6 @@
 import { useLiveQuery } from "dexie-react-hooks";
 import { useMemo } from "react";
+import { useToday } from "../../app/useToday";
 import {
   getExpensesBetween,
   getRecentExpenses,
@@ -20,7 +21,6 @@ import {
   daysInMonth,
   monthOf,
   monthRange,
-  todayISO,
 } from "../../domain/dates";
 import type { Expense, MonthKey } from "../../domain/types";
 
@@ -45,7 +45,7 @@ const TOP_COUNT = 4;
 
 /** Tutto ciò che mostra la Home per il mese in corso (undefined durante il caricamento). */
 export function useMonthSummary(): MonthSummary | undefined {
-  const today = todayISO();
+  const today = useToday();
   const month = monthOf(today);
   const previousMonth = addMonths(month, -1);
 

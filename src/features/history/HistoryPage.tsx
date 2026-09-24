@@ -2,11 +2,12 @@ import { ReceiptText, SearchX } from "lucide-react";
 import { AnimatePresence, m } from "motion/react";
 import { useMemo, useState } from "react";
 import { useSearchParams } from "react-router";
+import { useToday } from "../../app/useToday";
 import { AmountText } from "../../components/AmountText";
 import { EmptyState } from "../../components/EmptyState";
 import { ExpenseRow } from "../../components/ExpenseRow";
 import { Page } from "../../components/Page";
-import { formatDayHeader, todayISO } from "../../domain/dates";
+import { formatDayHeader } from "../../domain/dates";
 import { filtersFromSearch } from "../../domain/filterParams";
 import {
   defaultFilters,
@@ -29,7 +30,7 @@ export function HistoryPage() {
   const language = usePrefs((state) => state.language);
   const openNewExpense = useUi((state) => state.openNewExpense);
   const rowProps = useExpenseRow();
-  const today = todayISO();
+  const today = useToday();
   const [searchParams, setSearchParams] = useSearchParams();
   // i filtri vivono nell'indirizzo: riaprendo l'app la vista filtrata viene ripristinata
   const filters = useMemo(

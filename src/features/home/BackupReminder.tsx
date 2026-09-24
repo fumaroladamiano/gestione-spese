@@ -1,6 +1,7 @@
 import { TriangleAlert } from "lucide-react";
 import { Link } from "react-router";
-import { daysBetween, todayISO } from "../../domain/dates";
+import { useToday } from "../../app/useToday";
+import { daysBetween } from "../../domain/dates";
 import { useT } from "../../i18n/useT";
 import { usePrefs } from "../../stores/prefs";
 import styles from "./BackupReminder.module.css";
@@ -17,7 +18,8 @@ type BackupReminderProps = {
 export function BackupReminder({ hasExpenses }: BackupReminderProps) {
   const t = useT();
   const lastBackup = usePrefs((state) => state.lastBackupDate);
-  const age = lastBackup === null ? null : daysBetween(lastBackup, todayISO());
+  const today = useToday();
+  const age = lastBackup === null ? null : daysBetween(lastBackup, today);
   if (!hasExpenses || (age !== null && age <= REMINDER_DAYS)) return null;
 
   return (

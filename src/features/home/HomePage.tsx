@@ -1,9 +1,10 @@
 import { Calendar, ReceiptText, TrendingUp } from "lucide-react";
+import { useToday } from "../../app/useToday";
 import { EmptyState } from "../../components/EmptyState";
 import { ExpenseRow } from "../../components/ExpenseRow";
 import { Page } from "../../components/Page";
 import { SectionHeader } from "../../components/SectionHeader";
-import { formatLongDate, todayISO } from "../../domain/dates";
+import { formatLongDate } from "../../domain/dates";
 import { useT } from "../../i18n/useT";
 import { usePrefs } from "../../stores/prefs";
 import { useUi } from "../../stores/ui";
@@ -25,9 +26,10 @@ export function HomePage() {
   const summary = useMonthSummary();
   const budget = useBudget() ?? null;
   const rowProps = useExpenseRow();
+  const today = useToday();
 
   return (
-    <Page title={t("homeTitle")} caption={formatLongDate(todayISO(), language)}>
+    <Page title={t("homeTitle")} caption={formatLongDate(today, language)}>
       <InstallBanner />
       {summary ? (
         <>

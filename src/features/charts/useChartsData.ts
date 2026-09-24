@@ -1,5 +1,6 @@
 import { useLiveQuery } from "dexie-react-hooks";
 import { useMemo } from "react";
+import { useToday } from "../../app/useToday";
 import { getExpensesBetween } from "../../data/repositories/expenses";
 import {
   averagePerDay,
@@ -11,7 +12,7 @@ import {
   type CategoryTotal,
   type MonthComparison,
 } from "../../domain/aggregations";
-import { addMonths, monthOf, monthRange, todayISO } from "../../domain/dates";
+import { addMonths, monthOf, monthRange } from "../../domain/dates";
 import type { ISODate, MonthKey } from "../../domain/types";
 
 export type ChartsData = {
@@ -28,6 +29,7 @@ export type ChartsData = {
 
 /** Dati dei grafici di un mese e confronto con il precedente (undefined in caricamento). */
 export function useChartsData(month: MonthKey): ChartsData | undefined {
+  const today = useToday();
   const previousMonth = addMonths(month, -1);
   const expenses = useLiveQuery(
     () =>
@@ -40,7 +42,6 @@ export function useChartsData(month: MonthKey): ChartsData | undefined {
 
   return useMemo(() => {
     if (!expenses) return undefined;
-    const today = todayISO();
     const current = expenses.filter(
       (expense) => monthOf(expense.date) === month,
     );
@@ -64,5 +65,5 @@ export function useChartsData(month: MonthKey): ChartsData | undefined {
       daily: dailyTotals(current, month),
       averageCents: averagePerDay(totalCents, elapsedDays(month, today)),
     };
-  }, [expenses, month, previousMonth]);
+  }, [expenses, month, previousMonth, today]);
 }

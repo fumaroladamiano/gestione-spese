@@ -1,6 +1,7 @@
 import { useCallback, useMemo } from "react";
+import { useToday } from "../../app/useToday";
 import { FALLBACK_CATEGORY_ID } from "../../domain/categories";
-import { formatRelativeDay, todayISO } from "../../domain/dates";
+import { formatRelativeDay } from "../../domain/dates";
 import { formatAmount } from "../../domain/money";
 import type { Category, Expense } from "../../domain/types";
 import {
@@ -29,6 +30,7 @@ export function useExpenseRow() {
   const locale = useLocale();
   const language = usePrefs((state) => state.language);
   const categories = useCategoryMap();
+  const today = useToday();
   const openEditExpense = useUi((state) => state.openEditExpense);
   const deleteWithUndo = useDeleteExpense();
 
@@ -44,7 +46,7 @@ export function useExpenseRow() {
         categories.get(FALLBACK_CATEGORY_ID);
       const categoryName = category ? categoryDisplayName(category, t) : "";
       const method = paymentMethodName(expense.paymentMethod, t);
-      const day = formatRelativeDay(expense.date, todayISO(), language, {
+      const day = formatRelativeDay(expense.date, today, language, {
         today: t("today"),
         yesterday: t("yesterday"),
       });
@@ -78,6 +80,15 @@ export function useExpenseRow() {
         },
       };
     },
-    [categories, t, locale, language, labels, openEditExpense, deleteWithUndo],
+    [
+      categories,
+      t,
+      locale,
+      language,
+      today,
+      labels,
+      openEditExpense,
+      deleteWithUndo,
+    ],
   );
 }

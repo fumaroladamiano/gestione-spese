@@ -189,6 +189,11 @@ describe("repository delle spese", () => {
     );
     expect(await findCategoryForNote("CAFFÈ")).toBe("ristoranti");
     expect(await findCategoryForNote("benzina")).toBeNull();
-    expect(await findCategoryForNote("c")).toBeNull();
+  });
+
+  it("cerca il suggerimento solo da 3 caratteri in su", async () => {
+    await addExpense({ ...input, categoryId: "spesa", note: "Bar" }, NOW);
+    expect(await findCategoryForNote("ba")).toBeNull();
+    expect(await findCategoryForNote("bar")).toBe("spesa");
   });
 });

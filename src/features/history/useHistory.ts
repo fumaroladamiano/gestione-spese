@@ -1,11 +1,12 @@
 import { useLiveQuery } from "dexie-react-hooks";
 import { useMemo } from "react";
+import { useToday } from "../../app/useToday";
 import {
   getExpensesFiltered,
   getOldestExpenseDate,
 } from "../../data/repositories/expenses";
 import { groupByDay, sumCents, type DayGroup } from "../../domain/aggregations";
-import { monthOf, monthRange, todayISO } from "../../domain/dates";
+import { monthOf, monthRange } from "../../domain/dates";
 import {
   applyFilters,
   filterDateRange,
@@ -89,7 +90,8 @@ export function useFilterPreview(
 
 /** Mesi raggiungibili nei selettori: dal mese della prima spesa a quello corrente. */
 export function useMonthBounds(): { min: MonthKey; max: MonthKey } {
-  const current = monthOf(todayISO());
+  const today = useToday();
+  const current = monthOf(today);
   const oldest = useLiveQuery(getOldestExpenseDate, []);
   const min = oldest ? monthOf(oldest) : current;
   return { min: min < current ? min : current, max: current };
