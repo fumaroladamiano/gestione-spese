@@ -109,13 +109,27 @@ export async function updateCategory(
   });
 }
 
-/** Archivia: la categoria sparisce da inserimento e filtri ma resta nello storico. */
-export async function archiveCategory(id: string): Promise<void> {
+/**
+ * Archivia: la categoria sparisce da inserimento e filtri ma resta nello storico.
+ * Le sue regole ricorrenti si sospendono, così non genera più spese in una categoria
+ * archiviata; riattivarle è una scelta esplicita nella pagina Spese ricorrenti.
+ */
+export async function archiveCategory(
+  id: string,
+  now: Date = new Date(),
+): Promise<void> {
   if (id === FALLBACK_CATEGORY_ID) throw new DataError("protectedCategory");
-  await db.transaction("rw", db.categories, async () => {
+  await db.transaction("rw", db.categories, db.recurringRules, async () => {
     const category = await db.categories.get(id);
     if (!category) throw new DataError("categoryNotFound");
     await db.categories.put({ ...category, archived: true });
+    const timestamp = now.toISOString();
+    await db.recurringRules
+      .filter((rule) => rule.active && rule.categoryId === id)
+      .modify((rule) => {
+        rule.active = false;
+        rule.updatedAt = timestamp;
+      });
   });
 }
 

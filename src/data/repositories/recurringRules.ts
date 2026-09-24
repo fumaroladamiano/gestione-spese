@@ -100,6 +100,15 @@ export async function updateRule(
   });
 }
 
+/** Regole attive di una categoria: servono per avvisare prima di archiviarla. */
+export async function countActiveRulesInCategory(
+  categoryId: string,
+): Promise<number> {
+  const rules = await db.recurringRules.toArray();
+  return rules.filter((rule) => rule.active && rule.categoryId === categoryId)
+    .length;
+}
+
 /** Sospende o riattiva una regola (riattivando non si recuperano i mesi saltati). */
 export async function setRuleActive(
   id: string,

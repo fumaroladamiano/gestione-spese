@@ -12,6 +12,7 @@ import {
 } from "../../domain/categories";
 import { LIMITS, type Category } from "../../domain/types";
 import { useT } from "../../i18n/useT";
+import { useActiveRuleCount } from "../recurring/useRecurringRules";
 import styles from "./CategorySheet.module.css";
 import { useCategoryActions } from "./useCategoryActions";
 import { useCategoryName } from "./useCategories";
@@ -36,6 +37,7 @@ export function CategorySheet({
   const t = useT();
   const nameOf = useCategoryName();
   const actions = useCategoryActions();
+  const activeRules = useActiveRuleCount(category?.id ?? null);
   const [name, setName] = useState(() => (category ? nameOf(category) : ""));
   const [icon, setIcon] = useState(() => category?.icon ?? "gift");
   const [color, setColor] = useState(() => ({
@@ -105,6 +107,11 @@ export function CategorySheet({
         </button>
         {expenseCount > 0 ? (
           <p className={styles.note}>{t("keepExpenses", expenseCount)}</p>
+        ) : null}
+        {activeRules > 0 ? (
+          <p className={styles.note}>
+            {t("rulesSuspendedByArchive", activeRules)}
+          </p>
         ) : null}
       </>
     );

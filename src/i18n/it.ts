@@ -225,6 +225,10 @@ export const it = {
     `L'importo passa da ${previous} a ${next}.`,
   applyAmountFuture: "Solo dalle prossime",
   applyAmountAll: "Anche alle spese già create",
+  rulesSuspendedByArchive: (n: number) =>
+    n === 1
+      ? "La sua spesa ricorrente verrà sospesa."
+      : `Le sue ${String(n)} spese ricorrenti verranno sospese.`,
 
   // dati e backup
   dataAndBackup: "Dati e backup",

@@ -212,6 +212,10 @@ export const en = {
     `The amount goes from ${previous} to ${next}.`,
   applyAmountFuture: "From the next ones only",
   applyAmountAll: "Also expenses already created",
+  rulesSuspendedByArchive: (n: number) =>
+    n === 1
+      ? "Its recurring expense will be paused."
+      : `Its ${String(n)} recurring expenses will be paused.`,
 
   dataAndBackup: "Data & backup",
   exportJson: "Export backup (JSON)",

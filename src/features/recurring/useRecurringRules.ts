@@ -1,6 +1,7 @@
 import { useLiveQuery } from "dexie-react-hooks";
 import { useMemo } from "react";
 import {
+  countActiveRulesInCategory,
   deleteRule,
   getRecurringRules,
   setRuleActive,
@@ -15,6 +16,18 @@ import { useUi } from "../../stores/ui";
 /** Regole ricorrenti aggiornate in tempo reale (undefined in caricamento). */
 export function useRecurringRules(): RecurringRule[] | undefined {
   return useLiveQuery(getRecurringRules, []);
+}
+
+/** Quante regole attive userebbero questa categoria (avviso prima di archiviarla). */
+export function useActiveRuleCount(categoryId: string | null): number {
+  const count = useLiveQuery(
+    () =>
+      categoryId === null
+        ? Promise.resolve(0)
+        : countActiveRulesInCategory(categoryId),
+    [categoryId],
+  );
+  return count ?? 0;
 }
 
 /** Modifica, sospendi, riattiva ed elimina, con i toast di conferma. */

@@ -1,8 +1,10 @@
 import { beforeEach, describe, expect, it } from "vitest";
 import type { ExpenseInput } from "../../domain/types";
 import { resetDatabase, testDb } from "../testing";
+import { archiveCategory } from "./categories";
 import {
   addRecurringExpense,
+  countActiveRulesInCategory,
   deleteRule,
   generateDueExpenses,
   getRecurringRules,
@@ -109,6 +111,15 @@ describe("regole ricorrenti nel database", () => {
     expect(updated).toBe(4);
     const amounts = (await testDb.expenses.toArray()).map((e) => e.amountCents);
     expect(amounts).toEqual([1599, 1599, 1599, 1599]);
+  });
+
+  it("archiviando la categoria sospende le sue regole", async () => {
+    await addRecurringExpense(netflix, new Date(2026, 5, 5, 20));
+    expect(await countActiveRulesInCategory("abbonamenti")).toBe(1);
+
+    await archiveCategory("abbonamenti", new Date(2026, 8, 20, 9));
+    expect(await countActiveRulesInCategory("abbonamenti")).toBe(0);
+    expect(await generateDueExpenses(new Date(2026, 8, 16, 9))).toBe(0);
   });
 
   it("eliminare la regola lascia le spese senza collegamento", async () => {
