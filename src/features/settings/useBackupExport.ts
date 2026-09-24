@@ -9,6 +9,7 @@ import {
   categoryDisplayName,
   paymentMethodName,
 } from "../../i18n/categoryNames";
+import { errorTextKey } from "../../i18n/errorMessages";
 import { useT } from "../../i18n/useT";
 import { usePrefs } from "../../stores/prefs";
 import { useUi } from "../../stores/ui";
@@ -119,6 +120,20 @@ export function useBackupExport() {
     [markDone, showToast, t],
   );
 
+  // la lettura dei dati può fallire (database non disponibile): l'errore diventa un toast
+  const build = useCallback(
+    async (kind: ExportKind): Promise<ExportFile | null> => {
+      try {
+        return await buildExportFile(kind);
+      } catch (error) {
+        console.error(error);
+        showToast({ message: t(errorTextKey(error)) });
+        return null;
+      }
+    },
+    [showToast, t],
+  );
+
   const copy = useCallback(
     async (exported: ExportFile) => {
       try {
@@ -134,13 +149,7 @@ export function useBackupExport() {
   );
 
   return useMemo(
-    () => ({
-      build: buildExportFile,
-      canShare: canShareFile,
-      share,
-      download,
-      copy,
-    }),
-    [share, download, copy],
+    () => ({ build, canShare: canShareFile, share, download, copy }),
+    [build, share, download, copy],
   );
 }

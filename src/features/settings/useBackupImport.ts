@@ -19,14 +19,21 @@ export function useBackupImport() {
   /** Valida il file: null (con toast di errore) se non è un backup di Spese. */
   const read = useCallback(
     async (file: File): Promise<PendingImport | null> => {
-      // la validazione (zod) si carica solo ora: non pesa sull'avvio dell'app
-      const { parseBackup } = await import("../../domain/backupSchema");
-      const data = parseBackup(await file.text(), await getCategoryIds());
-      if (!data) {
-        showToast({ message: t("invalidBackup") });
+      try {
+        // la validazione (zod) si carica solo ora: non pesa sull'avvio dell'app
+        const { parseBackup } = await import("../../domain/backupSchema");
+        const data = parseBackup(await file.text(), await getCategoryIds());
+        if (!data) {
+          showToast({ message: t("invalidBackup") });
+          return null;
+        }
+        return { fileName: file.name, data };
+      } catch (error) {
+        // file illeggibile (permessi, iCloud non scaricato) o database non disponibile
+        console.error(error);
+        showToast({ message: t(errorTextKey(error)) });
         return null;
       }
-      return { fileName: file.name, data };
     },
     [showToast, t],
   );

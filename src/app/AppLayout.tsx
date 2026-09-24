@@ -23,7 +23,9 @@ export function AppLayout() {
 
   // spese già inserite in Safari: prima di installare conviene esportarle (R2)
   const exportBeforeInstall = async () => {
+    // build() mostra già il toast se la lettura dei dati fallisce
     const exported = await exporter.build("json");
+    if (!exported) return;
     if (exporter.canShare(exported.file)) await exporter.share(exported);
     else exporter.download(exported);
   };
