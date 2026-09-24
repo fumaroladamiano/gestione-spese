@@ -117,6 +117,7 @@ flowchart TD
 | Impostazioni | Tab | Route `#/settings` |
 | Categorie | Pagina con pulsante "‹ Impostazioni" | Route `#/settings/categories` |
 | Spese ricorrenti (fase 4) | Pagina con pulsante "‹ Impostazioni" | Route `#/settings/recurring` |
+| Modifica regola ricorrente (fase 4) | Foglio dal basso | Componente `Sheet` aperto toccando una regola |
 | Nuova / modifica spesa | Foglio dal basso a tutta altezza | Componente `Sheet` aperto da stato globale |
 | Filtri | Foglio dal basso | Componente `Sheet` |
 | Nuova / modifica categoria | Foglio dal basso | Componente `Sheet` |
@@ -191,11 +192,11 @@ flowchart TD
 - Foglio dal basso a tutta altezza (la schermata sotto si rimpicciolisce, come su iOS) con barra: `Annulla` · titolo · `Salva` (grigio finché mancano importo o categoria).
 - **Importo grande** (font rounded, cifre tabellari): mentre si digita, le cifre decimali non ancora inserite sono in grigio (`12,5` → `12,5`**`0`** `€`).
 - **Griglia categorie** a 4 colonne (icona + nome; con le 9 predefinite 3 righe, "Altro" nell'ultima); la selezionata si riempie del suo colore.
-- **Chip dettagli** (tutti opzionali, un tap ciascuno):
+- Campo **Nota** a una riga (max 40 caratteri, testo a 17 px per evitare lo zoom automatico di Safari), subito sotto la griglia delle categorie: si scrive con la stessa mano che ha appena scelto la categoria, e sotto compare l'eventuale categoria suggerita.
+- **Chip dettagli** sotto la nota (tutti opzionali, un tap ciascuno):
   - `Oggi` → mostra `Oggi` / `Ieri` / selettore data nativo di iOS (`<input type="date">`);
   - `Carta` → cicla Carta → Contanti → Altro (predefinito impostabile);
   - `Una tantum` ↔ `Ogni mese` (ricorrente mensile, dalla fase 4: crea una regola, [§ 3.6](#36-spese-ricorrenti)).
-- Campo **Nota** a una riga (max 40 caratteri, testo a 17 px per evitare lo zoom automatico di Safari).
 - **Tastierino numerico integrato** (non la tastiera di sistema): cifre, virgola, cancella. Massimo 2 decimali e 6 cifre intere.
 - In modalità **Modifica**: stessi campi precompilati + pulsante rosso "Elimina spesa" in fondo.
 
@@ -221,8 +222,8 @@ flowchart TD
 │    (…)                                      │
 │   Altro                                     │
 ├─────────────────────────────────────────────┤
-│ [▦ Oggi]  [▭ Carta]  [↻ Una tantum]         │
 │ [ Nota (es. Esselunga, benzina)       ]     │
+│ [▦ Oggi]  [▭ Carta]  [↻ Una tantum]         │
 ├─────────────────────────────────────────────┤
 │         1            2            3         │
 │         4            5            6         │
@@ -527,7 +528,7 @@ flowchart TD
 | 1 | Tocca **+** nella tab bar (da qualsiasi schermata) | **1** | Si apre il foglio "Nuova spesa": tastierino pronto, data = oggi, metodo = predefinito |
 | 2 | Digita `12,50` sul tastierino | – | L'importo appare in grande, le cifre mancanti in grigio |
 | 3 | Tocca **Ristoranti** | **2** | L'icona rimbalza e si colora, `Salva` si attiva |
-| 4 | *(opzionale)* Tocca chip data / metodo / ricorrente, scrive una nota | +0…4 | Chip aggiornati; la data mostra Oggi / Ieri / selettore data |
+| 4 | *(opzionale)* Scrive una nota, poi tocca chip data / metodo / ricorrente | +0…4 | Nota subito sotto le categorie (con categoria suggerita); chip aggiornati, la data mostra Oggi / Ieri / selettore data |
 | 5 | Tocca **Salva** | **3** | Il foglio si chiude, toast di conferma, dati aggiornati ovunque |
 
 ```mermaid
@@ -537,7 +538,7 @@ flowchart TD
     C -->|"tap 2: categoria"| E["Categoria evidenziata<br/>Salva attivo"]
     E --> F{"Dettagli opzionali?"}
     F -->|no| G["tap 3: Salva"]
-    F -->|sì| H["Data · Metodo · Ricorrente · Nota"]
+    F -->|sì| H["Nota · Data · Metodo · Ricorrente"]
     H --> G
     G --> V{"Importo > 0<br/>e categoria scelta?"}
     V -->|no| X["Shake sull'elemento mancante"] --> C
@@ -1283,8 +1284,11 @@ flowchart TD
 - **Idempotente**: `lastGeneratedMonth` e la transazione unica impediscono duplicati anche riaprendo l'app più volte o con due schede aperte.
 - **Mesi arretrati**: se l'app non viene aperta per due mesi, al primo avvio crea entrambe le spese.
 - **Modifica ed eliminazione** di una spesa generata riguardano solo quella spesa: la regola non cambia e la spesa non viene ricreata.
-- **Gestione** in Impostazioni → Spese ricorrenti: elenco delle regole con sospendi/riattiva ed elimina (le spese già create restano). Riattivando non si recuperano i mesi saltati.
+- **Gestione** in Impostazioni → Spese ricorrenti: toccando una regola si apre il foglio "Modifica regola" con importo, nota, giorno del mese e metodo, più sospendi/riattiva ed elimina (le spese già create restano). Riattivando non si recuperano i mesi saltati.
+- **Categoria della regola**: non si cambia dal foglio (per cambiarla si elimina la regola e la si ricrea).
+- **Importo cambiato**: alla conferma si sceglie se vale *solo dalle prossime* occorrenze oppure *anche per le spese già create* dalla regola (in quel caso si aggiornano tutte, anche quelle dei mesi chiusi).
 - Nel foglio di una spesa ricorrente, passare da "Ogni mese" a "Una tantum" sospende la regola.
+- **Categoria archiviata**: archiviare una categoria sospende le sue regole (il foglio categoria lo dice prima), così non genera più spese in una categoria nascosta; riattivarle è una scelta esplicita.
 
 ### 3.7 Backup ed esportazione
 
@@ -1399,7 +1403,7 @@ gestione-spese/
 │   └── icons/                      icon-192.png, icon-512.png, icon-512-maskable.png
 ├── src/
 │   ├── main.tsx                    avvio, eruda solo in sviluppo
-│   ├── app/                        router.tsx, AppLayout.tsx, TabBar.tsx, useStartup.ts (seed, ricorrenti, persist)
+│   ├── app/                        router.tsx, AppLayout.tsx, TabBar.tsx, startup.ts (seed, ricorrenti, persist), useToday.ts
 │   ├── features/
 │   │   ├── home/                   HomePage, MonthHeroCard, StatTile, TopCategories, useMonthSummary
 │   │   ├── expense/                ExpenseSheet, AmountDisplay, AmountKeypad, CategoryPicker, useExpenseDraft
@@ -1407,7 +1411,7 @@ gestione-spese/
 │   │   ├── charts/                 ChartsPage, DonutChart, DailyBarChart, MonthSummaryCard, useChartsData
 │   │   ├── settings/               SettingsPage, BackupSection, AppStatusSection, useBackup
 │   │   ├── categories/             CategoriesPage, CategorySheet, useCategories
-│   │   ├── recurring/              RecurringPage, useRecurringRules (fase 4)
+│   │   ├── recurring/              RecurringPage, RuleSheet, RuleFields, useRecurringRules (fase 4)
 │   │   └── install/                InstallBanner, InstallGuide, useStandalone
 │   ├── components/                 Sheet, ActionSheet, Chip, AmountText, CategoryIcon, CategoryGlyph.ts,
 │   │                               ExpenseRow, DaySectionHeader, ListGroup, SegmentedControl, Toast, EmptyState…
