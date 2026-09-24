@@ -1,9 +1,11 @@
 import { describe, expect, it } from "vitest";
 import {
   dueDates,
+  isValidDayOfMonth,
   occurrenceDate,
   resumedRule,
   ruleFromExpense,
+  ruleWithChanges,
 } from "./recurring";
 import type { RecurringRule } from "./types";
 
@@ -84,6 +86,37 @@ describe("spese ricorrenti", () => {
         "2026-09-16",
       ),
     ).toEqual([]);
+  });
+
+  it("modifica importo, nota, giorno e metodo senza toccare i mesi già generati", () => {
+    const changed = ruleWithChanges(
+      rule(),
+      {
+        amountCents: 1599,
+        note: "  Netflix famiglia  ",
+        paymentMethod: "contanti",
+        dayOfMonth: 12,
+      },
+      new Date("2026-09-20T09:00:00.000Z"),
+    );
+    expect(changed).toMatchObject({
+      id: "r1",
+      categoryId: "abbonamenti",
+      amountCents: 1599,
+      note: "Netflix famiglia",
+      paymentMethod: "contanti",
+      dayOfMonth: 12,
+      lastGeneratedMonth: "2026-08",
+      updatedAt: "2026-09-20T09:00:00.000Z",
+    });
+  });
+
+  it("accetta come giorno solo un intero da 1 a 31", () => {
+    expect(isValidDayOfMonth(1)).toBe(true);
+    expect(isValidDayOfMonth(31)).toBe(true);
+    expect(isValidDayOfMonth(0)).toBe(false);
+    expect(isValidDayOfMonth(32)).toBe(false);
+    expect(isValidDayOfMonth(5.5)).toBe(false);
   });
 
   it("riattivando non recupera i mesi saltati", () => {

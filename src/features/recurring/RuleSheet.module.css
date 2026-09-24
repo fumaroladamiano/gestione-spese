@@ -1,0 +1,92 @@
+.category {
+  padding: 0 var(--space-lg);
+  font-size: var(--text-footnote);
+  line-height: 1.4;
+  color: var(--color-secondary-label);
+  text-align: center;
+}
+
+.note {
+  display: block;
+  width: calc(100% - 2 * var(--space-lg));
+  height: 48px;
+  margin: var(--space-lg) var(--space-lg) 0;
+  padding: 0 var(--space-lg);
+  border: 0;
+  border-radius: var(--radius-md);
+  background: var(--color-surface);
+  box-shadow: var(--shadow-card);
+  color: var(--color-label);
+  font-size: var(--text-body);
+  outline: none;
+  transition: box-shadow 0.2s;
+}
+
+.note::placeholder {
+  color: var(--color-tertiary-label);
+}
+
+.note:focus {
+  box-shadow: 0 0 0 2px var(--color-tint);
+}
+
+.chips {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--space-sm);
+  padding: var(--space-lg) var(--space-lg) 0;
+}
+
+/* il giorno usa il selettore nativo di iOS: una pillola come i chip accanto */
+.day {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-xs);
+  height: var(--size-chip);
+  padding: 0 var(--space-md);
+  border-radius: var(--radius-full);
+  background: var(--color-surface);
+  box-shadow: var(--shadow-card);
+  color: var(--color-label);
+}
+
+/* appearance: none perché Safari disegna il proprio fondo grigio dentro la pillola */
+.select {
+  appearance: none;
+  padding-right: var(--space-sm);
+  border: 0;
+  background: none;
+  color: inherit;
+  font: inherit;
+  font-size: var(--text-body);
+  outline: none;
+}
+
+.caret {
+  margin-left: calc(-1 * var(--space-xs));
+  color: var(--color-tertiary-label);
+}
+
+.footer {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: var(--space-xl) var(--space-lg) 0;
+}
+
+.action,
+.danger {
+  min-height: var(--size-touch);
+  padding: 0 var(--space-lg);
+  font-size: var(--text-body);
+  font-weight: 500;
+}
+
+.action {
+  color: var(--color-tint);
+}
+
+.danger {
+  color: var(--color-danger);
+}

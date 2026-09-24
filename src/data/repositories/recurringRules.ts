@@ -1,7 +1,21 @@
 import { todayISO } from "../../domain/dates";
 import { newId } from "../../domain/ids";
-import { dueDates, resumedRule, ruleFromExpense } from "../../domain/recurring";
-import type { Expense, ExpenseInput, RecurringRule } from "../../domain/types";
+import { isValidAmount } from "../../domain/money";
+import {
+  dueDates,
+  isValidDayOfMonth,
+  resumedRule,
+  ruleFromExpense,
+  ruleWithChanges,
+  type RuleChanges,
+} from "../../domain/recurring";
+import {
+  LIMITS,
+  isPaymentMethod,
+  type Expense,
+  type ExpenseInput,
+  type RecurringRule,
+} from "../../domain/types";
 import { db } from "../db";
 import { DataError } from "../errors";
 import { addExpense } from "./expenses";
@@ -47,6 +61,43 @@ export async function addRecurringExpense(
       return { ...expense, recurringRuleId: rule.id };
     },
   );
+}
+
+/**
+ * Salva le modifiche fatte nel foglio della regola. Con `applyToExisting` il nuovo importo
+ * si applica anche alle spese già generate dalla regola (compresi i mesi chiusi); nota,
+ * giorno e metodo valgono solo per le occorrenze future. Restituisce le spese aggiornate.
+ */
+export async function updateRule(
+  id: string,
+  changes: RuleChanges,
+  applyToExisting = false,
+  now: Date = new Date(),
+): Promise<number> {
+  if (!isValidAmount(changes.amountCents)) throw new DataError("invalidAmount");
+  if (!isValidDayOfMonth(changes.dayOfMonth)) {
+    throw new DataError("invalidDayOfMonth");
+  }
+  if (!isPaymentMethod(changes.paymentMethod)) {
+    throw new DataError("invalidPaymentMethod");
+  }
+  if (changes.note.trim().length > LIMITS.noteLength) {
+    throw new DataError("invalidNote");
+  }
+  return db.transaction("rw", db.expenses, db.recurringRules, async () => {
+    const rule = await db.recurringRules.get(id);
+    if (!rule) throw new DataError("ruleNotFound");
+    await db.recurringRules.put(ruleWithChanges(rule, changes, now));
+    if (!applyToExisting || changes.amountCents === rule.amountCents) return 0;
+    const timestamp = now.toISOString();
+    return db.expenses
+      .where("recurringRuleId")
+      .equals(id)
+      .modify((expense) => {
+        expense.amountCents = changes.amountCents;
+        expense.updatedAt = timestamp;
+      });
+  });
 }
 
 /** Sospende o riattiva una regola (riattivando non si recuperano i mesi saltati). */

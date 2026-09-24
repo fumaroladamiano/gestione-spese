@@ -8,6 +8,8 @@ export type DataErrorCode =
   | "unknownCategory"
   | "archivedCategory"
   | "expenseNotFound"
+  | "ruleNotFound"
+  | "invalidDayOfMonth"
   | "categoryNotFound"
   | "invalidCategoryName"
   | "duplicateCategoryName"

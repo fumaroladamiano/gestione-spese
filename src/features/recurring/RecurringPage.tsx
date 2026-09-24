@@ -1,6 +1,5 @@
 import { Repeat } from "lucide-react";
 import { useState } from "react";
-import { ActionSheet } from "../../components/ActionSheet";
 import { CategoryIcon } from "../../components/CategoryIcon";
 import { classNames } from "../../components/classNames";
 import { EmptyState } from "../../components/EmptyState";
@@ -11,21 +10,25 @@ import type { RecurringRule } from "../../domain/types";
 import { useLocale, useT } from "../../i18n/useT";
 import { useCategoryMap, useCategoryName } from "../categories/useCategories";
 import styles from "./RecurringPage.module.css";
-import { useRecurringRules, useRuleActions } from "./useRecurringRules";
+import { RuleSheet } from "./RuleSheet";
+import { useRecurringRules } from "./useRecurringRules";
 
-/** Impostazioni → Spese ricorrenti: elenco delle regole con sospendi, riattiva, elimina. */
+/** Impostazioni → Spese ricorrenti: elenco delle regole, toccarne una la modifica. */
 export function RecurringPage() {
   const t = useT();
   const locale = useLocale();
   const rules = useRecurringRules();
   const categories = useCategoryMap();
   const nameOf = useCategoryName();
-  const actions = useRuleActions();
-  const [selected, setSelected] = useState<RecurringRule | null>(null);
+  const [sheet, setSheet] = useState<{
+    open: boolean;
+    session: number;
+    rule: RecurringRule | null;
+  }>({ open: false, session: 0, rule: null });
 
-  const titleOf = (rule: RecurringRule) => {
+  const categoryNameOf = (rule: RecurringRule) => {
     const category = categories.get(rule.categoryId);
-    return rule.note || (category ? nameOf(category) : "");
+    return category ? nameOf(category) : "";
   };
 
   return (
@@ -57,14 +60,20 @@ export function RecurringPage() {
                   !rule.active && styles.paused,
                 )}
                 onClick={() => {
-                  setSelected(rule);
+                  setSheet((current) => ({
+                    open: true,
+                    session: current.session + 1,
+                    rule,
+                  }));
                 }}
               >
                 {category ? (
                   <CategoryIcon category={category} size={40} />
                 ) : null}
                 <span className={styles.main}>
-                  <span className={styles.title}>{titleOf(rule)}</span>
+                  <span className={styles.title}>
+                    {rule.note || categoryNameOf(rule)}
+                  </span>
                   <span className={styles.subtitle}>
                     {t(
                       "ruleSummary",
@@ -87,36 +96,17 @@ export function RecurringPage() {
         </ListGroup>
       ) : null}
 
-      <ActionSheet
-        open={selected !== null}
-        title={selected ? titleOf(selected) : ""}
-        message={t("recurringFooter")}
-        actions={
-          selected
-            ? [
-                {
-                  label: selected.active ? t("suspendRule") : t("resumeRule"),
-                  onSelect: () => {
-                    setSelected(null);
-                    void actions.toggle(selected);
-                  },
-                },
-                {
-                  label: t("deleteRule"),
-                  destructive: true,
-                  onSelect: () => {
-                    setSelected(null);
-                    void actions.remove(selected);
-                  },
-                },
-              ]
-            : []
-        }
-        cancelLabel={t("cancel")}
-        onCancel={() => {
-          setSelected(null);
-        }}
-      />
+      {sheet.rule ? (
+        <RuleSheet
+          key={sheet.session}
+          open={sheet.open}
+          rule={sheet.rule}
+          categoryName={categoryNameOf(sheet.rule)}
+          onClose={() => {
+            setSheet((current) => ({ ...current, open: false }));
+          }}
+        />
+      ) : null}
     </Page>
   );
 }

@@ -210,6 +210,21 @@ export const it = {
   ruleSuspendedToast: "Spesa ricorrente sospesa",
   ruleResumedToast: "Spesa ricorrente riattivata",
   ruleDeletedToast: "Regola eliminata",
+  editRule: "Modifica regola",
+  dayOfMonth: "Giorno del mese",
+  dayOfMonthValue: (day: number) => `Giorno ${String(day)}`,
+  ruleCategoryFixed: (category: string) =>
+    `Categoria: ${category} (per cambiarla, elimina la regola e creala di nuovo)`,
+  ruleUpdatedToast: "Regola aggiornata",
+  ruleExpensesUpdatedToast: (n: number) =>
+    n === 1
+      ? "Regola aggiornata e 1 spesa modificata"
+      : `Regola aggiornata e ${String(n)} spese modificate`,
+  applyAmountTitle: "Nuovo importo",
+  applyAmountMessage: (previous: string, next: string) =>
+    `L'importo passa da ${previous} a ${next}.`,
+  applyAmountFuture: "Solo dalle prossime",
+  applyAmountAll: "Anche alle spese già create",
 
   // dati e backup
   dataAndBackup: "Dati e backup",

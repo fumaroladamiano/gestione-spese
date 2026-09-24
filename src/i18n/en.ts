@@ -197,6 +197,21 @@ export const en = {
   ruleSuspendedToast: "Recurring expense paused",
   ruleResumedToast: "Recurring expense resumed",
   ruleDeletedToast: "Rule deleted",
+  editRule: "Edit rule",
+  dayOfMonth: "Day of the month",
+  dayOfMonthValue: (day: number) => `Day ${String(day)}`,
+  ruleCategoryFixed: (category: string) =>
+    `Category: ${category} (to change it, delete the rule and create it again)`,
+  ruleUpdatedToast: "Rule updated",
+  ruleExpensesUpdatedToast: (n: number) =>
+    n === 1
+      ? "Rule updated and 1 expense changed"
+      : `Rule updated and ${String(n)} expenses changed`,
+  applyAmountTitle: "New amount",
+  applyAmountMessage: (previous: string, next: string) =>
+    `The amount goes from ${previous} to ${next}.`,
+  applyAmountFuture: "From the next ones only",
+  applyAmountAll: "Also expenses already created",
 
   dataAndBackup: "Data & backup",
   exportJson: "Export backup (JSON)",

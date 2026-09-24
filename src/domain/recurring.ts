@@ -52,6 +52,31 @@ export function ruleFromExpense(
   };
 }
 
+/** Campi di una regola modificabili dal foglio (la categoria resta quella di origine). */
+export type RuleChanges = Pick<
+  RecurringRule,
+  "amountCents" | "note" | "paymentMethod" | "dayOfMonth"
+>;
+
+/** Giorno del mese valido per una regola: da 1 a 31 (nei mesi corti diventa l'ultimo giorno). */
+export function isValidDayOfMonth(day: number): boolean {
+  return Number.isInteger(day) && day >= 1 && day <= 31;
+}
+
+/** Regola con i campi cambiati nel foglio; lastGeneratedMonth non si tocca. */
+export function ruleWithChanges(
+  rule: RecurringRule,
+  changes: RuleChanges,
+  now: Date,
+): RecurringRule {
+  return {
+    ...rule,
+    ...changes,
+    note: changes.note.trim(),
+    updatedAt: now.toISOString(),
+  };
+}
+
 /**
  * Riattiva una regola sospesa senza recuperare i mesi saltati:
  * riparte dal mese corrente (se il giorno è già passato la spesa di questo mese viene creata).

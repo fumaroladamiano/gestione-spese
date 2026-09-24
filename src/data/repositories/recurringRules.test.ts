@@ -7,6 +7,7 @@ import {
   generateDueExpenses,
   getRecurringRules,
   setRuleActive,
+  updateRule,
 } from "./recurringRules";
 
 const netflix: ExpenseInput = {
@@ -62,6 +63,52 @@ describe("regole ricorrenti nel database", () => {
 
     await setRuleActive(rule.id, true, new Date(2026, 8, 16));
     expect(await generateDueExpenses(new Date(2026, 8, 16))).toBe(1);
+  });
+
+  it("modifica la regola senza toccare le spese già create", async () => {
+    await addRecurringExpense(netflix, new Date(2026, 5, 5, 20));
+    await generateDueExpenses(new Date(2026, 8, 16, 9));
+    const [rule] = await getRecurringRules();
+    if (!rule) throw new Error("regola mancante");
+
+    const updated = await updateRule(
+      rule.id,
+      {
+        amountCents: 1599,
+        note: "Netflix famiglia",
+        paymentMethod: "contanti",
+        dayOfMonth: 12,
+      },
+      false,
+      new Date(2026, 8, 20, 9),
+    );
+    expect(updated).toBe(0);
+    const [saved] = await getRecurringRules();
+    expect(saved).toMatchObject({ amountCents: 1599, dayOfMonth: 12 });
+    const amounts = (await testDb.expenses.toArray()).map((e) => e.amountCents);
+    expect(amounts).toEqual([1299, 1299, 1299, 1299]);
+  });
+
+  it("applicando l'importo anche alle spese vecchie le aggiorna tutte", async () => {
+    await addRecurringExpense(netflix, new Date(2026, 5, 5, 20));
+    await generateDueExpenses(new Date(2026, 8, 16, 9));
+    const [rule] = await getRecurringRules();
+    if (!rule) throw new Error("regola mancante");
+
+    const updated = await updateRule(
+      rule.id,
+      {
+        amountCents: 1599,
+        note: rule.note,
+        paymentMethod: rule.paymentMethod,
+        dayOfMonth: rule.dayOfMonth,
+      },
+      true,
+      new Date(2026, 8, 20, 9),
+    );
+    expect(updated).toBe(4);
+    const amounts = (await testDb.expenses.toArray()).map((e) => e.amountCents);
+    expect(amounts).toEqual([1599, 1599, 1599, 1599]);
   });
 
   it("eliminare la regola lascia le spese senza collegamento", async () => {
